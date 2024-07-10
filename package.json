@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "dotenvx run -- drizzle-kit generate"
+    "shadcn:add": "pnpm dlx shadcn-ui@latest add",
+    "db:introspect": "dotenvx run -- drizzle-kit introspect",
+    "db:generate": "dotenvx run -- drizzle-kit generate",
+    "db:push": "dotenvx run -- drizzle-kit push",
+    "db:migrate": "dotenvx run -- tsx src/db/migrate.ts",
+    "db:drop-migration": "drizzle-kit drop",
+    "db:seed": "dotenvx run -- tsx src/db/seed.ts",
+    "db:studio": "dotenvx run -- drizzle-kit studio"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.1",
@@ -38,6 +45,7 @@
     "postcss": "^8",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.16.2",
     "typescript": "^5"
   },
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5"
