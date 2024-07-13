@@ -1,7 +1,12 @@
+import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
+
 export default function CoursesPage() {
   return (
-    <div className="flex min-h-full flex-col items-center justify-between p-24">
-      Courses page
+    <div className="p-6">
+      <Link href="/teacher/create" className={buttonVariants({})}>
+        New Course
+      </Link>
     </div>
   )
 }
