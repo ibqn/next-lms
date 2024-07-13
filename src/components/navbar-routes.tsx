@@ -2,7 +2,7 @@
 
 import { UserButton } from "@/components/user-button"
 import { usePathname } from "next/navigation"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 import Link from "next/link"
 
@@ -15,11 +15,14 @@ export const NavbarRoutes = (props: Props) => {
   const isStudentPage = pathname.startsWith("/chapter")
 
   return (
-    <div className="ml-auto flex gap-x-2">
+    <div className="ml-auto flex items-center gap-x-2">
       {isTeacherPage || isStudentPage ? (
-        <Button>
+        <Link
+          href="/"
+          className={buttonVariants({ variant: "ghost", size: "sm" })}
+        >
           <LogOut className="mr-2 size-4" /> Exit
-        </Button>
+        </Link>
       ) : (
         <Link
           href="/teacher/courses"

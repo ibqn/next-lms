@@ -1,7 +1,7 @@
-export default function ExplorePage() {
+export default function analyticsPage() {
   return (
     <div className="flex min-h-full flex-col items-center justify-between p-24">
-      explore page
+      analytics page
     </div>
   )
 }
