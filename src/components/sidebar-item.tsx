@@ -1,25 +1,51 @@
+"use client"
+
 import Link from "next/link"
-import type { ComponentProps } from "react"
+import { useMemo, type ComponentProps } from "react"
 import type { RouteItem } from "@/components/sidebar-routes"
 import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 type Props = RouteItem & ComponentProps<typeof Link>
 
 export const SidebarItem = ({
-  icon: Icon,
+  icon,
   label,
   href,
   className,
   ...props
 }: Props) => {
+  const pathname = usePathname()
+
+  const isActive = useMemo(() => pathname === href, [pathname, href])
+
   return (
     <Link
       {...props}
       href={href}
-      className={cn("flex items-center p-4 hover:bg-gray-100", className)}
+      className={cn(
+        "flex items-center gap-x-2 pl-6 text-sm font-medium transition-all",
+        isActive
+          ? "bg-sky-200/20 text-sky-700"
+          : "text-slate-500 hover:bg-slate-300/20 hover:text-slate-600",
+        className
+      )}
     >
-      <Icon className="mr-4 h-6 w-6" />
-      <span>{label}</span>
+      <div className="flex items-center gap-x-2 p-4">
+        <icon.type
+          {...icon.props}
+          className={cn(isActive ? "text-sky-700" : "text-slate-500")}
+          size={22}
+        />
+        <span>{label}</span>
+      </div>
+
+      <div
+        className={cn(
+          "ml-auto h-full border-2 border-sky-700 transition-all",
+          isActive ? "opacity-100" : "opacity-0"
+        )}
+      ></div>
     </Link>
   )
 }

@@ -1,37 +1,34 @@
-import { useMemo } from "react"
-import { Layout, Compass } from "lucide-react"
-import { SidebarItem } from "./sidebar-item"
+import { type ReactElement } from "react"
+import { SidebarItem } from "@/components/sidebar-item"
+import { PanelsTopLeft, Compass } from "lucide-react"
 
 type Props = {}
 
-type IconType = typeof Layout
+export type IconType = typeof PanelsTopLeft | typeof Compass
 
 export type RouteItem = {
-  icon: IconType
+  icon: ReactElement
   label: string
   href: string
 }
 
-export const SidebarRoutes = (props: Props) => {
-  const questRoutes = useMemo(
-    () => [
-      {
-        icon: Layout,
-        label: "Dashboard",
-        href: "/",
-      },
-      {
-        icon: Compass,
-        label: "Explore",
-        href: "/explore",
-      },
-    ],
-    []
-  )
+const guestRoutes: RouteItem[] = [
+  {
+    icon: <PanelsTopLeft />,
+    label: "Dashboard",
+    href: "/",
+  },
+  {
+    icon: <Compass />,
+    label: "Explore",
+    href: "/explore",
+  },
+]
 
+export const SidebarRoutes = (props: Props) => {
   return (
     <div className="flex w-full flex-col">
-      {questRoutes.map((route, index) => (
+      {guestRoutes.map((route, index) => (
         <SidebarItem key={index} {...route} />
       ))}
     </div>
