@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { Providers } from "@/components/providers"
+import { ReactNode } from "react"
+import { Toaster } from "@/components/ui/toaster"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 type Props = Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>
 
 export default function RootLayout({ children }: Props) {
@@ -28,6 +30,7 @@ export default function RootLayout({ children }: Props) {
         )}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   )
