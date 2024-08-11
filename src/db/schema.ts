@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm"
 import {
   boolean,
   timestamp,
@@ -5,9 +6,55 @@ import {
   text,
   primaryKey,
   integer,
+  decimal,
+  uuid,
 } from "drizzle-orm/pg-core"
 
 import type { AdapterAccountType } from "next-auth/adapters"
+
+const lifecycleDates = {
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`current_timestamp`)
+    .$onUpdate(() => new Date()),
+}
+
+export const courses = pgTable("course", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  description: text("description"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
+  isPublished: boolean("is_published").notNull().default(false),
+
+  categoryId: uuid("category_id").references(() => categories.id, {
+    onDelete: "cascade",
+  }),
+
+  ...lifecycleDates,
+})
+
+export type NewCourse = typeof courses.$inferInsert
+
+export const categories = pgTable("category", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").unique().notNull(),
+
+  ...lifecycleDates,
+})
+
+/*
+export const attachments = pgTable("attachment", {
+  id: uuid("id").defaultRandom(),
+  name: text("name").notNull(),
+  url: text("url").notNull(),
+  courseId: uuid("course_id")
+    .notNull()
+    .references(() => courses.id, { onDelete: "cascade" }),
+
+  ...lifecycleDates,
+})
+
+
 
 export const users = pgTable("user", {
   id: text("id")
@@ -85,3 +132,4 @@ export const authenticators = pgTable(
     }),
   })
 )
+*/

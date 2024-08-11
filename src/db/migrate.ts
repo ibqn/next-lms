@@ -1,5 +1,10 @@
-import { db } from "@/db"
-import { migrate } from "drizzle-orm/node-postgres/migrator"
+import { env } from "@/env/server"
+import { drizzle } from "drizzle-orm/postgres-js"
+import { migrate } from "drizzle-orm/postgres-js/migrator"
+import postgres from "postgres"
+
+const migrationClient = postgres(env.DATABASE_URL, { max: 1 })
+const db = drizzle(migrationClient)
 
 export async function runMigrate() {
   console.log("⏳ Running migrations...")
