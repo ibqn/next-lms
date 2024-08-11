@@ -1,5 +1,6 @@
 import { db } from "@/db"
 import { courses, type NewCourse } from "@/db/schema"
+import { takeFirstOrThrow } from "@/db/utils"
 import { courseSchema } from "@/lib/validators/course"
 import { NextResponse } from "next/server"
 
@@ -9,12 +10,13 @@ export async function POST(req: Request) {
     const courseData = await courseSchema.parseAsync(body)
 
     console.log("[courseData]", courseData)
+
     const course = await db
       .insert(courses)
       .values(courseData satisfies NewCourse as NewCourse)
       .returning()
 
-    return NextResponse.json(course)
+    return NextResponse.json(takeFirstOrThrow(course), { status: 201 })
   } catch (error) {
     console.error("[error]", error)
     return new NextResponse("An error occurred", { status: 500 })

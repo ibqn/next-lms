@@ -15,6 +15,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
+import { createCourseFn } from "@/apis/course"
 
 export default function CreatePage() {
   const form = useForm<CourseSchema>({
@@ -24,8 +29,44 @@ export default function CreatePage() {
     resolver: zodResolver(courseSchema),
   })
 
+  const router = useRouter()
+
+  const { toast } = useToast()
+
+  const { mutate: createCourse, isPending } = useMutation({
+    mutationFn: (payload: CourseSchema) => createCourseFn(payload),
+    onSuccess: (data, variables, context) => {
+      console.log("data:", data)
+      const { id } = data
+
+      form.reset()
+      toast({
+        title: "Create course success",
+        description: `The ${variables.title} community was created successfully`,
+        variant: "green",
+      })
+      router.push(`/teacher/courses/${id}`)
+    },
+    onError: (error, variables, context) => {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        toast({
+          title: "Create course error",
+          description: "Course with this name already exists",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Create course error",
+          description: "Something went wrong!",
+          variant: "destructive",
+        })
+      }
+    },
+  })
+
   const onSubmit = form.handleSubmit((data) => {
     console.log(data)
+    createCourse(data)
   })
 
   return (
@@ -62,7 +103,9 @@ export default function CreatePage() {
               >
                 Cancel
               </Link>
-              <Button type="submit">Create</Button>
+              <Button type="submit" disabled={isPending}>
+                Create
+              </Button>
             </div>
           </form>
         </Form>
