@@ -42,7 +42,7 @@ export default function CreatePage() {
       form.reset()
       toast({
         title: "Create course success",
-        description: `The ${variables.title} community was created successfully`,
+        description: `The ${variables.title} course was created successfully`,
         variant: "green",
       })
       router.push(`/teacher/courses/${id}`)
