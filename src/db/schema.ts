@@ -34,6 +34,7 @@ export const courses = pgTable("course", {
 })
 
 export type NewCourse = typeof courses.$inferInsert
+export type Course = typeof courses.$inferInsert
 
 export const categories = pgTable("category", {
   id: uuid("id").primaryKey().defaultRandom(),
