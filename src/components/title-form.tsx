@@ -97,7 +97,11 @@ export const TitleForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Course Title..." {...field} />
+                    <Input
+                      placeholder="Course Title..."
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormDescription>
                     {"e.g. 'Introduction to Computer Science'"}
