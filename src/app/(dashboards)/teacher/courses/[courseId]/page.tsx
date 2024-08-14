@@ -1,4 +1,5 @@
 import { IconBadge } from "@/components/icon-badge"
+import { TitleForm } from "@/components/title-form"
 import { db } from "@/db"
 import { courses } from "@/db/schema"
 import { eq } from "drizzle-orm"
@@ -49,6 +50,8 @@ export default async function SingleCoursePage({ params }: Props) {
             <IconBadge icon={LayoutDashboard} />
             <h2>Customize your course</h2>
           </div>
+
+          <TitleForm initialData={course} />
         </div>
       </div>
     </div>
