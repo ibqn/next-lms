@@ -13,7 +13,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -74,15 +73,6 @@ export const TitleForm = ({ initialData }: Props) => {
     updateCourse(data)
   })
 
-  console.log(
-    "isPending",
-    isPending,
-    "isSubmitting",
-    isSubmitting,
-    "isValid",
-    isValid
-  )
-
   return (
     <div className="mt-6 rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
@@ -106,7 +96,6 @@ export const TitleForm = ({ initialData }: Props) => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  {/* <FormLabel>Course Title</FormLabel> */}
                   <FormControl>
                     <Input placeholder="Course Title..." {...field} />
                   </FormControl>
