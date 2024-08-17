@@ -1,7 +1,7 @@
 import { db } from "@/db"
 import { courses } from "@/db/schema"
 import { takeFirstOrThrow } from "@/db/utils"
-import { courseSchema } from "@/lib/validators/course"
+import { updateCourseSchema } from "@/lib/validators/course"
 import { eq } from "drizzle-orm"
 import { NextResponse } from "next/server"
 
@@ -15,7 +15,7 @@ export async function PATCH(req: Request, { params }: Props) {
   try {
     const { courseId } = params
     const body = await req.json()
-    const courseData = await courseSchema.parseAsync(body)
+    const courseData = await updateCourseSchema.parseAsync(body)
 
     console.log("[courseData]", courseData)
 

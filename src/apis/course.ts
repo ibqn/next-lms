@@ -1,5 +1,5 @@
 import type { NewCourse } from "@/db/schema"
-import type { CourseSchema } from "@/lib/validators/course"
+import type { CourseSchema, UpdateCourseSchema } from "@/lib/validators/course"
 import axios from "axios"
 
 export const createCourseFn = async (courseData: CourseSchema) => {
@@ -9,9 +9,9 @@ export const createCourseFn = async (courseData: CourseSchema) => {
 
 export const updateCourseFn = async (
   courseId: string,
-  courseData: CourseSchema
+  courseData: UpdateCourseSchema
 ) => {
-  const response = await axios.patch<NewCourse>(
+  const response = await axios.patch<UpdateCourseSchema>(
     `/api/courses/${courseId}`,
     courseData
   )

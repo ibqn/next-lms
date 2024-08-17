@@ -1,3 +1,4 @@
+import { DescriptionForm } from "@/components/description-form"
 import { IconBadge } from "@/components/icon-badge"
 import { TitleForm } from "@/components/title-form"
 import { db } from "@/db"
@@ -52,6 +53,7 @@ export default async function SingleCoursePage({ params }: Props) {
           </div>
 
           <TitleForm initialData={course} />
+          <DescriptionForm initialData={course} />
         </div>
       </div>
     </div>
