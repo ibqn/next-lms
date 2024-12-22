@@ -1,7 +1,6 @@
 import {
   boolean,
   timestamp,
-  pgTable,
   text,
   primaryKey,
   integer,
@@ -9,8 +8,9 @@ import {
   uuid,
 } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
+import { schema } from "./schema"
 
-export const courses = pgTable("course", {
+export const courses = schema.table("course", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   description: text("description"),
@@ -27,7 +27,7 @@ export const courses = pgTable("course", {
 export type NewCourse = typeof courses.$inferInsert
 export type Course = typeof courses.$inferInsert
 
-export const categories = pgTable("category", {
+export const categories = schema.table("category", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").unique().notNull(),
 

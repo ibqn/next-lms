@@ -1,12 +1,105 @@
 {
-  "id": "7a154f5c-a4d8-4a9b-8030-c4b2599dc6e0",
+  "id": "5ad74539-5edf-403b-9071-3ff7b89e3120",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.category": {
+    "drizzle.session": {
+      "name": "session",
+      "schema": "drizzle",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
+          "schemaTo": "drizzle",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "drizzle.user": {
+      "name": "user",
+      "schema": "drizzle",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "drizzle.category": {
       "name": "category",
-      "schema": "",
+      "schema": "drizzle",
       "columns": {
         "id": {
           "name": "id",
@@ -33,7 +126,7 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "default": "current_timestamp"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -47,11 +140,14 @@
             "name"
           ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "public.course": {
+    "drizzle.course": {
       "name": "course",
-      "schema": "",
+      "schema": "drizzle",
       "columns": {
         "id": {
           "name": "id",
@@ -104,7 +200,7 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "default": "current_timestamp"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -113,6 +209,7 @@
           "name": "course_category_id_category_id_fk",
           "tableFrom": "course",
           "tableTo": "category",
+          "schemaTo": "drizzle",
           "columnsFrom": [
             "category_id"
           ],
@@ -124,12 +221,20 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {},
-  "schemas": {},
+  "schemas": {
+    "drizzle": "drizzle"
+  },
   "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},
