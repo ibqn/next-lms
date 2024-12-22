@@ -1,19 +1,27 @@
 "use client"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, LogOut } from "lucide-react"
+import { useMutation } from "@tanstack/react-query"
+import { getSignout } from "@/api/auth"
+import { useRouter } from "next/navigation"
+import { getQueryClient } from "@/lib/query-client"
 
-type Props = {}
+export const UserButton = () => {
+  const router = useRouter()
+  const queryClient = getQueryClient()
+  const { mutate: signout } = useMutation({
+    mutationFn: getSignout,
+    onSettled: async () => {
+      queryClient.setQueryData(["user"], null)
+    },
+  })
 
-export const UserButton = (props: Props) => {
   const handleSignOut = () => {
     console.log("Sign out")
+    signout()
+    router.push("/sign-in")
   }
 
   return (

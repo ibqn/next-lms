@@ -29,7 +29,7 @@ export const SignInForm = () => {
   })
 
   return (
-    <CardWrapper headerLabel="Welcome back" backButtonLabel="Don't have an account?" backButtonHref="/auth/sign-up">
+    <CardWrapper headerLabel="Welcome back" backButtonLabel="Don't have an account?" backButtonHref="/sign-up">
       <Form {...form}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
