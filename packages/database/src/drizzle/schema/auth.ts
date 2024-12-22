@@ -26,7 +26,10 @@ export const sessionTable = schema.table("session", {
 })
 
 export const sessionRelations = relations(sessionTable, ({ one }) => ({
-  user: one(userTable, { fields: [sessionTable.userId], references: [userTable.id] }),
+  user: one(userTable, {
+    fields: [sessionTable.userId],
+    references: [userTable.id],
+  }),
 }))
 
 export type User = Omit<InferSelectModel<typeof userTable>, "passwordHash">

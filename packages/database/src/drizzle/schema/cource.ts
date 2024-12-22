@@ -9,15 +9,7 @@ import {
   decimal,
   uuid,
 } from "drizzle-orm/pg-core"
-
-import type { AdapterAccountType } from "next-auth/adapters"
-
-const lifecycleDates = {
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-}
+import { lifecycleDates } from "./utils"
 
 export const courses = pgTable("course", {
   id: uuid("id").primaryKey().defaultRandom(),

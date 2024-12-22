@@ -5,12 +5,10 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url(),
 })
 
-const processEnv = envSchema.parse(process.env)
+export const processEnv = envSchema.parse(process.env)
 
 export const db = drizzle(processEnv.DATABASE_URL, {
-  schema: {
-
-  },
+  schema: {},
 })
 
 const result = db.execute("select 1")
