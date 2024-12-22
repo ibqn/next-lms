@@ -40,14 +40,14 @@ export const SignUpForm = () => {
   const { mutate: signup } = useMutation({
     mutationFn: postSignup,
     onSuccess: async ({ data }) => {
-      console.log("Signin success")
+      console.log("Signup success")
       await queryClient.invalidateQueries({ queryKey: ["user"] })
       setResponse(data)
       toast({ title: "Signup success", description: "Account successfully created", variant: "green" })
       router.push(redirect)
     },
     onError: (error) => {
-      let message = "Signup failed"
+      let message = "Sign up failed"
 
       if (error instanceof AxiosError) {
         const response = error.response?.data as ErrorResponse
@@ -55,7 +55,7 @@ export const SignUpForm = () => {
       }
 
       setResponse({ success: false, error: message })
-      toast({ title: "Signup failed", description: message, variant: "destructive" })
+      toast({ title: "Sign up failed", description: message, variant: "destructive" })
     },
   })
 
