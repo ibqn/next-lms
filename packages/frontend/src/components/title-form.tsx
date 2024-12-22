@@ -7,18 +7,11 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { titleSchema, type TitleSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "./ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
-import { updateCourseFn } from "@/apis/course"
+import { updateCourseFn } from "@/api/course"
 import { useRouter } from "next/navigation"
 
 type Props = {
@@ -97,25 +90,16 @@ export const TitleForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Course Title..."
-                      {...field}
-                      disabled={isSubmitting}
-                    />
+                    <Input placeholder="Course Title..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>
-                    {"e.g. 'Introduction to Computer Science'"}
-                  </FormDescription>
+                  <FormDescription>{"e.g. 'Introduction to Computer Science'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex items-center gap-x-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || isPending}
-              >
+              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                 Save
               </Button>
             </div>

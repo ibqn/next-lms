@@ -3,15 +3,7 @@
 import { courseSchema, type CourseSchema } from "@/lib/validators/course"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
@@ -19,7 +11,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
-import { createCourseFn } from "@/apis/course"
+import { createCourseFn } from "@/api/course"
 
 export default function CreatePage() {
   const form = useForm<CourseSchema>({
@@ -74,9 +66,7 @@ export default function CreatePage() {
       <div>
         <h1 className="text-3xl font-semibold">Name your course</h1>
         <p className="mt-2 text-sm text-slate-600">
-          {
-            "What would you like to name your course? Don't worry, you can change this later."
-          }
+          {"What would you like to name your course? Don't worry, you can change this later."}
         </p>
         <Form {...form}>
           <form onSubmit={onSubmit} className="mt-8 space-y-8">
@@ -89,18 +79,13 @@ export default function CreatePage() {
                   <FormControl>
                     <Input placeholder="Course Title..." {...field} />
                   </FormControl>
-                  <FormDescription>
-                    {"e.g. 'Introduction to Computer Science'"}
-                  </FormDescription>
+                  <FormDescription>{"e.g. 'Introduction to Computer Science'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Link
-                href="/teacher/courses"
-                className={buttonVariants({ variant: "ghost" })}
-              >
+              <Link href="/teacher/courses" className={buttonVariants({ variant: "ghost" })}>
                 Cancel
               </Link>
               <Button type="submit" disabled={isPending}>

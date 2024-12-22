@@ -38,6 +38,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      backend:
+        specifier: workspace:*
+        version: link:../backend
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1

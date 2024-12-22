@@ -5,22 +5,12 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
-import {
-  descriptionSchema,
-  type DescriptionSchema,
-} from "@/lib/validators/course"
+import { descriptionSchema, type DescriptionSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { useToast } from "./ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
-import { updateCourseFn } from "@/apis/course"
+import { updateCourseFn } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Textarea } from "@/components/ui/textarea"
@@ -50,8 +40,7 @@ export const DescriptionForm = ({ initialData }: Props) => {
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: DescriptionSchema) =>
-      updateCourseFn(courseId!, payload),
+    mutationFn: (payload: DescriptionSchema) => updateCourseFn(courseId!, payload),
     onSuccess: (data, variables, context) => {
       console.log("data:", data)
       const { title } = data
@@ -102,37 +91,23 @@ export const DescriptionForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      placeholder="Course Description..."
-                      {...field}
-                      disabled={isSubmitting}
-                    />
+                    <Textarea placeholder="Course Description..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>
-                    {"e.g. 'This course is about...'"}
-                  </FormDescription>
+                  <FormDescription>{"e.g. 'This course is about...'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex items-center gap-x-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || isPending}
-              >
+              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                 Save
               </Button>
             </div>
           </form>
         </Form>
       ) : (
-        <p
-          className={cn(
-            "mt-2 text-sm",
-            !initialData.description && "italic text-slate-500"
-          )}
-        >
+        <p className={cn("mt-2 text-sm", !initialData.description && "italic text-slate-500")}>
           {initialData.description || "No description"}
         </p>
       )}
