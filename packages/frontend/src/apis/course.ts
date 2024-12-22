@@ -1,4 +1,4 @@
-import type { NewCourse } from "@/db/schema"
+import type { NewCourse } from "database/src/drizzle/schema/course"
 import type { CourseSchema, UpdateCourseSchema } from "@/lib/validators/course"
 import axios from "axios"
 
