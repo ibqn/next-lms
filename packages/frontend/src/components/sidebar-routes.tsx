@@ -5,8 +5,6 @@ import { SidebarItem } from "@/components/sidebar-item"
 import { PanelsTopLeft, Compass, List, BarChart } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-type Props = {}
-
 export type IconType = typeof PanelsTopLeft | typeof Compass
 
 export type RouteItem = {
@@ -41,7 +39,7 @@ const teacherRoutes: RouteItem[] = [
   },
 ]
 
-export const SidebarRoutes = (props: Props) => {
+export const SidebarRoutes = () => {
   let routes = guestRoutes
 
   const pathname = usePathname()
