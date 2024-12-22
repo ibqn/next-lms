@@ -15,7 +15,7 @@ import type { AdapterAccountType } from "next-auth/adapters"
 const lifecycleDates = {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
-    .default(sql`current_timestamp`)
+    .defaultNow()
     .$onUpdate(() => new Date()),
 }
 
