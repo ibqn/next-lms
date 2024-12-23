@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
-import { createCourseFn } from "@/api/course"
+import { postCourse } from "@/api/course"
 
 export default function CreatePage() {
   const form = useForm<CourseSchema>({
@@ -26,20 +26,20 @@ export default function CreatePage() {
   const { toast } = useToast()
 
   const { mutate: createCourse, isPending } = useMutation({
-    mutationFn: (payload: CourseSchema) => createCourseFn(payload),
-    onSuccess: (data, variables, context) => {
+    mutationFn: postCourse,
+    onSuccess: ({ data }) => {
       console.log("data:", data)
       const { id } = data
 
       form.reset()
       toast({
         title: "Create course success",
-        description: `The ${variables.title} course was created successfully`,
+        description: `The ${data.title} course was created successfully`,
         variant: "green",
       })
       router.push(`/teacher/courses/${id}`)
     },
-    onError: (error, variables, context) => {
+    onError: (error) => {
       if (axios.isAxiosError(error) && error.response?.status === 409) {
         toast({
           title: "Create course error",

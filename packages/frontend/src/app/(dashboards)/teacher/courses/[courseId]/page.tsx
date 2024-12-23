@@ -1,35 +1,26 @@
 import { DescriptionForm } from "@/components/description-form"
 import { IconBadge } from "@/components/icon-badge"
 import { TitleForm } from "@/components/title-form"
-import { db } from "@/db"
-import { courses } from "@/db/schema"
-import { eq } from "drizzle-orm"
+import { getCourse } from "database/src/queries/course"
 import { LayoutDashboard } from "lucide-react"
 import { notFound } from "next/navigation"
 
 type Props = {
-  params: {
+  params: Promise<{
     courseId: string
-  }
+  }>
 }
 
 export default async function SingleCoursePage({ params }: Props) {
-  const { courseId } = params
+  const { courseId } = await params
 
-  const course = await db.query.courses.findFirst({
-    where: eq(courses.id, courseId),
-  })
+  const course = await getCourse({ courseId })
 
   if (!course) {
     notFound()
   }
 
-  const requiredFields = [
-    course.title,
-    course.description,
-    course.price,
-    course.categoryId,
-  ]
+  const requiredFields = [course.title, course.description, course.price, course.categoryId]
   const totalFields = requiredFields.length
   const completedFields = requiredFields.filter(Boolean).length
   const completionText = `(${completedFields}/${totalFields})`
@@ -39,9 +30,7 @@ export default async function SingleCoursePage({ params }: Props) {
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
           <h1 className="text-2xl">Course setup</h1>
-          <span className="text-sm text-slate-700">
-            Complete all fields {completionText}
-          </span>
+          <span className="text-sm text-slate-700">Complete all fields {completionText}</span>
         </div>
       </div>
 

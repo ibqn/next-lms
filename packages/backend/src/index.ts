@@ -13,6 +13,7 @@ import {
   validateSessionToken,
 } from "database/src/lucia"
 import { authRoute } from "./routes/auth"
+import { courseRoute } from "./routes/courses"
 
 const app = new Hono<Context>()
 
@@ -65,7 +66,10 @@ app.use("*", cors(), async (c, next) => {
   await next()
 })
 
-export const routes = app.basePath("/api").route("/auth", authRoute)
+export const routes = app
+  .basePath("/api")
+  .route("/auth", authRoute)
+  .route("/courses", courseRoute)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

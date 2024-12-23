@@ -1,127 +1,51 @@
-import {
-  boolean,
-  timestamp,
-  text,
-  primaryKey,
-  integer,
-  decimal,
-  uuid,
-} from "drizzle-orm/pg-core"
+import { boolean, text, decimal, uuid } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
 import { schema } from "./schema"
+import { relations, type InferSelectModel } from "drizzle-orm"
+import { categoryTable } from "./category"
+import { userTable, type User } from "./auth"
+import { attachmentTable } from "./attachment"
+import { createInsertSchema } from "drizzle-zod"
+import { z } from "zod"
 
-export const courses = schema.table("course", {
+export const courseTable = schema.table("course", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   description: text("description"),
   price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
   isPublished: boolean("is_published").notNull().default(false),
 
-  categoryId: uuid("category_id").references(() => categories.id, {
+  imageUrl: text("image_url"),
+  userId: uuid("user_id").references(() => userTable.id, {
+    onDelete: "set null",
+  }),
+  categoryId: uuid("category_id").references(() => categoryTable.id, {
     onDelete: "cascade",
   }),
 
   ...lifecycleDates,
 })
 
-export type NewCourse = typeof courses.$inferInsert
-export type Course = typeof courses.$inferInsert
+export const courseRelations = relations(courseTable, ({ one, many }) => ({
+  category: one(categoryTable, {
+    fields: [courseTable.categoryId],
+    references: [categoryTable.id],
+    relationName: "category",
+  }),
+  user: one(userTable, {
+    fields: [courseTable.userId],
+    references: [userTable.id],
+    relationName: "user",
+  }),
+  attachments: many(attachmentTable),
+}))
 
-export const categories = schema.table("category", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").unique().notNull(),
+export type Course = InferSelectModel<typeof courseTable> & {
+  user: User | null
+}
 
-  ...lifecycleDates,
+export const insertCourseSchema = createInsertSchema(courseTable, {
+  title: z
+    .string()
+    .min(3, { message: "Title should have at least 3 characters." }),
 })
-
-/*
-export const attachments = pgTable("attachment", {
-  id: uuid("id").defaultRandom(),
-  name: text("name").notNull(),
-  url: text("url").notNull(),
-  courseId: uuid("course_id")
-    .notNull()
-    .references(() => courses.id, { onDelete: "cascade" }),
-
-  ...lifecycleDates,
-})
-
-
-
-export const users = pgTable("user", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-})
-
-export const accounts = pgTable(
-  "account",
-  {
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    type: text("type").$type<AdapterAccountType>().notNull(),
-    provider: text("provider").notNull(),
-    providerAccountId: text("providerAccountId").notNull(),
-    refresh_token: text("refresh_token"),
-    access_token: text("access_token"),
-    expires_at: integer("expires_at"),
-    token_type: text("token_type"),
-    scope: text("scope"),
-    id_token: text("id_token"),
-    session_state: text("session_state"),
-  },
-  (account) => ({
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-    }),
-  })
-)
-
-export const sessions = pgTable("session", {
-  sessionToken: text("sessionToken").primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-})
-
-export const verificationTokens = pgTable(
-  "verificationToken",
-  {
-    identifier: text("identifier").notNull(),
-    token: text("token").notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-  },
-  (verificationToken) => ({
-    compositePk: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
-  })
-)
-
-export const authenticators = pgTable(
-  "authenticator",
-  {
-    credentialID: text("credentialID").notNull().unique(),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: text("providerAccountId").notNull(),
-    credentialPublicKey: text("credentialPublicKey").notNull(),
-    counter: integer("counter").notNull(),
-    credentialDeviceType: text("credentialDeviceType").notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
-    transports: text("transports"),
-  },
-  (authenticator) => ({
-    compositePK: primaryKey({
-      columns: [authenticator.userId, authenticator.credentialID],
-    }),
-  })
-)
-*/

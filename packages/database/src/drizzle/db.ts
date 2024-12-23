@@ -1,6 +1,9 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 import { z } from "zod"
 import { sessionRelations, sessionTable, userTable } from "./schema/auth"
+import { courseRelations, courseTable } from "./schema/course"
+import { categoryRelations, categoryTable } from "./schema/category"
+import { attachmentRelations, attachmentTable } from "./schema/attachment"
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
@@ -13,6 +16,12 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     user: userTable,
     session: sessionTable,
     sessionRelations,
+    course: courseTable,
+    courseRelations,
+    category: categoryTable,
+    categoryRelations,
+    attachment: attachmentTable,
+    attachmentRelations,
   },
 })
 
