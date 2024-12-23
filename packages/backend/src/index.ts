@@ -14,10 +14,11 @@ import {
 } from "database/src/lucia"
 import { authRoute } from "./routes/auth"
 import { courseRoute } from "./routes/courses"
+import { uploadRoute } from "./routes/uploads"
 
 const app = new Hono<Context>()
 
-app.use(prettyJSON())
+// app.use(prettyJSON())
 
 app.notFound((c) =>
   c.json<ErrorResponse>({ error: "Not Found", success: false }, 404)
@@ -70,6 +71,7 @@ export const routes = app
   .basePath("/api")
   .route("/auth", authRoute)
   .route("/courses", courseRoute)
+  .route("/uploads", uploadRoute)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

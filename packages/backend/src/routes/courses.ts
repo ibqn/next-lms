@@ -11,6 +11,7 @@ import {
 } from "database/src/validators/course"
 import type { User } from "database/src/drizzle/schema/auth"
 import { paramIdSchema } from "database/src/validators/param"
+import { HTTPException } from "hono/http-exception"
 
 export const courseRoute = new Hono<Context>()
   .post("/", signedIn, zValidator("form", createCourseSchema), async (c) => {
@@ -35,6 +36,10 @@ export const courseRoute = new Hono<Context>()
       const user = c.get("user") as User
 
       const course = await updateCourse({ ...inputData, id, user })
+
+      if (!course) {
+        throw new HTTPException(404, { message: "Course not found" })
+      }
 
       return c.json<SuccessResponse<Course>>(
         { success: true, message: "Post updated", data: course },
