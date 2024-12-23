@@ -1,6 +1,6 @@
 "use client"
 
-import type { Course } from "@/db/schema"
+import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
@@ -8,9 +8,9 @@ import { useForm } from "react-hook-form"
 import { descriptionSchema, type DescriptionSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { useToast } from "./ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
-import { updateCourseFn } from "@/api/course"
+import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Textarea } from "@/components/ui/textarea"
@@ -40,20 +40,19 @@ export const DescriptionForm = ({ initialData }: Props) => {
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: DescriptionSchema) => updateCourseFn(courseId!, payload),
-    onSuccess: (data, variables, context) => {
+    mutationFn: (payload: DescriptionSchema) => patchCourse(courseId, payload),
+    onSuccess: ({ data }) => {
       console.log("data:", data)
-      const { title } = data
 
       toast({
         title: "Update course success",
-        description: `The course title '${title}' was updated successfully`,
+        description: `The course description updated successfully`,
         variant: "green",
       })
       toggleEdit()
       router.refresh()
     },
-    onError: (error, variables, context) => {
+    onError: () => {
       toast({
         title: "Update course error",
         description: "Something went wrong!",
