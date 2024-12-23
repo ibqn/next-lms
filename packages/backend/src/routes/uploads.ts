@@ -103,7 +103,6 @@ async function handleGetFile(upload: Upload) {
 
   const readStream = createReadStream(filePath)
   const stream = Readable.toWeb(readStream) as ReadableStream
-
   const contentType = mime.getType(filePath)
 
   if (!contentType) {
