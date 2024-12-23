@@ -59,8 +59,8 @@ export const uploadRoute = new Hono<Context>()
 
       try {
         await access(filePath)
-      } catch (error) {
-        return new HTTPException(404, { message: "file not found" })
+      } catch {
+        throw new HTTPException(404, { message: "file not found" })
       }
 
       const readStream = createReadStream(filePath)
@@ -89,8 +89,8 @@ export const uploadRoute = new Hono<Context>()
 
     try {
       await access(filePath)
-    } catch (error) {
-      return new HTTPException(404, { message: "file not found" })
+    } catch {
+      throw new HTTPException(404, { message: "file not found" })
     }
 
     if (!upload.isPublic) {
