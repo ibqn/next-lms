@@ -5,7 +5,7 @@ import { relations, type InferSelectModel } from "drizzle-orm"
 import { categoryTable } from "./category"
 import { userTable, type User } from "./auth"
 import { attachmentTable } from "./attachment"
-import { createInsertSchema } from "drizzle-zod"
+import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 import { z } from "zod"
 
 export const courseTable = schema.table("course", {

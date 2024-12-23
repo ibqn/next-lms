@@ -1,6 +1,6 @@
 "use client"
 
-import type { Course } from "@/db/schema"
+import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
@@ -11,7 +11,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } 
 import { Input } from "@/components/ui/input"
 import { useToast } from "./ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
-import { updateCourseFn } from "@/api/course"
+import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 
 type Props = {
@@ -39,8 +39,8 @@ export const TitleForm = ({ initialData }: Props) => {
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: TitleSchema) => updateCourseFn(courseId!, payload),
-    onSuccess: (data, variables, context) => {
+    mutationFn: (payload: TitleSchema) => patchCourse(courseId, payload),
+    onSuccess: ({ data }) => {
       console.log("data:", data)
       const { title } = data
 
@@ -52,7 +52,7 @@ export const TitleForm = ({ initialData }: Props) => {
       toggleEdit()
       router.refresh()
     },
-    onError: (error, variables, context) => {
+    onError: () => {
       toast({
         title: "Update course error",
         description: "Something went wrong!",
