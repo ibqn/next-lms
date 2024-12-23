@@ -49,28 +49,8 @@ export const uploadRoute = new Hono<Context>()
     async (c) => {
       const { id } = c.req.valid("param")
 
-      const upload = await getUpload({ id })
-
-      if (!upload) {
-        throw new HTTPException(404, { message: "Upload not found" })
-      }
-
-      const filePath = path.join("file-storage", upload.filePath)
-
-      try {
-        await access(filePath)
-      } catch {
-        throw new HTTPException(404, { message: "file not found" })
-      }
-
-      const readStream = createReadStream(filePath)
-      const stream = Readable.toWeb(readStream) as ReadableStream
-
-      const contentType = mime.getType(filePath)
-
-      if (!contentType) {
-        throw new HTTPException(500, { message: "Invalid file type" })
-      }
+      const upload = await handleGetUpload(id)
+      const { stream, contentType } = await handleGetFile(upload)
 
       c.header("Content-Type", contentType)
       return c.body(stream)
@@ -79,32 +59,13 @@ export const uploadRoute = new Hono<Context>()
   .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
 
-    const upload = await getUpload({ id })
-
-    if (!upload) {
-      throw new HTTPException(404, { message: "Upload not found" })
-    }
-
-    const filePath = path.join("file-storage", upload.filePath)
-
-    try {
-      await access(filePath)
-    } catch {
-      throw new HTTPException(404, { message: "file not found" })
-    }
+    const upload = await handleGetUpload(id)
 
     if (!upload.isPublic) {
       throw new HTTPException(403, { message: "Upload is not public" })
     }
 
-    const readStream = createReadStream(filePath)
-    const stream = Readable.toWeb(readStream) as ReadableStream
-
-    const contentType = mime.getType(filePath)
-
-    if (!contentType) {
-      throw new HTTPException(500, { message: "Invalid file type" })
-    }
+    const { stream, contentType } = await handleGetFile(upload)
 
     c.header("Content-Type", contentType)
     return c.body(stream)
@@ -112,11 +73,7 @@ export const uploadRoute = new Hono<Context>()
   .get(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
 
-    const upload = await getUpload({ id })
-
-    if (!upload) {
-      throw new HTTPException(404, { message: "Upload not found" })
-    }
+    const upload = await handleGetUpload(id)
 
     return c.json<SuccessResponse<Upload>>({
       message: "Upload received",
@@ -124,3 +81,34 @@ export const uploadRoute = new Hono<Context>()
       success: true,
     })
   })
+
+async function handleGetUpload(id: string) {
+  const upload = await getUpload({ id })
+
+  if (!upload) {
+    throw new HTTPException(404, { message: "Upload not found" })
+  }
+
+  return upload
+}
+
+async function handleGetFile(upload: Upload) {
+  const filePath = path.join("file-storage", upload.filePath)
+
+  try {
+    await access(filePath)
+  } catch {
+    throw new HTTPException(404, { message: "file not found" })
+  }
+
+  const readStream = createReadStream(filePath)
+  const stream = Readable.toWeb(readStream) as ReadableStream
+
+  const contentType = mime.getType(filePath)
+
+  if (!contentType) {
+    throw new HTTPException(500, { message: "Invalid file type" })
+  }
+
+  return { stream, contentType }
+}
