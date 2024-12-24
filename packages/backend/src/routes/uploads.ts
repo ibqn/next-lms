@@ -126,8 +126,7 @@ export const fileRoute = new Hono<Context>()
       const upload = await handleGetUpload(id)
       const { stream, contentType } = await handleGetFile(upload)
 
-      c.header("Content-Type", contentType)
-      return c.body(stream)
+      return c.body(stream, { headers: { "Content-Type": contentType } })
     }
   )
   .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
@@ -141,6 +140,5 @@ export const fileRoute = new Hono<Context>()
 
     const { stream, contentType } = await handleGetFile(upload)
 
-    c.header("Content-Type", contentType)
-    return c.body(stream)
+    return c.body(stream, { headers: { "Content-Type": contentType } })
   })

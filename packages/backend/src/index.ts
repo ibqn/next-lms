@@ -18,7 +18,7 @@ import { uploadRoute, fileRoute } from "./routes/uploads"
 
 const app = new Hono<Context>()
 
-// app.use(prettyJSON())
+app.use(prettyJSON())
 
 app.notFound((c) =>
   c.json<ErrorResponse>({ error: "Not Found", success: false }, 404)

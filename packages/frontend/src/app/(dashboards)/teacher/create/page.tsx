@@ -1,6 +1,6 @@
 "use client"
 
-import { courseSchema, type CourseSchema } from "@/lib/validators/course"
+import { titleSchema, type TitleSchema } from "@/lib/validators/course"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -14,11 +14,11 @@ import { useRouter } from "next/navigation"
 import { postCourse } from "@/api/course"
 
 export default function CreatePage() {
-  const form = useForm<CourseSchema>({
+  const form = useForm<TitleSchema>({
     defaultValues: {
       title: "",
     },
-    resolver: zodResolver(courseSchema),
+    resolver: zodResolver(titleSchema),
   })
 
   const router = useRouter()
