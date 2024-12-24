@@ -42,6 +42,19 @@ export const uploadRoute = new Hono<Context>()
       success: true,
     })
   })
+  .get(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id } = c.req.valid("param")
+
+    const upload = await handleGetUpload(id)
+
+    return c.json<SuccessResponse<Upload>>({
+      message: "Upload received",
+      data: upload,
+      success: true,
+    })
+  })
+
+export const fileRoute = new Hono<Context>()
   .get(
     ":id/protected",
     signedIn,
@@ -69,17 +82,6 @@ export const uploadRoute = new Hono<Context>()
 
     c.header("Content-Type", contentType)
     return c.body(stream)
-  })
-  .get(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
-    const { id } = c.req.valid("param")
-
-    const upload = await handleGetUpload(id)
-
-    return c.json<SuccessResponse<Upload>>({
-      message: "Upload received",
-      data: upload,
-      success: true,
-    })
   })
 
 async function handleGetUpload(id: string) {

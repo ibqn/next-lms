@@ -14,7 +14,7 @@ import {
 } from "database/src/lucia"
 import { authRoute } from "./routes/auth"
 import { courseRoute } from "./routes/courses"
-import { uploadRoute } from "./routes/uploads"
+import { uploadRoute, fileRoute } from "./routes/uploads"
 
 const app = new Hono<Context>()
 
@@ -68,6 +68,7 @@ app.use("*", cors(), async (c, next) => {
 })
 
 export const routes = app
+  .route("/uploads", fileRoute)
   .basePath("/api")
   .route("/auth", authRoute)
   .route("/courses", courseRoute)
