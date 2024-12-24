@@ -5,10 +5,14 @@ import { uploadSchema } from "../validators/upload"
 import { zValidator } from "@hono/zod-validator"
 import type { User } from "database/src/drizzle/schema/auth"
 import { HTTPException } from "hono/http-exception"
-import { access, writeFile } from "fs/promises"
+import { access, unlink, writeFile } from "fs/promises"
 import path from "path"
 import type { SuccessResponse } from "../types"
-import { createUpload, getUpload } from "database/src/queries/upload"
+import {
+  createUpload,
+  deleteUpload,
+  getUpload,
+} from "database/src/queries/upload"
 import type { Upload } from "database/src/drizzle/schema/upload"
 import { paramIdSchema } from "database/src/validators/param"
 import { createReadStream } from "fs"
@@ -53,35 +57,32 @@ export const uploadRoute = new Hono<Context>()
       success: true,
     })
   })
-
-export const fileRoute = new Hono<Context>()
-  .get(
-    ":id/protected",
-    signedIn,
-    zValidator("param", paramIdSchema),
-    async (c) => {
-      const { id } = c.req.valid("param")
-
-      const upload = await handleGetUpload(id)
-      const { stream, contentType } = await handleGetFile(upload)
-
-      c.header("Content-Type", contentType)
-      return c.body(stream)
-    }
-  )
-  .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
+  .delete(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
+    const user = c.get("user") as User
 
     const upload = await handleGetUpload(id)
 
-    if (!upload.isPublic) {
-      throw new HTTPException(403, { message: "Upload is not public" })
+    if (upload.userId !== user.id) {
+      throw new HTTPException(403, { message: "Unauthorized" })
     }
 
-    const { stream, contentType } = await handleGetFile(upload)
+    const filePath = path.join("file-storage", upload.filePath)
 
-    c.header("Content-Type", contentType)
-    return c.body(stream)
+    try {
+      await access(filePath)
+    } catch {
+      throw new HTTPException(404, { message: "file not found" })
+    }
+
+    await unlink(filePath)
+    await deleteUpload({ id })
+
+    return c.json<SuccessResponse<Upload>>({
+      message: "Upload deleted",
+      data: upload,
+      success: true,
+    })
   })
 
 async function handleGetUpload(id: string) {
@@ -113,3 +114,33 @@ async function handleGetFile(upload: Upload) {
 
   return { stream, contentType }
 }
+
+export const fileRoute = new Hono<Context>()
+  .get(
+    ":id/protected",
+    signedIn,
+    zValidator("param", paramIdSchema),
+    async (c) => {
+      const { id } = c.req.valid("param")
+
+      const upload = await handleGetUpload(id)
+      const { stream, contentType } = await handleGetFile(upload)
+
+      c.header("Content-Type", contentType)
+      return c.body(stream)
+    }
+  )
+  .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
+    const { id } = c.req.valid("param")
+
+    const upload = await handleGetUpload(id)
+
+    if (!upload.isPublic) {
+      throw new HTTPException(403, { message: "Upload is not public" })
+    }
+
+    const { stream, contentType } = await handleGetFile(upload)
+
+    c.header("Content-Type", contentType)
+    return c.body(stream)
+  })

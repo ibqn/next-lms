@@ -3,6 +3,7 @@ import type { User } from "../drizzle/schema/auth"
 import type { CreateUploadSchema } from "../validators/upload"
 import { uploadTable, type Upload } from "../drizzle/schema/upload"
 import type { ParamIdSchema } from "src/validators/param"
+import { eq } from "drizzle-orm"
 
 type CreateUploadOptions = CreateUploadSchema & {
   user: User
@@ -52,4 +53,10 @@ export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
   }
 
   return upload satisfies Upload as Upload
+}
+
+type DeleteUploadOptions = ParamIdSchema
+
+export const deleteUpload = async ({ id: uploadId }: DeleteUploadOptions) => {
+  return await db.delete(uploadTable).where(eq(uploadTable.id, uploadId))
 }
