@@ -22,8 +22,4 @@ export const getUser = async () => {
   return user
 }
 
-export const userQueryOptions = () =>
-  queryOptions({
-    queryKey: ["user"],
-    queryFn: getUser,
-  })
+export const userQueryOptions = () => queryOptions({ queryKey: ["user"], queryFn: getUser })

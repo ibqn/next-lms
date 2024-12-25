@@ -1,7 +1,7 @@
 import { env } from "@/lib/env"
+import { getCookieServer } from "@/lib/server-cookie"
 import axiosNative from "axios"
 
-console.log("process env api", env.NEXT_PUBLIC_API_URL)
 const defaultOptions = {
   baseURL: `${env.NEXT_PUBLIC_API_URL}/api`,
   withCredentials: true,
@@ -10,4 +10,24 @@ const defaultOptions = {
   },
 }
 
-export const axios = axiosNative.create(defaultOptions)
+const axios = axiosNative.create(defaultOptions)
+
+const isServer = typeof window === "undefined"
+
+if (isServer) {
+  axios.interceptors.request.use(
+    async (config) => {
+      const serverSessionCookie = await getCookieServer()
+
+      if (serverSessionCookie) {
+        config.headers["Cookie"] = serverSessionCookie
+      }
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+}
+
+export { axios }

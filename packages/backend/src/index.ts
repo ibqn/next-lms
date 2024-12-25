@@ -7,14 +7,12 @@ import { HTTPException } from "hono/http-exception"
 import { getErrorMessage } from "./utils/error"
 import { cors } from "hono/cors"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import {
-  getSessionCookieOptions,
-  sessionCookieName,
-  validateSessionToken,
-} from "database/src/lucia"
+import { validateSessionToken } from "database/src/lucia"
+import { sessionCookieName, getSessionCookieOptions } from "database/src/cookie"
 import { authRoute } from "./routes/auth"
 import { courseRoute } from "./routes/courses"
 import { uploadRoute, fileRoute } from "./routes/uploads"
+import { categoryRoutes } from "./routes/categories"
 
 const app = new Hono<Context>()
 
@@ -84,6 +82,7 @@ export const routes = app
   .route("/auth", authRoute)
   .route("/courses", courseRoute)
   .route("/uploads", uploadRoute)
+  .route("/categories", categoryRoutes)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

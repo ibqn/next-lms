@@ -1,5 +1,6 @@
 import { cache } from "react"
-import { getSessionCookieOptions, sessionCookieName, validateSessionToken, type SessionValidationResult } from "database/src/lucia"
+import { getSessionCookieOptions, sessionCookieName } from "database/src/cookie"
+import { validateSessionToken, type SessionValidationResult } from "database/src/lucia"
 import { cookies } from "next/headers"
 
 export const validateRequest = cache(async (): Promise<SessionValidationResult> => {

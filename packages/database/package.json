@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "tsx --env-file-if-exists=.env src/index.ts",
+    "seed": "tsx --env-file-if-exists=.env src/seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",

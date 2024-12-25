@@ -1,7 +1,11 @@
+import { categoryQueryOptions } from "@/api/category"
+import { CategoryForm } from "@/components/category-form"
 import { DescriptionForm } from "@/components/description-form"
 import { IconBadge } from "@/components/icon-badge"
 import { ImageForm } from "@/components/image-form"
 import { TitleForm } from "@/components/title-form"
+import { getQueryClient } from "@/lib/query-client"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getCourse } from "database/src/queries/course"
 import { LayoutDashboard } from "lucide-react"
 import { notFound } from "next/navigation"
@@ -26,6 +30,9 @@ export default async function SingleCoursePage({ params }: Props) {
   const completedFields = requiredFields.filter(Boolean).length
   const completionText = `(${completedFields}/${totalFields})`
 
+  const queryClient = getQueryClient()
+  await queryClient.prefetchQuery(categoryQueryOptions())
+
   return (
     <div className="flex grow flex-col p-6">
       <div className="flex items-center justify-between">
@@ -45,6 +52,9 @@ export default async function SingleCoursePage({ params }: Props) {
           <TitleForm initialData={course} />
           <DescriptionForm initialData={course} />
           <ImageForm initialData={course} />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <CategoryForm initialData={course} />
+          </HydrationBoundary>
         </div>
       </div>
     </div>

@@ -8,11 +8,8 @@ import { HTTPException } from "hono/http-exception"
 import { signedIn } from "../middleware/signed-in"
 import { signIn, signUp } from "database/src/queries/auth"
 import type { User } from "database/src/drizzle/schema/auth"
-import {
-  getSessionCookieOptions,
-  invalidateSessionToken,
-  sessionCookieName,
-} from "database/src/lucia"
+import { getSessionCookieOptions, sessionCookieName } from "database/src/cookie"
+import { invalidateSessionToken } from "database/src/lucia"
 
 const authRoute = new Hono<Context>()
   .post("/signup", zValidator("form", signinSchema), async (c) => {
