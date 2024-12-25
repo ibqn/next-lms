@@ -48,7 +48,11 @@ app.onError((error, c) => {
 app.use(
   "*",
   cors({
-    origin: "http://localhost:3000",
+    origin: (origin) => {
+      if (origin.includes("localhost")) {
+        return origin
+      }
+    },
     credentials: true,
   }),
   async (c, next) => {
