@@ -28,7 +28,7 @@ export const PriceForm = ({ initialData }: Props) => {
 
   const form = useForm<PriceSchema>({
     defaultValues: {
-      price: initialData.price ?? 0,
+      price: initialData.price ?? null,
     },
     resolver: zodResolver(priceSchema),
   })
@@ -45,9 +45,11 @@ export const PriceForm = ({ initialData }: Props) => {
       console.log("data:", data)
       const { price } = data
 
+      const formattedPrice = price ? `'${formatPrice(price)}'` : ""
+
       toast({
         title: "Update course success",
-        description: `The course price '${price}' was updated successfully`,
+        description: `The course price ${formattedPrice} was updated successfully`,
         variant: "green",
       })
       toggleEdit()
@@ -95,10 +97,9 @@ export const PriceForm = ({ initialData }: Props) => {
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
                       <Input
                         className="pl-8"
-                        type="number"
-                        step="0.01"
                         placeholder="Course Price..."
                         {...field}
+                        value={field.value ?? ""}
                         disabled={isSubmitting}
                       />
                     </div>
@@ -116,8 +117,10 @@ export const PriceForm = ({ initialData }: Props) => {
             </div>
           </form>
         </Form>
-      ) : (
+      ) : initialData.price ? (
         <p className="mt-2 text-sm">{formatPrice(initialData.price)}</p>
+      ) : (
+        <p className="mt-2 text-sm italic text-slate-500">No price</p>
       )}
     </div>
   )

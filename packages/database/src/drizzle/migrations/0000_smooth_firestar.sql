@@ -35,7 +35,7 @@ CREATE TABLE "drizzle"."course" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
 	"description" text,
-	"price" numeric(10, 2) DEFAULT '0' NOT NULL,
+	"price" real,
 	"is_published" boolean DEFAULT false NOT NULL,
 	"image_url" text,
 	"user_id" uuid,

@@ -17,7 +17,10 @@ export const categorySchema = z.object({
 })
 
 export const priceSchema = z.object({
-  price: z.coerce.number().min(0, { message: "Price should be a positive number." }),
+  price: z.coerce
+    .number()
+    .positive({ message: "Price must be a positive number." })
+    .or(z.literal("").transform(() => null)),
 })
 
 export type TitleSchema = z.infer<typeof titleSchema>
