@@ -15,7 +15,7 @@ export type ComboBoxOption = {
 export type ComboBoxProps = {
   options: ComboBoxOption[]
   value?: string | null
-  onChange: (value: string) => void
+  onChange: (value: string | null) => void
 }
 
 export function Combobox({ options, value, onChange }: ComboBoxProps) {
@@ -40,7 +40,7 @@ export function Combobox({ options, value, onChange }: ComboBoxProps) {
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : currentValue)
+                    onChange(currentValue === value ? null : currentValue)
                     setOpen(false)
                   }}
                 >

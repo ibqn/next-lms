@@ -14,8 +14,8 @@ import { paramIdSchema } from "database/src/validators/param"
 import { HTTPException } from "hono/http-exception"
 
 export const courseRoute = new Hono<Context>()
-  .post("/", signedIn, zValidator("form", createCourseSchema), async (c) => {
-    const inputData = c.req.valid("form")
+  .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
+    const inputData = c.req.valid("json")
     const user = c.get("user") as User
 
     const course = await createCourse({ ...inputData, user })
@@ -29,10 +29,10 @@ export const courseRoute = new Hono<Context>()
     "/:id",
     signedIn,
     zValidator("param", paramIdSchema),
-    zValidator("form", updateCourseSchema),
+    zValidator("json", updateCourseSchema),
     async (c) => {
       const { id } = c.req.valid("param")
-      const inputData = c.req.valid("form")
+      const inputData = c.req.valid("json")
       const user = c.get("user") as User
 
       const course = await updateCourse({ ...inputData, id, user })

@@ -12,8 +12,8 @@ import { getSessionCookieOptions, sessionCookieName } from "database/src/cookie"
 import { invalidateSessionToken } from "database/src/lucia"
 
 const authRoute = new Hono<Context>()
-  .post("/signup", zValidator("form", signinSchema), async (c) => {
-    const { username, password } = c.req.valid("form")
+  .post("/signup", zValidator("json", signinSchema), async (c) => {
+    const { username, password } = c.req.valid("json")
 
     const { token } = await signUp(username, password)
 
@@ -27,13 +27,16 @@ const authRoute = new Hono<Context>()
       201
     )
   })
-  .post("/signin", zValidator("form", signinSchema), async (c) => {
-    const { username, password } = c.req.valid("form")
+
+  .post("/signin", zValidator("json", signinSchema), async (c) => {
+    const { username, password } = c.req.valid("json")
 
     const { token } = await signIn(username, password)
 
     if (!token) {
-      throw new HTTPException(401, { message: "Invalid username or password" })
+      throw new HTTPException(401, {
+        message: "Invalid username or password",
+      })
     }
 
     setCookie(c, sessionCookieName, token, getSessionCookieOptions())

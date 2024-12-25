@@ -6,7 +6,7 @@ const defaultOptions = {
   baseURL: `${env.NEXT_PUBLIC_API_URL}/api`,
   withCredentials: true,
   headers: {
-    "Content-Type": "multipart/form-data",
+    "Content-Type": "application/json",
   },
 }
 
