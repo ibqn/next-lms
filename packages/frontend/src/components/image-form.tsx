@@ -157,7 +157,7 @@ export const ImageForm = ({ initialData }: Props) => {
                     <FormControl>
                       <input className="hidden" {...field} disabled={isSubmitting} />
                     </FormControl>
-                    <FormDescription>{"e.g. 'Upload an image...'"}</FormDescription>
+                    <FormDescription>16:9 aspect ratio is recommended</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
