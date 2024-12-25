@@ -90,6 +90,11 @@ export const updateCourse = async ({
   const user =
     (await db.query.user.findFirst({
       where: ({ id }, { eq }) => eq(id, userId),
+      columns: {
+        id: true,
+        username: true,
+        createdAt: true,
+      },
     })) ?? null
 
   return { ...course, user } satisfies Course as Course
