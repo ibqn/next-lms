@@ -3,7 +3,7 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ImageIcon, PencilIcon, PlusCircleIcon, UploadIcon } from "lucide-react"
+import { ImageIcon, PencilIcon, PlusCircleIcon, UploadIcon, XIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { imageSchema, ImageSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 import { useDropzone } from "react-dropzone"
 import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
+import { deleteUpload } from "@/api/upload"
 
 type Props = {
   initialData: Course
@@ -93,6 +94,35 @@ export const ImageForm = ({ initialData }: Props) => {
     },
   })
 
+  const imageUrl = form.watch("imageUrl")
+
+  const { mutate: removeUpload } = useMutation({
+    mutationFn: deleteUpload,
+    onSuccess: () => {
+      console.log("Image removed")
+
+      form.setValue("imageUrl", "")
+    },
+    onError: () => {
+      toast({
+        title: "Remove upload error",
+        description: "Something went wrong!",
+        variant: "destructive",
+      })
+    },
+  })
+
+  const removeImageUrl = () => {
+    if (imageUrl) {
+      const uploadId = imageUrl.split("/").pop()
+      if (uploadId) {
+        removeUpload(uploadId)
+      }
+    } else {
+      form.setValue("imageUrl", "")
+    }
+  }
+
   return (
     <div className="mt-6 rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
@@ -147,6 +177,30 @@ export const ImageForm = ({ initialData }: Props) => {
               </div>
             )}
           </div>
+
+          {imageUrl && (
+            <div className="my-4 flex items-start">
+              <div className="group relative aspect-video">
+                <div className="absolute right-1.5 top-1.5 bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="h-auto p-1 opacity-0 group-hover:opacity-100"
+                    onClick={() => removeImageUrl()}
+                  >
+                    <XIcon className="size-4" aria-hidden="true" />
+                  </Button>
+                </div>
+                <Image
+                  src={imageUrl}
+                  alt="Course image"
+                  className="w-64 rounded-md object-cover"
+                  width={120}
+                  height={120}
+                />
+              </div>
+            </div>
+          )}
+
           <Form {...form}>
             <form onSubmit={onSubmit} className="mt-4 space-y-4">
               <FormField
