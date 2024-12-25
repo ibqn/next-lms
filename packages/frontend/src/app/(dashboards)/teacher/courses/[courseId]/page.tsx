@@ -3,11 +3,12 @@ import { CategoryForm } from "@/components/category-form"
 import { DescriptionForm } from "@/components/description-form"
 import { IconBadge } from "@/components/icon-badge"
 import { ImageForm } from "@/components/image-form"
+import { PriceForm } from "@/components/price-form"
 import { TitleForm } from "@/components/title-form"
 import { getQueryClient } from "@/lib/query-client"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getCourse } from "database/src/queries/course"
-import { LayoutDashboard } from "lucide-react"
+import { CircleDollarSignIcon, LayoutDashboardIcon, ListChecksIcon } from "lucide-react"
 import { notFound } from "next/navigation"
 
 type Props = {
@@ -45,8 +46,8 @@ export default async function SingleCoursePage({ params }: Props) {
       <div className="mt-16 grid grow grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col">
           <div className="flex items-center gap-x-2">
-            <IconBadge icon={LayoutDashboard} />
-            <h2>Customize your course</h2>
+            <IconBadge icon={LayoutDashboardIcon} />
+            <h2 className="text-xl">Customize your course</h2>
           </div>
 
           <TitleForm initialData={course} />
@@ -55,6 +56,22 @@ export default async function SingleCoursePage({ params }: Props) {
           <HydrationBoundary state={dehydrate(queryClient)}>
             <CategoryForm initialData={course} />
           </HydrationBoundary>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={ListChecksIcon} />
+            <h2 className="text-xl">Course chapters</h2>
+          </div>
+
+          <div>TODO: chapters</div>
+
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={CircleDollarSignIcon} />
+            <h2 className="text-xl">Sell your course</h2>
+          </div>
+
+          <PriceForm initialData={course} />
         </div>
       </div>
     </div>

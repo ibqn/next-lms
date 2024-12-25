@@ -1,4 +1,4 @@
-import { boolean, text, decimal, uuid } from "drizzle-orm/pg-core"
+import { boolean, text, decimal, uuid, real } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
 import { schema } from "./schema"
 import { relations, type InferSelectModel } from "drizzle-orm"
@@ -12,7 +12,7 @@ export const courseTable = schema.table("course", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   description: text("description"),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
+  price: real("price").notNull().default(0),
   isPublished: boolean("is_published").notNull().default(false),
 
   imageUrl: text("image_url"),
