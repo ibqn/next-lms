@@ -45,27 +45,34 @@ app.onError((error, c) => {
   )
 })
 
-app.use("*", cors(), async (c, next) => {
-  const token = getCookie(c, sessionCookieName)
-  // console.log("token", token)
-  if (!token) {
-    c.set("user", null)
-    c.set("session", null)
-    return await next()
-  }
+app.use(
+  "*",
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+  async (c, next) => {
+    const token = getCookie(c, sessionCookieName)
+    // console.log("token", token)
+    if (!token) {
+      c.set("user", null)
+      c.set("session", null)
+      return await next()
+    }
 
-  const { session, user } = await validateSessionToken(token)
-  if (session) {
-    setCookie(c, sessionCookieName, token, getSessionCookieOptions())
-  }
-  // else {
-  //   deleteCookie(c, "session_token")
-  // }
-  c.set("session", session)
-  c.set("user", user)
+    const { session, user } = await validateSessionToken(token)
+    if (session) {
+      setCookie(c, sessionCookieName, token, getSessionCookieOptions())
+    }
+    // else {
+    //   deleteCookie(c, "session_token")
+    // }
+    c.set("session", session)
+    c.set("user", user)
 
-  await next()
-})
+    await next()
+  }
+)
 
 export const routes = app
   .route("/uploads", fileRoute)

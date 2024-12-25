@@ -76,5 +76,7 @@ export const getPublicUrl = (upload: Upload) => {
 }
 
 export const getProtectedUrl = (upload: Upload) => {
-  return `http://localhost:3333/uploads/${upload.id}/protected`
+  // return `http://localhost:3333/uploads/${upload.id}/protected`
+  // return `/uploads/${upload.id}/protected`
+  return `/images/${upload.id}`
 }

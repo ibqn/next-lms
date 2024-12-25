@@ -181,7 +181,13 @@ export const ImageForm = ({ initialData }: Props) => {
             </div>
           ) : (
             <div className="relative aspect-video">
-              <Image fill className="rounded-md object-cover" alt="Course image" src={initialData.imageUrl} />
+              <Image
+                fill
+                className="rounded-md object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                alt="Course image"
+                src={initialData.imageUrl}
+              />
             </div>
           )}
         </>
