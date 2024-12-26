@@ -70,7 +70,7 @@ export const PriceForm = ({ initialData }: Props) => {
   })
 
   return (
-    <div className="mt-6 rounded-md border bg-slate-100 p-4">
+    <div className="rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
         <span>Course price</span>
         <Button variant="ghost" onClick={toggleEdit}>
