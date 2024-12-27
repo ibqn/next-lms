@@ -4,7 +4,7 @@ import { schema } from "./schema"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { categoryTable } from "./category"
 import { userTable, type User } from "./auth"
-import { attachmentTable } from "./attachment"
+import { attachmentTable, type Attachment } from "./attachment"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
@@ -42,6 +42,8 @@ export const courseRelations = relations(courseTable, ({ one, many }) => ({
 
 export type Course = InferSelectModel<typeof courseTable> & {
   user: User | null
+} & {
+  attachments?: Attachment[]
 }
 
 export const insertCourseSchema = createInsertSchema(courseTable, {

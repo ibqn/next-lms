@@ -50,6 +50,17 @@ export const getCourse = async ({ courseId }: GetCourseOptions) => {
           createdAt: true,
         },
       },
+      attachments: {
+        columns: {
+          id: true,
+          name: true,
+          url: true,
+          createdAt: true,
+          updatedAt: true,
+          courseId: true,
+          userId: true,
+        },
+      },
     },
   })
 
