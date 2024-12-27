@@ -1,6 +1,7 @@
 import { categoryQueryOptions } from "@/api/category"
 import { CategoryForm } from "@/components/category-form"
 import { DescriptionForm } from "@/components/description-form"
+import { FileForm } from "@/components/file-form"
 import { IconBadge } from "@/components/icon-badge"
 import { ImageForm } from "@/components/image-form"
 import { PriceForm } from "@/components/price-form"
@@ -8,7 +9,7 @@ import { TitleForm } from "@/components/title-form"
 import { getQueryClient } from "@/lib/query-client"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getCourse } from "database/src/queries/course"
-import { CircleDollarSignIcon, LayoutDashboardIcon, ListChecksIcon } from "lucide-react"
+import { CircleDollarSignIcon, FileIcon, LayoutDashboardIcon, ListChecksIcon } from "lucide-react"
 import { notFound } from "next/navigation"
 
 type Props = {
@@ -21,7 +22,6 @@ export default async function SingleCoursePage({ params }: Props) {
   const { courseId } = await params
 
   const course = await getCourse({ courseId })
-
   if (!course) {
     notFound()
   }
@@ -44,7 +44,7 @@ export default async function SingleCoursePage({ params }: Props) {
       </div>
 
       <div className="mt-16 grid grow grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-6">
           <div className="flex items-center gap-x-2">
             <IconBadge icon={LayoutDashboardIcon} />
             <h2 className="text-xl">Customize your course</h2>
@@ -58,7 +58,7 @@ export default async function SingleCoursePage({ params }: Props) {
           </HydrationBoundary>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-6">
           <div className="flex items-center gap-x-2">
             <IconBadge icon={ListChecksIcon} />
             <h2 className="text-xl">Course chapters</h2>
@@ -72,6 +72,13 @@ export default async function SingleCoursePage({ params }: Props) {
           </div>
 
           <PriceForm initialData={course} />
+
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={FileIcon} />
+            <h2 className="text-xl">Resources & Attachments</h2>
+          </div>
+
+          <FileForm initialData={course} />
         </div>
       </div>
     </div>
