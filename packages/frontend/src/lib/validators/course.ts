@@ -23,8 +23,19 @@ export const priceSchema = z.object({
     .or(z.literal("").transform(() => null)),
 })
 
+export const attachmentSchema = z.object({
+  attachments: z.array(
+    z.object({
+      id: z.string().uuid().optional(),
+      name: z.string().min(1, { message: "Name is required." }),
+      url: z.string().min(1, { message: "URL is required." }),
+    })
+  ),
+})
+
 export type TitleSchema = z.infer<typeof titleSchema>
 export type DescriptionSchema = z.infer<typeof descriptionSchema>
 export type ImageSchema = z.infer<typeof imageSchema>
 export type CategorySchema = z.infer<typeof categorySchema>
 export type PriceSchema = z.infer<typeof priceSchema>
+export type AttachmentSchema = z.infer<typeof attachmentSchema>
