@@ -77,7 +77,7 @@ export const CategoryForm = ({ initialData }: Props) => {
   const selectedCategory = categories.find((category) => category.value === initialData.categoryId)
 
   return (
-    <div className="mt-6 rounded-md border bg-slate-100 p-4">
+    <div className="rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
         <span>Course Category</span>
         <Button variant="ghost" onClick={toggleEdit}>
