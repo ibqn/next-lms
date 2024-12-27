@@ -21,7 +21,7 @@ export const courseRoute = new Hono<Context>()
     const course = await createCourse({ ...inputData, user })
 
     return c.json<SuccessResponse<Course>>(
-      { success: true, message: "Post created", data: course },
+      { success: true, message: "Course created", data: course },
       201
     )
   })
@@ -42,7 +42,7 @@ export const courseRoute = new Hono<Context>()
       }
 
       return c.json<SuccessResponse<Course>>(
-        { success: true, message: "Post updated", data: course },
+        { success: true, message: "Course updated", data: course },
         200
       )
     }
