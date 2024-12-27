@@ -1,5 +1,5 @@
 {
-  "id": "6c9f23d5-9de3-40af-ab04-65eda5b2278a",
+  "id": "769e7cb1-8c03-406d-b13e-53616e1ea775",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -11,8 +11,8 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": false,
+          "primaryKey": true,
+          "notNull": true,
           "default": "gen_random_uuid()"
         },
         "name": {
@@ -24,6 +24,12 @@
         "url": {
           "name": "url",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -66,6 +72,20 @@
         }
       },
       "foreignKeys": {
+        "attachment_user_id_user_id_fk": {
+          "name": "attachment_user_id_user_id_fk",
+          "tableFrom": "attachment",
+          "tableTo": "user",
+          "schemaTo": "drizzle",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
         "attachment_course_id_course_id_fk": {
           "name": "attachment_course_id_course_id_fk",
           "tableFrom": "attachment",
