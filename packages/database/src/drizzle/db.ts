@@ -28,5 +28,5 @@ export const db = drizzle(processEnv.DATABASE_URL, {
   },
 })
 
-const result = db.execute("select 1")
-console.log(result)
+// const result = db.execute("select 1")
+// console.log(result)
