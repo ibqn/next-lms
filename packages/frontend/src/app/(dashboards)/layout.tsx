@@ -5,7 +5,7 @@ type Props = Readonly<{
   children: React.ReactNode
 }>
 
-export default function DashboardLayout({ children }: Props) {
+export default async function DashboardLayout({ children }: Props) {
   return (
     <div className="flex h-full grow">
       <div className="fixed inset-y-0 z-50 h-[80px] w-full md:pl-56">
