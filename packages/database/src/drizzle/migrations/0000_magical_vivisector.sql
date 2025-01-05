@@ -1,4 +1,4 @@
-CREATE SCHEMA "drizzle";
+CREATE SCHEMA if not exists "drizzle";
 --> statement-breakpoint
 CREATE TABLE "drizzle"."attachment" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
