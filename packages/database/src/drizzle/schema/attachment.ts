@@ -27,12 +27,10 @@ export const attachmentRelations = relations(attachmentTable, ({ one }) => ({
   user: one(userTable, {
     fields: [attachmentTable.userId],
     references: [userTable.id],
-    relationName: "user",
   }),
   course: one(courseTable, {
     fields: [attachmentTable.courseId],
     references: [courseTable.id],
-    relationName: "course",
   }),
 }))
 

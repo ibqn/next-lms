@@ -1,4 +1,4 @@
-CREATE SCHEMA if not exists "drizzle";
+CREATE SCHEMA "drizzle";
 --> statement-breakpoint
 CREATE TABLE "drizzle"."attachment" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "drizzle"."chapter" (
 	"position" integer,
 	"is_published" boolean DEFAULT false NOT NULL,
 	"is_free" boolean DEFAULT false NOT NULL,
-	"course_id" uuid,
+	"course_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "chapter_title_unique" UNIQUE("title")

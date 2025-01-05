@@ -1,5 +1,5 @@
 {
-  "id": "afbfd736-e8af-4332-a0b1-b1821ae61f44",
+  "id": "db9ae723-fe26-498c-8287-22eff5a94b6d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -301,7 +301,7 @@
           "name": "course_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",

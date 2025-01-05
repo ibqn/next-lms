@@ -18,6 +18,8 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     user: userTable,
     session: sessionTable,
     sessionRelations,
+    chapter: chapterTable,
+    chapterRelations,
     course: courseTable,
     courseRelations,
     category: categoryTable,
@@ -26,8 +28,6 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     attachmentRelations,
     upload: uploadTable,
     uploadRelations,
-    chapters: chapterTable,
-    chapterRelations,
   },
 })
 

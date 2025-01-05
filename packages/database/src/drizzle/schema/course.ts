@@ -31,15 +31,13 @@ export const courseRelations = relations(courseTable, ({ one, many }) => ({
   category: one(categoryTable, {
     fields: [courseTable.categoryId],
     references: [categoryTable.id],
-    relationName: "category",
   }),
   user: one(userTable, {
     fields: [courseTable.userId],
     references: [userTable.id],
-    relationName: "user",
   }),
-  attachments: many(attachmentTable),
   chapters: many(chapterTable),
+  attachments: many(attachmentTable),
 }))
 
 export type Course = InferSelectModel<typeof courseTable> & {

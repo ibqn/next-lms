@@ -9,12 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
-import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { titleSchema } from "@/lib/validators/chapter"
 import type { TitleSchema } from "@/lib/validators/course"
 import { Input } from "@/components/ui/input"
+import { postChapter } from "@/api/chapter"
+import { ChapterList } from "@/components/chapter-list"
 
 type Props = {
   initialData: Course
@@ -39,13 +40,13 @@ export const ChapterForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
-  const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: TitleSchema) => patchCourse(courseId, payload),
-    onSuccess: ({ data }) => {
+  const { mutate: createChapter, isPending } = useMutation({
+    mutationFn: (payload: TitleSchema) => postChapter({ ...payload, courseId }),
+    onSuccess: (data) => {
       console.log("data:", data)
 
       toast({
-        title: "Update course success",
+        title: "Create chapter success",
         description: `The course description updated successfully`,
         variant: "green",
       })
@@ -54,7 +55,7 @@ export const ChapterForm = ({ initialData }: Props) => {
     },
     onError: () => {
       toast({
-        title: "Update course error",
+        title: "Create chapter error",
         description: "Something went wrong!",
         variant: "destructive",
       })
@@ -63,7 +64,7 @@ export const ChapterForm = ({ initialData }: Props) => {
 
   const onSubmit = form.handleSubmit((data) => {
     console.log(data)
-    updateCourse(data)
+    createChapter(data)
   })
 
   return (
@@ -108,6 +109,7 @@ export const ChapterForm = ({ initialData }: Props) => {
           <p className={cn("mt-2 text-sm", !initialData.chapters?.length && "italic text-slate-500")}>
             {!initialData.chapters?.length && "No chapters yet"}
           </p>
+          <ChapterList chapters={initialData.chapters ?? []} />
 
           <p className="mt-4 text-sm text-muted-foreground">Drag {"'n'"} Drop to reorder chapters</p>
         </>

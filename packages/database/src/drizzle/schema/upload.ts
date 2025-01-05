@@ -22,7 +22,6 @@ export const uploadRelations = relations(uploadTable, ({ one }) => ({
   user: one(userTable, {
     fields: [uploadTable.userId],
     references: [userTable.id],
-    relationName: "user",
   }),
 }))
 

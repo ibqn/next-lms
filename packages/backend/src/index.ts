@@ -14,6 +14,7 @@ import { courseRoute } from "./routes/courses"
 import { uploadRoute, fileRoute } from "./routes/uploads"
 import { categoryRoutes } from "./routes/categories"
 import { attachmentRoute } from "./routes/attachments"
+import { chapterRoute } from "./routes/chapters"
 
 const app = new Hono<Context>()
 
@@ -85,6 +86,7 @@ export const routes = app
   .route("/uploads", uploadRoute)
   .route("/categories", categoryRoutes)
   .route("/attachments", attachmentRoute)
+  .route("/chapters", chapterRoute)
 
 const port = 3333
 console.log(`Server is running on http://localhost:${port}`)

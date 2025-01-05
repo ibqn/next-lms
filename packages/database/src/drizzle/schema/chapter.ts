@@ -15,20 +15,19 @@ export const chapterTable = schema.table(
     isPublished: boolean("is_published").notNull().default(false),
     isFree: boolean("is_free").notNull().default(false),
 
-    courseId: uuid("course_id").references(() => courseTable.id, {
-      onDelete: "cascade",
-    }),
+    courseId: uuid("course_id")
+      .notNull()
+      .references(() => courseTable.id, { onDelete: "cascade" }),
 
     ...lifecycleDates,
-  },
-  (table) => [index("chapter_course_index").on(table.courseId)]
+  }
+  // (table) => [index("chapter_course_index").on(table.courseId)]
 )
 
 export const chapterRelations = relations(chapterTable, ({ one, many }) => ({
   course: one(courseTable, {
     fields: [chapterTable.courseId],
     references: [courseTable.id],
-    relationName: "course",
   }),
 }))
 
