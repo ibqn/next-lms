@@ -20,7 +20,7 @@ export const attachmentTable = schema.table(
 
     ...lifecycleDates,
   },
-  (table) => [index("course_index").on(table.courseId)]
+  (table) => [index("attachment_course_index").on(table.courseId)]
 )
 
 export const attachmentRelations = relations(attachmentTable, ({ one }) => ({

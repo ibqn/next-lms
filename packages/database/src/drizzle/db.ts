@@ -5,6 +5,7 @@ import { courseRelations, courseTable } from "./schema/course"
 import { categoryRelations, categoryTable } from "./schema/category"
 import { attachmentRelations, attachmentTable } from "./schema/attachment"
 import { uploadRelations, uploadTable } from "./schema/upload"
+import { chapterRelations, chapterTable } from "./schema/chapter"
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
@@ -25,6 +26,8 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     attachmentRelations,
     upload: uploadTable,
     uploadRelations,
+    chapters: chapterTable,
+    chapterRelations,
   },
 })
 

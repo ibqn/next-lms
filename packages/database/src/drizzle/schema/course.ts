@@ -7,6 +7,7 @@ import { userTable, type User } from "./auth"
 import { attachmentTable, type Attachment } from "./attachment"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
+import { chapterTable, type Chapter } from "./chapter"
 
 export const courseTable = schema.table("course", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -38,12 +39,15 @@ export const courseRelations = relations(courseTable, ({ one, many }) => ({
     relationName: "user",
   }),
   attachments: many(attachmentTable),
+  chapters: many(chapterTable),
 }))
 
 export type Course = InferSelectModel<typeof courseTable> & {
   user: User | null
 } & {
   attachments?: Attachment[]
+} & {
+  chapters?: Chapter[]
 }
 
 export const insertCourseSchema = createInsertSchema(courseTable, {

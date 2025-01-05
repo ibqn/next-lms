@@ -3,42 +3,34 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Pencil } from "lucide-react"
+import { Pencil, PlusCircleIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { categorySchema, type CategorySchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Combobox } from "@/components/ui/combobox"
-import { categoryQueryOptions } from "@/api/category"
+import { Textarea } from "@/components/ui/textarea"
+import { titleSchema } from "@/lib/validators/chapter"
+import type { TitleSchema } from "@/lib/validators/course"
 
 type Props = {
   initialData: Course
 }
 
-export const CategoryForm = ({ initialData }: Props) => {
+export const ChapterForm = ({ initialData }: Props) => {
   const { id: courseId } = initialData
-  const { data: response } = useSuspenseQuery(categoryQueryOptions())
 
-  const categories =
-    response?.data.map(({ id, name }) => ({
-      label: name,
-      value: id,
-    })) ?? []
+  const [isCreating, setIsCreating] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
-  const [isEditing, setIsEditing] = useState(false)
+  const toggleCreating = () => setIsCreating((prev) => !prev)
 
-  const toggleEdit = () => setIsEditing((prev) => !prev)
-
-  const form = useForm<CategorySchema>({
-    defaultValues: {
-      categoryId: initialData.categoryId,
-    },
-    resolver: zodResolver(categorySchema),
+  const form = useForm<TitleSchema>({
+    defaultValues: { title: "" },
+    resolver: zodResolver(titleSchema),
   })
 
   const { isSubmitting, isValid } = form.formState
@@ -48,16 +40,16 @@ export const CategoryForm = ({ initialData }: Props) => {
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: CategorySchema) => patchCourse(courseId, payload),
+    mutationFn: (payload: TitleSchema) => patchCourse(courseId, payload),
     onSuccess: ({ data }) => {
       console.log("data:", data)
 
       toast({
         title: "Update course success",
-        description: `The course Category updated successfully`,
+        description: `The course description updated successfully`,
         variant: "green",
       })
-      toggleEdit()
+      toggleCreating()
       router.refresh()
     },
     onError: () => {
@@ -74,35 +66,33 @@ export const CategoryForm = ({ initialData }: Props) => {
     updateCourse(data)
   })
 
-  const selectedCategory = categories.find((category) => category.value === initialData.categoryId)
-
   return (
     <div className="rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
-        <span>Course category</span>
-        <Button variant="ghost" onClick={toggleEdit}>
-          {isEditing ? (
+        <span>Course chapters</span>
+        <Button variant="ghost" onClick={toggleCreating}>
+          {isCreating ? (
             <>Cancel</>
           ) : (
             <>
-              <Pencil className="mr-2 size-4" />
-              Edit Category
+              <PlusCircleIcon className="mr-2 size-4" />
+              add a chapter
             </>
           )}
         </Button>
       </div>
-      {isEditing ? (
+      {isCreating ? (
         <Form {...form}>
           <form onSubmit={onSubmit} className="mt-4 space-y-4">
             <FormField
               control={form.control}
-              name="categoryId"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox {...field} options={categories} />
+                    <Textarea placeholder="Title description..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>Select a category for your course</FormDescription>
+                  <FormDescription>{"e.g. 'This chapter is about...'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -116,8 +106,8 @@ export const CategoryForm = ({ initialData }: Props) => {
           </form>
         </Form>
       ) : (
-        <p className={cn("mt-2 text-sm", !initialData.categoryId && "italic text-slate-500")}>
-          {selectedCategory?.label || "No Category"}
+        <p className={cn("mt-2 text-sm", !initialData.description && "italic text-slate-500")}>
+          {initialData.description || "No description"}
         </p>
       )}
     </div>

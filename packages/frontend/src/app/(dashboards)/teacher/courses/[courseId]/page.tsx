@@ -1,5 +1,6 @@
 import { categoryQueryOptions } from "@/api/category"
 import { CategoryForm } from "@/components/category-form"
+import { ChapterForm } from "@/components/chapter-form"
 import { DescriptionForm } from "@/components/description-form"
 import { FileForm } from "@/components/file-form"
 import { IconBadge } from "@/components/icon-badge"
@@ -26,7 +27,13 @@ export default async function SingleCoursePage({ params }: Props) {
     notFound()
   }
 
-  const requiredFields = [course.title, course.description, course.price, course.categoryId]
+  const requiredFields = [
+    course.title,
+    course.description,
+    course.price,
+    course.categoryId,
+    course.chapters?.some((chapter) => chapter.isPublished),
+  ]
   const totalFields = requiredFields.length
   const completedFields = requiredFields.filter(Boolean).length
   const completionText = `(${completedFields}/${totalFields})`
@@ -64,7 +71,7 @@ export default async function SingleCoursePage({ params }: Props) {
             <h2 className="text-xl">Course chapters</h2>
           </div>
 
-          <div>TODO: chapters</div>
+          <ChapterForm initialData={course} />
 
           <div className="flex items-center gap-x-2">
             <IconBadge icon={CircleDollarSignIcon} />
