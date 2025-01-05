@@ -3,7 +3,7 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Pencil, PlusCircleIcon } from "lucide-react"
+import { PlusCircleIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
@@ -12,9 +12,9 @@ import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Textarea } from "@/components/ui/textarea"
 import { titleSchema } from "@/lib/validators/chapter"
 import type { TitleSchema } from "@/lib/validators/course"
+import { Input } from "@/components/ui/input"
 
 type Props = {
   initialData: Course
@@ -90,25 +90,27 @@ export const ChapterForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea placeholder="Title description..." {...field} disabled={isSubmitting} />
+                    <Input placeholder="Title description..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>{"e.g. 'This chapter is about...'"}</FormDescription>
+                  <FormDescription>{"e.g. 'Introduction to the course...'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="flex items-center gap-x-2">
-              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
-                Save
-              </Button>
-            </div>
+            <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+              Create
+            </Button>
           </form>
         </Form>
       ) : (
-        <p className={cn("mt-2 text-sm", !initialData.description && "italic text-slate-500")}>
-          {initialData.description || "No description"}
-        </p>
+        <>
+          <p className={cn("mt-2 text-sm", !initialData.chapters?.length && "italic text-slate-500")}>
+            {!initialData.chapters?.length && "No chapters yet"}
+          </p>
+
+          <p className="mt-4 text-sm text-muted-foreground">Drag {"'n'"} Drop to reorder chapters</p>
+        </>
       )}
     </div>
   )
