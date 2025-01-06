@@ -36,7 +36,7 @@ export const createChapter = async ({
     .insert(chapterTable)
     .values({
       courseId,
-      position: lastChapter?.position ?? 0 + 1,
+      position: (lastChapter?.position ?? 0) + 1,
       title,
     })
     .returning({
