@@ -15,3 +15,14 @@ export const createChapterSchema = insertChapterSchema.pick({
 })
 
 export type CreateChapterSchema = z.infer<typeof createChapterSchema>
+
+export const reorderChapterSchema = z.object({
+  reorderList: z.array(
+    z.object({
+      id: z.string().uuid(),
+      position: z.number().positive(),
+    })
+  ),
+})
+
+export type ReorderChapterSchema = z.infer<typeof reorderChapterSchema>

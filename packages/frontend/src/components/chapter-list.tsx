@@ -5,12 +5,19 @@ import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea
 import { cn } from "@/lib/utils"
 import { GripIcon, PencilIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { ReorderChapterSchema } from "database/src/validators/chapter"
 
 type Props = {
   chapters: Chapter[]
+  onEdit: (chapterId: string) => void
+  onReorder: (reorderedData: ReorderChapterSchema) => void
 }
 
-export const ChapterList = ({ chapters }: Props) => {
+export const ChapterList = (props: Props) => {
+  const [chapters, setChapters] = useState<Chapter[]>(props.chapters)
+
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return
@@ -19,8 +26,25 @@ export const ChapterList = ({ chapters }: Props) => {
     const items = Array.from(chapters)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
+
+    const startIndex = Math.min(result.source.index, result.destination.index)
+    const endIndex = Math.max(result.source.index, result.destination.index)
+
+    const updateData = items.map(({ id }, index) => ({ id, position: index + 1 })).slice(startIndex, endIndex + 1)
+    console.log("updateData:", updateData)
+
+    setChapters(items)
+    props.onReorder({ reorderList: updateData })
   }
-  const onEdit = (chapterId: string) => () => {}
+
+  useEffect(() => {
+    setChapters(props.chapters)
+  }, [props.chapters])
+
+  const router = useRouter()
+  const onEdit = (chapterId: string) => () => {
+    router.push(`/course/${chapters.at(0)?.courseId}/chapters/${chapterId}`)
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -54,7 +78,7 @@ export const ChapterList = ({ chapters }: Props) => {
 
                     {chapter.title}
 
-                    <div className="ml-auto flex items-center gap-x-2 pr-2">
+                    <div className="ml-auto flex items-center gap-x-2 pr-2.5">
                       {chapter.isFree && <Badge>Free</Badge>}
 
                       <Badge className={cn(chapter.isPublished ? "bg-sky-700" : "bg-slate-500")}>
@@ -63,7 +87,9 @@ export const ChapterList = ({ chapters }: Props) => {
 
                       <PencilIcon
                         className="size-4 cursor-pointer transition hover:opacity-75"
-                        onClick={onEdit(chapter.id)}
+                        onClick={() => {
+                          onEdit(chapter.id)
+                        }}
                       />
                     </div>
                   </div>

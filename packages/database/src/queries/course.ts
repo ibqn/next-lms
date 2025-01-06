@@ -63,6 +63,7 @@ export const getCourse = async ({ courseId }: GetCourseOptions) => {
           position: true,
           videoUrl: true,
         },
+        orderBy: (chapters, { asc }) => [asc(chapters.position)],
       },
       attachments: {
         columns: {
