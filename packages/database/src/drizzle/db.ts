@@ -30,6 +30,3 @@ export const db = drizzle(processEnv.DATABASE_URL, {
     uploadRelations,
   },
 })
-
-// const result = db.execute("select 1")
-// console.log(result)
