@@ -11,7 +11,6 @@ import { ReorderChapterSchema } from "database/src/validators/chapter"
 
 type Props = {
   chapters: Chapter[]
-  onEdit: (chapterId: string) => void
   onReorder: (reorderedData: ReorderChapterSchema) => void
 }
 
@@ -31,7 +30,6 @@ export const ChapterList = (props: Props) => {
     const endIndex = Math.max(result.source.index, result.destination.index)
 
     const updateData = items.map(({ id }, index) => ({ id, position: index + 1 })).slice(startIndex, endIndex + 1)
-    console.log("updateData:", updateData)
 
     setChapters(items)
     props.onReorder({ reorderList: updateData })
@@ -42,8 +40,8 @@ export const ChapterList = (props: Props) => {
   }, [props.chapters])
 
   const router = useRouter()
-  const onEdit = (chapterId: string) => () => {
-    router.push(`/course/${chapters.at(0)?.courseId}/chapters/${chapterId}`)
+  const onEdit = (chapterId: string) => {
+    router.push(`/teacher/courses/${chapters.at(0)?.courseId}/chapters/${chapterId}`)
   }
 
   return (

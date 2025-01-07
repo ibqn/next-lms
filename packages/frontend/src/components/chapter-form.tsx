@@ -135,7 +135,6 @@ export const ChapterForm = ({ initialData }: Props) => {
             onReorder={(reorderData) => {
               reorderChapters(reorderData)
             }}
-            onEdit={() => {}}
           />
 
           <p className="mt-4 text-sm text-muted-foreground">Drag {"'n'"} Drop to reorder chapters</p>
