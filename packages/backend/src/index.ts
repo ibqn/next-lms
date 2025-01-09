@@ -57,7 +57,6 @@ app.use(
   }),
   async (c, next) => {
     const token = getCookie(c, sessionCookieName)
-    // console.log("token", token)
     if (!token) {
       c.set("user", null)
       c.set("session", null)
@@ -67,10 +66,9 @@ app.use(
     const { session, user } = await validateSessionToken(token)
     if (session) {
       setCookie(c, sessionCookieName, token, getSessionCookieOptions())
+    } else {
+      deleteCookie(c, "session_token")
     }
-    // else {
-    //   deleteCookie(c, "session_token")
-    // }
     c.set("session", session)
     c.set("user", user)
 
