@@ -2,6 +2,7 @@ import type { CreateChapterSchema, ReorderChapterSchema } from "database/src/val
 import { axios } from "./axios"
 import type { ApiResponse } from "backend/src/types"
 import { Chapter } from "database/src/drizzle/schema/chapter"
+import { queryOptions } from "@tanstack/react-query"
 
 export const postChapter = async (chapterData: CreateChapterSchema) => {
   const { data: response } = await axios.post<ApiResponse<Chapter>>("/chapters", chapterData)
@@ -24,3 +25,24 @@ export const postReorderChapters = async (reorderList: ReorderChapterSchema) => 
 
   return chapterIds
 }
+
+export const getChapter = async (chapterId: string) => {
+  try {
+    const { data: response } = await axios.get<ApiResponse<Chapter>>(`/chapters/${chapterId}`)
+
+    if (!response.success) {
+      return null
+    }
+    const { data: chapter } = response
+    return chapter
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const chapterQueryOptions = (courseId: string) =>
+  queryOptions({
+    queryKey: ["chapters", courseId] as const,
+    queryFn: () => getChapter(courseId),
+  })
