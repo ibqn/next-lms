@@ -161,17 +161,41 @@ export const getChapter = async ({
   return chapter satisfies Chapter as Chapter
 }
 
-type UpdateChapterOptions = UpdateChapterSchema & ParamIdSchema
+type UpdateChapterOptions = UpdateChapterSchema &
+  ParamIdSchema & {
+    user: User
+  }
 
 export const updateChapter = async ({
-  id,
+  id: chapterId,
+  user,
   ...data
 }: UpdateChapterOptions): Promise<ApiResponse<Chapter>> => {
+  const [chapter] = await db
+    .select({ courseId: chapterTable.courseId })
+    .from(chapterTable)
+    .where(eq(chapterTable.id, chapterId))
+
+  if (!chapter) {
+    return { success: false, error: "Chapter not found" }
+  }
+
+  const [course] = await db
+    .select({ id: courseTable.id, userId: courseTable.userId })
+    .from(courseTable)
+    .where(
+      and(eq(courseTable.userId, user.id), eq(courseTable.id, chapter.courseId))
+    )
+
+  if (!course) {
+    return { success: false, error: "Not authorized to update chapter" }
+  }
+
   try {
     const [chapter] = await db
       .update(chapterTable)
       .set(data)
-      .where(eq(chapterTable.id, id))
+      .where(eq(chapterTable.id, chapterId))
       .returning({
         id: chapterTable.id,
         title: chapterTable.title,
