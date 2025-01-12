@@ -1,4 +1,4 @@
-import type { CreateChapterSchema, ReorderChapterSchema } from "database/src/validators/chapter"
+import type { CreateChapterSchema, ReorderChapterSchema, UpdateChapterSchema } from "database/src/validators/chapter"
 import { axios } from "./axios"
 import type { ApiResponse } from "backend/src/types"
 import { Chapter } from "database/src/drizzle/schema/chapter"
@@ -46,3 +46,13 @@ export const chapterQueryOptions = (courseId: string) =>
     queryKey: ["chapters", courseId] as const,
     queryFn: () => getChapter(courseId),
   })
+
+export const patchChapter = async (chapterId: string, chapterData: UpdateChapterSchema) => {
+  const { data: response } = await axios.patch<ApiResponse<Chapter>>(`/chapters/${chapterId}`, chapterData)
+
+  if (!response.success) {
+    return null
+  }
+  const { data: chapter } = response
+  return chapter
+}

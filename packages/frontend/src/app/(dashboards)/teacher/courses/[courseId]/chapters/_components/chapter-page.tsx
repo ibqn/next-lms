@@ -1,6 +1,7 @@
 "use client"
 
 import { chapterQueryOptions } from "@/api/chapter"
+import { TitleForm } from "@/components/forms/chapter/title-form"
 import { IconBadge } from "@/components/icon-badge"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { LayoutDashboardIcon } from "lucide-react"
@@ -39,6 +40,8 @@ export const ChapterPage = ({ chapterId }: Props) => {
               <h2 className="text-xl">Customize your chapter</h2>
             </div>
           </div>
+
+          <TitleForm initialData={chapter} />
         </div>
       </div>
     </>

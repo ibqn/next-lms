@@ -8,9 +8,11 @@ import {
   reorderChapters,
   getChapter,
 } from "database/src/queries/chapter"
+import { updateChapter } from "database/src/queries/chapter"
 import {
   createChapterSchema,
   reorderChapterSchema,
+  updateChapterSchema,
 } from "database/src/validators/chapter"
 import type { User } from "database/src/drizzle/schema/auth"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
@@ -70,3 +72,21 @@ export const chapterRoute = new Hono<Context>()
       data: chapter,
     })
   })
+  .patch(
+    "/:id",
+    signedIn,
+    zValidator("param", paramIdSchema),
+    zValidator("json", updateChapterSchema),
+    async (c) => {
+      const { id } = c.req.valid("param")
+      const inputData = c.req.valid("json")
+
+      const response = await updateChapter({ ...inputData, id })
+
+      if (!response.success) {
+        throw new HTTPException(404, { message: response.error })
+      }
+
+      return c.json<SuccessResponse<Chapter>>(response, 200)
+    }
+  )

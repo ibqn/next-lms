@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { chapterTable } from "../drizzle/schema/chapter"
-import { createInsertSchema } from "drizzle-zod"
+import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 
 export const insertChapterSchema = createInsertSchema(chapterTable, {
   courseId: z.string().uuid(),
@@ -26,3 +26,13 @@ export const reorderChapterSchema = z.object({
 })
 
 export type ReorderChapterSchema = z.infer<typeof reorderChapterSchema>
+
+export const updateChapterSchema = createUpdateSchema(chapterTable)
+  .partial()
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+
+export type UpdateChapterSchema = z.infer<typeof updateChapterSchema>

@@ -5,10 +5,13 @@ import {
   reorderChapterSchema,
   type CreateChapterSchema,
   type ReorderChapterSchema,
+  type UpdateChapterSchema,
 } from "../validators/chapter"
-import { and, desc, eq } from "drizzle-orm"
+import { and, desc, eq, is } from "drizzle-orm"
 import { courseTable } from "../drizzle/schema/course"
-import { type ParamIdSchema } from "src/validators/param"
+import { type ParamIdSchema } from "../validators/param"
+import postgres from "postgres"
+import type { ApiResponse } from "../types"
 
 type CreateChapterOptions = CreateChapterSchema & {
   user: User
@@ -156,4 +159,42 @@ export const getChapter = async ({
   }
 
   return chapter satisfies Chapter as Chapter
+}
+
+type UpdateChapterOptions = UpdateChapterSchema & ParamIdSchema
+
+export const updateChapter = async ({
+  id,
+  ...data
+}: UpdateChapterOptions): Promise<ApiResponse<Chapter>> => {
+  try {
+    const [chapter] = await db
+      .update(chapterTable)
+      .set(data)
+      .where(eq(chapterTable.id, id))
+      .returning({
+        id: chapterTable.id,
+        title: chapterTable.title,
+        description: chapterTable.description,
+        isFree: chapterTable.isFree,
+        isPublished: chapterTable.isPublished,
+        videoUrl: chapterTable.videoUrl,
+        courseId: chapterTable.courseId,
+        position: chapterTable.position,
+        createdAt: courseTable.createdAt,
+        updatedAt: courseTable.updatedAt,
+      })
+
+    return {
+      data: chapter satisfies Chapter as Chapter,
+      success: true,
+      message: "Chapter updated",
+    }
+  } catch (error) {
+    console.error(error)
+    if (error instanceof postgres.PostgresError && error.code === "23505") {
+      return { success: false, error: "Chapter with this title already exists" }
+    }
+    return { success: false, error: "Failed to update chapter" }
+  }
 }
