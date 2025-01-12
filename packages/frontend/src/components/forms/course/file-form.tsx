@@ -14,7 +14,7 @@ import { deleteUpload } from "@/api/upload"
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { attachmentSchema, AttachmentSchema } from "@/lib/validators/course"
-import { Form, FormControl, FormField, FormItem } from "./ui/form"
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import Link from "next/link"
 import { postAttachment } from "@/api/attachment"
 
