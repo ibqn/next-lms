@@ -7,11 +7,11 @@ import {
   type ReorderChapterSchema,
   type UpdateChapterSchema,
 } from "../validators/chapter"
-import { and, desc, eq, is } from "drizzle-orm"
+import { and, desc, eq } from "drizzle-orm"
 import { courseTable } from "../drizzle/schema/course"
 import { type ParamIdSchema } from "../validators/param"
 import postgres from "postgres"
-import type { ApiResponse } from "../types"
+import type { ApiResponse } from "backend/src/types"
 
 type CreateChapterOptions = CreateChapterSchema & {
   user: User
