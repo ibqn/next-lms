@@ -8,6 +8,7 @@ import {
 } from "../validators/chapter"
 import { and, desc, eq } from "drizzle-orm"
 import { courseTable } from "../drizzle/schema/course"
+import { type ParamIdSchema } from "src/validators/param"
 
 type CreateChapterOptions = CreateChapterSchema & {
   user: User
@@ -113,4 +114,46 @@ export const reorderChapters = async ({
   })
 
   return trxResult
+}
+
+export type GetChapterOptions = ParamIdSchema & {
+  user: User
+}
+
+export const getChapter = async ({
+  id: chapterId,
+  user,
+}: GetChapterOptions) => {
+  const [chapter] = await db
+    .select({
+      id: chapterTable.id,
+      title: chapterTable.title,
+      description: chapterTable.description,
+      courseId: chapterTable.courseId,
+      isPublished: chapterTable.isPublished,
+      videoUrl: chapterTable.videoUrl,
+      isFree: chapterTable.isFree,
+      position: chapterTable.position,
+      createdAt: chapterTable.createdAt,
+      updatedAt: chapterTable.updatedAt,
+    })
+    .from(chapterTable)
+    .where(eq(chapterTable.id, chapterId))
+
+  if (!chapter) {
+    return null
+  }
+
+  const [course] = await db
+    .select({ id: courseTable.id })
+    .from(courseTable)
+    .where(
+      and(eq(courseTable.id, chapter.courseId), eq(courseTable.userId, user.id))
+    )
+
+  if (!course) {
+    return null
+  }
+
+  return chapter satisfies Chapter as Chapter
 }

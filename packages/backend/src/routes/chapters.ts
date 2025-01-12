@@ -2,8 +2,12 @@ import { Hono } from "hono"
 import type { Context } from "../utils/context"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
-import type { SuccessResponse } from "../types"
-import { createChapter, reorderChapters } from "database/src/queries/chapter"
+import { type SuccessResponse } from "../types"
+import {
+  createChapter,
+  reorderChapters,
+  getChapter,
+} from "database/src/queries/chapter"
 import {
   createChapterSchema,
   reorderChapterSchema,
@@ -11,6 +15,7 @@ import {
 import type { User } from "database/src/drizzle/schema/auth"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import { HTTPException } from "hono/http-exception"
+import { paramIdSchema } from "database/src/validators/param"
 
 export const chapterRoute = new Hono<Context>()
   .post("/", signedIn, zValidator("json", createChapterSchema), async (c) => {
@@ -49,3 +54,19 @@ export const chapterRoute = new Hono<Context>()
       })
     }
   )
+  .get("/:id", zValidator("param", paramIdSchema), signedIn, async (c) => {
+    const { id } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const chapter = await getChapter({ id, user })
+
+    if (!chapter) {
+      throw new HTTPException(404, { message: "Chapter not found" })
+    }
+
+    return c.json<SuccessResponse<Chapter>>({
+      success: true,
+      message: "Chapter found",
+      data: chapter,
+    })
+  })
