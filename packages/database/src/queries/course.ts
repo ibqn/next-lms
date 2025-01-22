@@ -6,7 +6,7 @@ import type {
   UpdateCourseSchema,
 } from "../validators/course"
 import { eq } from "drizzle-orm"
-import type { ParamIdSchema } from "src/validators/param"
+import type { ParamIdSchema } from "../validators/param"
 
 type CreateCourseOptions = CreateCourseSchema & {
   user: User

@@ -2,7 +2,7 @@ import { db } from "../drizzle/db"
 import type { User } from "../drizzle/schema/auth"
 import type { CreateUploadSchema } from "../validators/upload"
 import { uploadTable, type Upload } from "../drizzle/schema/upload"
-import type { ParamIdSchema } from "src/validators/param"
+import type { ParamIdSchema } from "../validators/param"
 import { eq } from "drizzle-orm"
 
 type CreateUploadOptions = CreateUploadSchema & {
