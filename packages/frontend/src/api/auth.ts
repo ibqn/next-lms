@@ -1,6 +1,6 @@
 import type { SigninSchema } from "database/src/validators/signin"
 import { axios } from "./axios"
-import type { ApiResponse, SuccessResponse } from "backend/src/types"
+import type { ApiResponse, SuccessResponse } from "database/src/types"
 import { queryOptions } from "@tanstack/react-query"
 import type { User } from "database/src/drizzle/schema/auth"
 

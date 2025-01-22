@@ -1,4 +1,4 @@
-import { SuccessResponse } from "backend/src/types"
+import { SuccessResponse } from "database/src/types"
 import { Category } from "database/src/drizzle/schema/category"
 import { axios } from "./axios"
 import { queryOptions } from "@tanstack/react-query"

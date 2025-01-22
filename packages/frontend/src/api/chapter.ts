@@ -1,6 +1,6 @@
 import type { CreateChapterSchema, ReorderChapterSchema, UpdateChapterSchema } from "database/src/validators/chapter"
 import { axios } from "./axios"
-import type { ApiResponse } from "backend/src/types"
+import type { ApiResponse } from "database/src/types"
 import { Chapter } from "database/src/drizzle/schema/chapter"
 import { queryOptions } from "@tanstack/react-query"
 
