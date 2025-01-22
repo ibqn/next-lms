@@ -17,9 +17,6 @@ importers:
       argon2:
         specifier: ^0.41.1
         version: 0.41.1
-      backend:
-        specifier: workspace:*
-        version: link:../backend
       drizzle-orm:
         specifier: ^0.38.4
         version: 0.38.4(postgres@3.4.5)

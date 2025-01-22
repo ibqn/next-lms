@@ -3,7 +3,7 @@ import type { Context } from "../utils/context"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import type { Course } from "database/src/drizzle/schema/course"
-import type { SuccessResponse } from "../types"
+import type { SuccessResponse } from "database/src/types"
 import { createCourse, updateCourse } from "database/src/queries/course"
 import {
   createCourseSchema,

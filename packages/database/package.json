@@ -15,7 +15,6 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "argon2": "^0.41.1",
-    "backend": "workspace:*",
     "drizzle-orm": "^0.38.4",
     "drizzle-zod": "^0.6.1",
     "postgres": "^3.4.5",

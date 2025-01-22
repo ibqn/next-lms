@@ -7,7 +7,7 @@ import type { User } from "database/src/drizzle/schema/auth"
 import { HTTPException } from "hono/http-exception"
 import { access, unlink, writeFile } from "fs/promises"
 import path from "path"
-import type { SuccessResponse } from "../types"
+import type { SuccessResponse } from "database/src/types"
 import {
   createUpload,
   deleteUpload,

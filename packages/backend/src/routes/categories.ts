@@ -3,7 +3,7 @@ import type { Context } from "../utils/context"
 import { signedIn } from "../middleware/signed-in"
 import { getCategories } from "database/src/queries/category"
 import type { Category } from "database/src/drizzle/schema/category"
-import type { SuccessResponse } from "../types"
+import type { SuccessResponse } from "database/src/types"
 
 export const categoryRoutes = new Hono<Context>().get(
   "/",
