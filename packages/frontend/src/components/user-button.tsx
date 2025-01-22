@@ -3,14 +3,13 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, LogOut } from "lucide-react"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { getSignout } from "@/api/auth"
 import { useRouter } from "next/navigation"
-import { getQueryClient } from "@/lib/query-client"
 
 export const UserButton = () => {
   const router = useRouter()
-  const queryClient = getQueryClient()
+  const queryClient = useQueryClient()
   const { mutate: signout } = useMutation({
     mutationFn: getSignout,
     onSettled: async () => {

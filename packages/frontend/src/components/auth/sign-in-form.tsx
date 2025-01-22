@@ -11,13 +11,12 @@ import { useState } from "react"
 import { FormError } from "./form-error"
 import { FormSuccess } from "./form-success"
 import Link from "next/link"
-import { useMutation } from "@tanstack/react-query"
-import { getQueryClient } from "@/lib/query-client"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { toast } from "@/components/ui/use-toast"
-import { ErrorResponse, SuccessResponse } from "backend/src/types"
+import { ErrorResponse, SuccessResponse } from "database/src/types"
 
 export const SignInForm = () => {
   const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
@@ -34,7 +33,7 @@ export const SignInForm = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get("redirect") ?? "/"
 
-  const queryClient = getQueryClient()
+  const queryClient = useQueryClient()
 
   const { mutate: signin } = useMutation({
     mutationFn: postSignin,

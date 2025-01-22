@@ -10,11 +10,10 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { FormError } from "@/components/auth/form-error"
 import { FormSuccess } from "@/components/auth/form-success"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postSignup } from "@/api/auth"
-import { getQueryClient } from "@/lib/query-client"
 import { AxiosError } from "axios"
-import type { ErrorResponse, SuccessResponse } from "backend/src/types"
+import type { ErrorResponse, SuccessResponse } from "database/src/types"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter, useSearchParams } from "next/navigation"
 
@@ -35,7 +34,7 @@ export const SignUpForm = () => {
 
   const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
 
-  const queryClient = getQueryClient()
+  const queryClient = useQueryClient()
 
   const { mutate: signup } = useMutation({
     mutationFn: postSignup,

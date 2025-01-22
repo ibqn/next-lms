@@ -9,13 +9,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import { chapterQueryOptions, patchChapter } from "@/api/chapter"
-import { getQueryClient } from "@/lib/query-client"
 import { isAxiosError } from "axios"
-import { ErrorResponse } from "backend/src/types"
+import { ErrorResponse } from "database/src/types"
 
 type Props = {
   initialData: Chapter
@@ -41,7 +40,7 @@ export const TitleForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
-  const queryClient = getQueryClient()
+  const queryClient = useQueryClient()
 
   const { mutate: updateChapter, isPending } = useMutation({
     mutationFn: (payload: TitleSchema) => patchChapter(chapterId, payload),
