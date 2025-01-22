@@ -2,7 +2,7 @@ import { Hono } from "hono"
 import type { Context } from "../utils/context"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
-import { type SuccessResponse } from "../types"
+import type { SuccessResponse } from "database/src/types"
 import {
   createChapter,
   reorderChapters,
@@ -78,10 +78,11 @@ export const chapterRoute = new Hono<Context>()
     zValidator("param", paramIdSchema),
     zValidator("json", updateChapterSchema),
     async (c) => {
+      const user = c.get("user") as User
       const { id } = c.req.valid("param")
       const inputData = c.req.valid("json")
 
-      const response = await updateChapter({ ...inputData, id })
+      const response = await updateChapter({ ...inputData, id, user })
 
       if (!response.success) {
         throw new HTTPException(404, { message: response.error })
