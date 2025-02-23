@@ -8,12 +8,12 @@
     "@hono/node-server": "^1.13.8",
     "@hono/zod-validator": "^0.4.3",
     "database": "workspace:*",
-    "hono": "^4.7.1",
+    "hono": "^4.7.2",
     "mime": "^4.0.6",
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
-    "tsx": "^4.7.1"
+    "@types/node": "^22.13.5",
+    "tsx": "^4.19.3"
   }
 }
