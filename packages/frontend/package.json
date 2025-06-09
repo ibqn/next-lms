@@ -36,7 +36,6 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.57.0",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.25.56"
   },
   "devDependencies": {
@@ -51,6 +50,7 @@
     "postcss": "^8.5.4",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "tailwindcss": "^4.1.8",
+    "tw-animate-css": "^1.3.4",
     "typescript": "^5.8.3"
   }
 }
