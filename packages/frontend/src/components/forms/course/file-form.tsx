@@ -144,7 +144,7 @@ export const FileForm = ({ initialData }: Props) => {
             className={cn(
               "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg",
               "border border-dashed border-muted-foreground/25 bg-slate-200 px-5 py-2.5 text-center transition hover:bg-slate-200/25",
-              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60"
             )}
@@ -185,8 +185,8 @@ export const FileForm = ({ initialData }: Props) => {
                   key={field.url}
                   className="flex items-center gap-2 rounded-md border border-sky-200 bg-sky-100 p-3 text-sky-700"
                 >
-                  <FileIcon className="size-4 flex-shrink-0" />
-                  <div className="flex-grow">
+                  <FileIcon className="size-4 shrink-0" />
+                  <div className="grow">
                     <FormField
                       control={form.control}
                       name={`attachments.${index}`}
