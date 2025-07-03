@@ -1,5 +1,5 @@
-import { insertUploadSchema } from "src/drizzle/schema/upload"
-import { z } from "zod"
+import { insertUploadSchema } from "../drizzle/schema/upload"
+import { z } from "zod/v4"
 
 export const createUploadSchema = insertUploadSchema.omit({
   id: true,

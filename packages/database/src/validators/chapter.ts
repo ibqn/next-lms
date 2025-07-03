@@ -1,9 +1,9 @@
-import { z } from "zod"
+import { z } from "zod/v4"
 import { chapterTable } from "../drizzle/schema/chapter"
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod"
 
 export const insertChapterSchema = createInsertSchema(chapterTable, {
-  courseId: z.string().uuid(),
+  courseId: z.uuid(),
   title: z
     .string()
     .min(3, { message: "Title should have at least 3 characters." }),
@@ -19,7 +19,7 @@ export type CreateChapterSchema = z.infer<typeof createChapterSchema>
 export const reorderChapterSchema = z.object({
   reorderList: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.uuid(),
       position: z.number().positive(),
     })
   ),
