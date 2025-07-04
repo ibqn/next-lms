@@ -50,9 +50,6 @@ importers:
       axios:
         specifier: ^1.10.0
         version: 1.10.0
-      backend:
-        specifier: workspace:*
-        version: link:../backend
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
