@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@hono/node-server':
-        specifier: ^1.14.4
-        version: 1.14.4(hono@4.8.3)
+        specifier: ^1.15.0
+        version: 1.15.0(hono@4.8.3)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.0(hono@4.8.3)(zod@3.25.67)
+        version: 0.7.0(hono@4.8.3)(zod@3.25.72)
       database:
         specifier: workspace:*
         version: link:../database
@@ -24,8 +24,8 @@ importers:
         specifier: ^4.0.7
         version: 4.0.7
       zod:
-        specifier: ^3.25.67
-        version: 3.25.67
+        specifier: ^3.25.72
+        version: 3.25.72
     devDependencies:
       '@types/node':
         specifier: ^24.0.10
@@ -186,8 +186,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@hono/node-server@1.14.4':
-    resolution: {integrity: sha512-DnxpshhYewr2q9ZN8ez/M5mmc3sucr8CT1sIgIy1bkeUXut9XWDkqHoFHRhWIQgkYnKpVRxunyhK7WzpJeJ6qQ==}
+  '@hono/node-server@1.15.0':
+    resolution: {integrity: sha512-MjmK4l5N4dQpZ9OSWN0tCj7ejuc7WvuWMzSKtc89bnknJykAeHxzRigXBTYZk85H6Awrii6RM59iUiUluApu2A==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
@@ -234,8 +234,8 @@ packages:
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
-  zod@3.25.67:
-    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
+  zod@3.25.72:
+    resolution: {integrity: sha512-Cl+fe4dNL4XumOBNBsr0lHfA80PQiZXHI4xEMTEr8gt6aGz92t3lBA32e71j9+JeF/VAYvdfBnuwJs+BMx/BrA==}
 
 snapshots:
 
@@ -314,14 +314,14 @@ snapshots:
   '@esbuild/win32-x64@0.25.5':
     optional: true
 
-  '@hono/node-server@1.14.4(hono@4.8.3)':
+  '@hono/node-server@1.15.0(hono@4.8.3)':
     dependencies:
       hono: 4.8.3
 
-  '@hono/zod-validator@0.7.0(hono@4.8.3)(zod@3.25.67)':
+  '@hono/zod-validator@0.7.0(hono@4.8.3)(zod@3.25.72)':
     dependencies:
       hono: 4.8.3
-      zod: 3.25.67
+      zod: 3.25.72
 
   '@types/node@24.0.10':
     dependencies:
@@ -377,4 +377,4 @@ snapshots:
 
   undici-types@7.8.0: {}
 
-  zod@3.25.67: {}
+  zod@3.25.72: {}
