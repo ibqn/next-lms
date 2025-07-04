@@ -27,16 +27,13 @@ const authRoute = new Hono<Context>()
       201
     )
   })
-
   .post("/signin", zValidator("json", signinSchema), async (c) => {
     const { username, password } = c.req.valid("json")
 
     const { token } = await signIn(username, password)
 
     if (!token) {
-      throw new HTTPException(401, {
-        message: "Invalid username or password",
-      })
+      throw new HTTPException(401, { message: "Invalid username or password" })
     }
 
     setCookie(c, sessionCookieName, token, getSessionCookieOptions())
@@ -59,6 +56,18 @@ const authRoute = new Hono<Context>()
       success: true,
       data: user,
       message: "User data",
+    })
+  })
+  .get("/validate", async (c) => {
+    const user = c.get("user")
+    const session = c.get("session")
+
+    const data = { user, session }
+
+    return c.json<SuccessResponse<typeof data>>({
+      success: true,
+      message: "Session validation result",
+      data,
     })
   })
 
