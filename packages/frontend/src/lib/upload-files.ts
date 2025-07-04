@@ -1,6 +1,6 @@
 import { AxiosProgressEvent } from "axios"
 import { axios } from "../api/axios"
-import { SuccessResponse } from "backend/src/types"
+import { SuccessResponse } from "database/src/types"
 import { Upload } from "database/src/drizzle/schema/upload"
 
 export type UploadProgress = {
@@ -26,12 +26,18 @@ type UploadOptions = {
   onUploadError?: ({ file, error }: UploadError) => void
 }
 
-export const uploadFiles = async ({ files, onUploadProgress, onUploadSuccess, onUploadError }: UploadOptions) => {
-  const uploadProgressForFile = (file: File) => (progressEvent: AxiosProgressEvent) => {
-    const { loaded, total } = progressEvent
-    const progress = total ? Math.floor((loaded / total) * 100) : 0
-    onUploadProgress?.({ file, progress })
-  }
+export const uploadFiles = async ({
+  files,
+  onUploadProgress,
+  onUploadSuccess,
+  onUploadError,
+}: UploadOptions) => {
+  const uploadProgressForFile =
+    (file: File) => (progressEvent: AxiosProgressEvent) => {
+      const { loaded, total } = progressEvent
+      const progress = total ? Math.floor((loaded / total) * 100) : 0
+      onUploadProgress?.({ file, progress })
+    }
 
   const config = {
     headers: {
@@ -43,10 +49,14 @@ export const uploadFiles = async ({ files, onUploadProgress, onUploadSuccess, on
     const formData = new FormData()
     formData.append("file", file)
 
-    const response = await axios.post<SuccessResponse<Upload>>("/uploads", formData, {
-      ...config,
-      onUploadProgress: uploadProgressForFile(file),
-    })
+    const response = await axios.post<SuccessResponse<Upload>>(
+      "/uploads",
+      formData,
+      {
+        ...config,
+        onUploadProgress: uploadProgressForFile(file),
+      }
+    )
 
     return response.data
   }
