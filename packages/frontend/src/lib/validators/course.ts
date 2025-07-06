@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod/v4"
 
 export const titleSchema = z.object({
   title: z.string().min(1, { message: "Title is required." }),
@@ -26,7 +26,7 @@ export const priceSchema = z.object({
 export const attachmentSchema = z.object({
   attachments: z.array(
     z.object({
-      id: z.string().uuid().optional(),
+      id: z.uuid().optional(),
       name: z.string().min(1, { message: "Name is required." }),
       url: z.string().min(1, { message: "URL is required." }),
     })
