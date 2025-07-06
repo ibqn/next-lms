@@ -8,9 +8,9 @@
     "@hono/node-server": "^1.15.0",
     "@hono/zod-validator": "^0.7.0",
     "database": "workspace:*",
-    "hono": "^4.8.3",
+    "hono": "^4.8.4",
     "mime": "^4.0.7",
-    "zod": "^3.25.72"
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
