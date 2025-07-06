@@ -3,13 +3,21 @@
 import { titleSchema, type TitleSchema } from "@/lib/validators/course"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { postCourse } from "@/api/course"
 
@@ -23,8 +31,6 @@ export default function CreatePage() {
 
   const router = useRouter()
 
-  const { toast } = useToast()
-
   const { mutate: createCourse, isPending } = useMutation({
     mutationFn: postCourse,
     onSuccess: ({ data }) => {
@@ -32,27 +38,18 @@ export default function CreatePage() {
       const { id } = data
 
       form.reset()
-      toast({
-        title: "Create course success",
+      toast.success("Create course success", {
         description: `The ${data.title} course was created successfully`,
-        variant: "green",
       })
       router.push(`/teacher/courses/${id}`)
     },
     onError: (error) => {
+      let errorMessage = "Something went wrong while creating the course."
       if (axios.isAxiosError(error) && error.response?.status === 409) {
-        toast({
-          title: "Create course error",
-          description: "Course with this name already exists",
-          variant: "destructive",
-        })
-      } else {
-        toast({
-          title: "Create course error",
-          description: "Something went wrong!",
-          variant: "destructive",
-        })
+        errorMessage = "Course with this name already exists!"
       }
+
+      toast.error("Create course error", { description: errorMessage })
     },
   })
 
@@ -66,7 +63,9 @@ export default function CreatePage() {
       <div>
         <h1 className="text-3xl font-semibold">Name your course</h1>
         <p className="mt-2 text-sm text-slate-600">
-          {"What would you like to name your course? Don't worry, you can change this later."}
+          {
+            "What would you like to name your course? Don't worry, you can change this later."
+          }
         </p>
         <Form {...form}>
           <form onSubmit={onSubmit} className="mt-8 space-y-8">
@@ -79,13 +78,18 @@ export default function CreatePage() {
                   <FormControl>
                     <Input placeholder="Course Title..." {...field} />
                   </FormControl>
-                  <FormDescription>{"e.g. 'Introduction to Computer Science'"}</FormDescription>
+                  <FormDescription>
+                    {"e.g. 'Introduction to Computer Science'"}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Link href="/teacher/courses" className={buttonVariants({ variant: "ghost" })}>
+              <Link
+                href="/teacher/courses"
+                className={buttonVariants({ variant: "ghost" })}
+              >
                 Cancel
               </Link>
               <Button type="submit" disabled={isPending}>

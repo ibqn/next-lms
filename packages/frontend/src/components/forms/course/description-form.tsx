@@ -5,10 +5,20 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { descriptionSchema, type DescriptionSchema } from "@/lib/validators/course"
+import {
+  descriptionSchema,
+  type DescriptionSchema,
+} from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { useToast } from "@/components/ui/use-toast"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
+import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
@@ -35,8 +45,6 @@ export const DescriptionForm = ({ initialData }: Props) => {
 
   const { isSubmitting, isValid } = form.formState
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
@@ -44,19 +52,15 @@ export const DescriptionForm = ({ initialData }: Props) => {
     onSuccess: ({ data }) => {
       console.log("data:", data)
 
-      toast({
-        title: "Update course success",
+      toast.success("Update course success", {
         description: `The course description updated successfully`,
-        variant: "green",
       })
       toggleEdit()
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Update course error",
+      toast.error("Update course error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -90,23 +94,37 @@ export const DescriptionForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea placeholder="Course Description..." {...field} disabled={isSubmitting} />
+                    <Textarea
+                      placeholder="Course Description..."
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
-                  <FormDescription>{"e.g. 'This course is about...'"}</FormDescription>
+                  <FormDescription>
+                    {"e.g. 'This course is about...'"}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex items-center gap-x-2">
-              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !isValid || isPending}
+              >
                 Save
               </Button>
             </div>
           </form>
         </Form>
       ) : (
-        <p className={cn("mt-2 text-sm", !initialData.description && "italic text-slate-500")}>
+        <p
+          className={cn(
+            "mt-2 text-sm",
+            !initialData.description && "italic text-slate-500"
+          )}
+        >
           {initialData.description || "No description"}
         </p>
       )}

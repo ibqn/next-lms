@@ -4,7 +4,7 @@ import "./globals.css"
 import { cn } from "@/lib/utils"
 import { Providers } from "@/components/providers"
 import { ReactNode } from "react"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,7 +23,12 @@ type Props = Readonly<{
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("flex min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+      <body
+        className={cn(
+          "flex min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
         <Providers>{children}</Providers>
         <Toaster />
       </body>

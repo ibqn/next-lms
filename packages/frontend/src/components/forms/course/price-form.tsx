@@ -7,9 +7,16 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { priceSchema, type PriceSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
@@ -35,8 +42,6 @@ export const PriceForm = ({ initialData }: Props) => {
 
   const { isSubmitting, isValid } = form.formState
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
@@ -47,19 +52,15 @@ export const PriceForm = ({ initialData }: Props) => {
 
       const formattedPrice = price ? `'${formatPrice(price)}'` : ""
 
-      toast({
-        title: "Update course success",
+      toast.success("Update course success", {
         description: `The course price ${formattedPrice} was updated successfully`,
-        variant: "green",
       })
       toggleEdit()
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Update course error",
+      toast.error("Update course error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -94,7 +95,9 @@ export const PriceForm = ({ initialData }: Props) => {
                 <FormItem>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                        $
+                      </span>
                       <Input
                         className="pl-8"
                         placeholder="Course Price..."
@@ -111,7 +114,10 @@ export const PriceForm = ({ initialData }: Props) => {
             />
 
             <div className="flex items-center gap-x-2">
-              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !isValid || isPending}
+              >
                 Save
               </Button>
             </div>

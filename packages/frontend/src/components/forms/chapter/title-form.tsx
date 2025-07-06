@@ -6,9 +6,16 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { titleSchema, type TitleSchema } from "@/lib/validators/chapter"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
@@ -36,8 +43,6 @@ export const TitleForm = ({ initialData }: Props) => {
 
   const { isSubmitting, isValid } = form.formState
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const queryClient = useQueryClient()
@@ -45,16 +50,16 @@ export const TitleForm = ({ initialData }: Props) => {
   const { mutate: updateChapter, isPending } = useMutation({
     mutationFn: (payload: TitleSchema) => patchChapter(chapterId, payload),
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: chapterQueryOptions(chapterId).queryKey })
+      await queryClient.invalidateQueries({
+        queryKey: chapterQueryOptions(chapterId).queryKey,
+      })
       router.refresh()
     },
     onSuccess: (chapter: Chapter | null) => {
       console.log("data:", chapter)
       const title = chapter?.title
-      toast({
-        title: "Update course success",
+      toast.success("Update course success", {
         description: `The course title '${title}' was updated successfully`,
-        variant: "green",
       })
       toggleEdit()
     },
@@ -65,10 +70,8 @@ export const TitleForm = ({ initialData }: Props) => {
         const data = error.response?.data as ErrorResponse
         message = data.error
       }
-      toast({
-        title: "Chapter update failed",
+      toast.error("Chapter update failed", {
         description: message ?? "Something went wrong!",
-        variant: message ? "yellow" : "destructive",
       })
     },
   })
@@ -102,7 +105,11 @@ export const TitleForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Chapter Title..." {...field} disabled={isSubmitting} />
+                    <Input
+                      placeholder="Chapter Title..."
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormDescription>{"e.g. 'Introduction'"}</FormDescription>
                   <FormMessage />
@@ -111,7 +118,10 @@ export const TitleForm = ({ initialData }: Props) => {
             />
 
             <div className="flex items-center gap-x-2">
-              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !isValid || isPending}
+              >
                 Save
               </Button>
             </div>

@@ -7,8 +7,15 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { categorySchema, type CategorySchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { useToast } from "@/components/ui/use-toast"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
+import { toast } from "sonner"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
@@ -43,8 +50,6 @@ export const CategoryForm = ({ initialData }: Props) => {
 
   const { isSubmitting, isValid } = form.formState
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useMutation({
@@ -52,19 +57,15 @@ export const CategoryForm = ({ initialData }: Props) => {
     onSuccess: ({ data }) => {
       console.log("data:", data)
 
-      toast({
-        title: "Update course success",
+      toast.success("Update course success", {
         description: `The course Category updated successfully`,
-        variant: "green",
       })
       toggleEdit()
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Update course error",
+      toast.error("Update course error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -74,7 +75,9 @@ export const CategoryForm = ({ initialData }: Props) => {
     updateCourse(data)
   })
 
-  const selectedCategory = categories.find((category) => category.value === initialData.categoryId)
+  const selectedCategory = categories.find(
+    (category) => category.value === initialData.categoryId
+  )
 
   return (
     <div className="rounded-md border bg-slate-100 p-4">
@@ -102,21 +105,31 @@ export const CategoryForm = ({ initialData }: Props) => {
                   <FormControl>
                     <Combobox {...field} options={categories} />
                   </FormControl>
-                  <FormDescription>Select a category for your course</FormDescription>
+                  <FormDescription>
+                    Select a category for your course
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex items-center gap-x-2">
-              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !isValid || isPending}
+              >
                 Save
               </Button>
             </div>
           </form>
         </Form>
       ) : (
-        <p className={cn("mt-2 text-sm", !initialData.categoryId && "italic text-slate-500")}>
+        <p
+          className={cn(
+            "mt-2 text-sm",
+            !initialData.categoryId && "italic text-slate-500"
+          )}
+        >
           {selectedCategory?.label || "No Category"}
         </p>
       )}

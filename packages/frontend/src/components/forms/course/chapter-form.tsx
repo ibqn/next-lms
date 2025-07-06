@@ -6,8 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Loader2Icon, PlusCircleIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { useToast } from "@/components/ui/use-toast"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
+import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -35,26 +42,20 @@ export const ChapterForm = ({ initialData }: Props) => {
 
   const { isSubmitting, isValid } = form.formState
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const { mutate: createChapter, isPending } = useMutation({
     mutationFn: (payload: TitleSchema) => postChapter({ ...payload, courseId }),
     onSuccess: () => {
-      toast({
-        title: "Create chapter success",
+      toast.success("Create chapter success", {
         description: `The course description updated successfully`,
-        variant: "green",
       })
       toggleCreating()
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Create chapter error",
+      toast.error("Create chapter error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -62,18 +63,14 @@ export const ChapterForm = ({ initialData }: Props) => {
   const { mutate: reorderChapters, isPending: isPendingReorder } = useMutation({
     mutationFn: postReorderChapters,
     onSuccess: () => {
-      toast({
-        title: "Reorder chapter success",
+      toast.success("Reorder chapter success", {
         description: `The chapters reordered successfully`,
-        variant: "green",
       })
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Reorder chapter error",
+      toast.error("Reorder chapter error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -84,7 +81,12 @@ export const ChapterForm = ({ initialData }: Props) => {
   })
 
   return (
-    <div className={cn("relative rounded-md border bg-slate-100 p-4", isPendingReorder && "pointer-events-none")}>
+    <div
+      className={cn(
+        "relative rounded-md border bg-slate-100 p-4",
+        isPendingReorder && "pointer-events-none"
+      )}
+    >
       {isPendingReorder && (
         <div className="absolute inset-0 flex items-center justify-center rounded-md bg-slate-500/20">
           <Loader2Icon className="size-6 animate-spin text-sky-500" />
@@ -112,22 +114,36 @@ export const ChapterForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Title description..." {...field} disabled={isSubmitting} />
+                    <Input
+                      placeholder="Title description..."
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
-                  <FormDescription>{"e.g. 'Introduction to the course...'"}</FormDescription>
+                  <FormDescription>
+                    {"e.g. 'Introduction to the course...'"}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !isValid || isPending}
+            >
               Create
             </Button>
           </form>
         </Form>
       ) : (
         <>
-          <p className={cn("mt-2 text-sm", !initialData.chapters?.length && "italic text-slate-500")}>
+          <p
+            className={cn(
+              "mt-2 text-sm",
+              !initialData.chapters?.length && "italic text-slate-500"
+            )}
+          >
             {!initialData.chapters?.length && "No chapters yet"}
           </p>
           <ChapterList
@@ -137,7 +153,9 @@ export const ChapterForm = ({ initialData }: Props) => {
             }}
           />
 
-          <p className="mt-4 text-sm text-muted-foreground">Drag {"'n'"} Drop to reorder chapters</p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Drag {"'n'"} Drop to reorder chapters
+          </p>
         </>
       )}
     </div>

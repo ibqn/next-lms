@@ -3,8 +3,14 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { FileIcon, PencilIcon, PlusCircleIcon, UploadIcon, XIcon } from "lucide-react"
-import { useToast } from "@/components/ui/use-toast"
+import {
+  FileIcon,
+  PencilIcon,
+  PlusCircleIcon,
+  UploadIcon,
+  XIcon,
+} from "lucide-react"
+import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -29,8 +35,6 @@ export const FileForm = ({ initialData }: Props) => {
 
   const toggleEdit = () => setIsEditing((prev) => !prev)
 
-  const { toast } = useToast()
-
   const router = useRouter()
 
   const { mutate: createAttachment, isPending } = useMutation({
@@ -38,19 +42,15 @@ export const FileForm = ({ initialData }: Props) => {
     onSuccess: ({ data }) => {
       console.log("data:", data)
 
-      toast({
-        title: "Create attachment success",
+      toast("Create attachment success", {
         description: `The course image updated successfully`,
-        variant: "green",
       })
       toggleEdit()
       router.refresh()
     },
     onError: () => {
-      toast({
-        title: "Create attachment error",
+      toast.error("Create attachment error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -85,10 +85,8 @@ export const FileForm = ({ initialData }: Props) => {
       console.log("Upload removed")
     },
     onError: () => {
-      toast({
-        title: "Remove upload error",
+      toast.error("Remove upload error", {
         description: "Something went wrong!",
-        variant: "destructive",
       })
     },
   })
@@ -102,7 +100,10 @@ export const FileForm = ({ initialData }: Props) => {
 
   const onSubmit = form.handleSubmit((data) => {
     console.log(data)
-    const attachments = data.attachments.map((attachment) => ({ ...attachment, courseId }))
+    const attachments = data.attachments.map((attachment) => ({
+      ...attachment,
+      courseId,
+    }))
     createAttachment(attachments)
   })
 
@@ -153,20 +154,30 @@ export const FileForm = ({ initialData }: Props) => {
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
+                  <UploadIcon
+                    className="size-7 text-slate-500"
+                    aria-hidden="true"
+                  />
                 </div>
-                <p className="font-medium text-muted-foreground">Drop the files here</p>
+                <p className="font-medium text-muted-foreground">
+                  Drop the files here
+                </p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
+                  <UploadIcon
+                    className="size-7 text-slate-500"
+                    aria-hidden="true"
+                  />
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
                     Drag {`'n'`} drop files here, or click to select files
                   </p>
-                  <p className="text-sm text-muted-foreground/70">You can upload files with a maximum size of 4MB</p>
+                  <p className="text-sm text-muted-foreground/70">
+                    You can upload files with a maximum size of 4MB
+                  </p>
                 </div>
               </div>
             )}
@@ -193,7 +204,11 @@ export const FileForm = ({ initialData }: Props) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <Link className="line-clamp-1 text-xs" target="_blank" href={field.value.url}>
+                            <Link
+                              className="line-clamp-1 text-xs"
+                              target="_blank"
+                              href={field.value.url}
+                            >
                               {field.value.name}{" "}
                             </Link>
                           </FormControl>
@@ -216,7 +231,10 @@ export const FileForm = ({ initialData }: Props) => {
               ))}
 
               <div className="flex items-center gap-x-2">
-                <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !isValid || isPending}
+                >
                   Save
                 </Button>
               </div>

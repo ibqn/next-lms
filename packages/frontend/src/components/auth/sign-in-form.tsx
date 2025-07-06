@@ -4,7 +4,14 @@ import { useForm } from "react-hook-form"
 import { CardWrapper } from "./card-wrapper"
 import { type SigninSchema, signinSchema } from "database/src/validators/signin"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -15,11 +22,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { ErrorResponse, SuccessResponse } from "database/src/types"
 
 export const SignInForm = () => {
-  const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
+  const [response, setResponse] = useState<
+    SuccessResponse | ErrorResponse | null
+  >(null)
 
   const form = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
@@ -40,7 +49,7 @@ export const SignInForm = () => {
     onSuccess: async () => {
       console.log("Signin success")
       setResponse({ success: true, message: "Welcome back" })
-      toast({ title: "Sign in success", description: "Welcome back", variant: "green" })
+      toast.success("Sign in success", { description: "Welcome back" })
       await queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push(redirect)
     },
@@ -52,7 +61,7 @@ export const SignInForm = () => {
         message = response.error
       }
       setResponse({ success: false, error: message })
-      toast({ title: "Sign in failed", description: message, variant: "destructive" })
+      toast.error("Sign in failed", { description: message })
     },
   })
 
@@ -64,7 +73,11 @@ export const SignInForm = () => {
   const isDisabled = form.formState.isSubmitting
 
   return (
-    <CardWrapper headerLabel="Welcome back" backButtonLabel="Don't have an account?" backButtonHref="/sign-up">
+    <CardWrapper
+      headerLabel="Welcome back"
+      backButtonLabel="Don't have an account?"
+      backButtonHref="/sign-up"
+    >
       <Form {...form}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
@@ -110,7 +123,9 @@ export const SignInForm = () => {
           </div>
 
           {response?.success && <FormSuccess message={response.message} />}
-          {response?.success === false && <FormError message={response.error} />}
+          {response?.success === false && (
+            <FormError message={response.error} />
+          )}
 
           <Button type="submit" className="w-full" disabled={isDisabled}>
             Sign In
