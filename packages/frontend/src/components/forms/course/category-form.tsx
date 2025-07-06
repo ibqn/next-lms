@@ -20,7 +20,7 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Combobox } from "@/components/ui/combobox"
+import { Combobox } from "@/components/combobox"
 import { categoryQueryOptions } from "@/api/category"
 
 type Props = {
