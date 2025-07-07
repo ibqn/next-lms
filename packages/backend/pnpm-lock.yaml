@@ -13,7 +13,7 @@ importers:
         version: 1.15.0(hono@4.8.4)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.0(hono@4.8.4)(zod@3.25.74)
+        version: 0.7.0(hono@4.8.4)(zod@3.25.75)
       database:
         specifier: workspace:*
         version: link:../database
@@ -24,8 +24,8 @@ importers:
         specifier: ^4.0.7
         version: 4.0.7
       zod:
-        specifier: ^3.25.74
-        version: 3.25.74
+        specifier: ^3.25.75
+        version: 3.25.75
     devDependencies:
       '@types/node':
         specifier: ^24.0.10
@@ -234,8 +234,8 @@ packages:
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
-  zod@3.25.74:
-    resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
+  zod@3.25.75:
+    resolution: {integrity: sha512-OhpzAmVzabPOL6C3A3gpAifqr9MqihV/Msx3gor2b2kviCgcb+HM9SEOpMWwwNp9MRunWnhtAKUoo0AHhjyPPg==}
 
 snapshots:
 
@@ -318,10 +318,10 @@ snapshots:
     dependencies:
       hono: 4.8.4
 
-  '@hono/zod-validator@0.7.0(hono@4.8.4)(zod@3.25.74)':
+  '@hono/zod-validator@0.7.0(hono@4.8.4)(zod@3.25.75)':
     dependencies:
       hono: 4.8.4
-      zod: 3.25.74
+      zod: 3.25.75
 
   '@types/node@24.0.10':
     dependencies:
@@ -377,4 +377,4 @@ snapshots:
 
   undici-types@7.8.0: {}
 
-  zod@3.25.74: {}
+  zod@3.25.75: {}
