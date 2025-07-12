@@ -13,7 +13,7 @@ importers:
         version: 1.15.0(hono@4.8.4)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.0(hono@4.8.4)(zod@3.25.75)
+        version: 0.7.0(hono@4.8.4)(zod@4.0.5)
       database:
         specifier: workspace:*
         version: link:../database
@@ -24,12 +24,12 @@ importers:
         specifier: ^4.0.7
         version: 4.0.7
       zod:
-        specifier: ^3.25.75
-        version: 3.25.75
+        specifier: ^4.0.5
+        version: 4.0.5
     devDependencies:
       '@types/node':
-        specifier: ^24.0.10
-        version: 24.0.10
+        specifier: ^24.0.13
+        version: 24.0.13
       tsx:
         specifier: ^4.20.3
         version: 4.20.3
@@ -198,8 +198,8 @@ packages:
       hono: '>=3.9.0'
       zod: ^3.25.0
 
-  '@types/node@24.0.10':
-    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
+  '@types/node@24.0.13':
+    resolution: {integrity: sha512-Qm9OYVOFHFYg3wJoTSrz80hoec5Lia/dPp84do3X7dZvLikQvM1YpmvTBEdIr/e+U8HTkFjLHLnl78K/qjf+jQ==}
 
   esbuild@0.25.5:
     resolution: {integrity: sha512-P8OtKZRv/5J5hhz0cUAdu/cLuPIKXpQl1R9pZtvmHWQvrAUVd0UNIPT4IB4W3rNOqVO0rlqHmCIbSwxh/c9yUQ==}
@@ -234,8 +234,8 @@ packages:
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
-  zod@3.25.75:
-    resolution: {integrity: sha512-OhpzAmVzabPOL6C3A3gpAifqr9MqihV/Msx3gor2b2kviCgcb+HM9SEOpMWwwNp9MRunWnhtAKUoo0AHhjyPPg==}
+  zod@4.0.5:
+    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
 
 snapshots:
 
@@ -318,12 +318,12 @@ snapshots:
     dependencies:
       hono: 4.8.4
 
-  '@hono/zod-validator@0.7.0(hono@4.8.4)(zod@3.25.75)':
+  '@hono/zod-validator@0.7.0(hono@4.8.4)(zod@4.0.5)':
     dependencies:
       hono: 4.8.4
-      zod: 3.25.75
+      zod: 4.0.5
 
-  '@types/node@24.0.10':
+  '@types/node@24.0.13':
     dependencies:
       undici-types: 7.8.0
 
@@ -377,4 +377,4 @@ snapshots:
 
   undici-types@7.8.0: {}
 
-  zod@3.25.75: {}
+  zod@4.0.5: {}

@@ -10,10 +10,10 @@
     "database": "workspace:*",
     "hono": "^4.8.4",
     "mime": "^4.0.7",
-    "zod": "^3.25.75"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.13",
     "tsx": "^4.20.3"
   }
 }
