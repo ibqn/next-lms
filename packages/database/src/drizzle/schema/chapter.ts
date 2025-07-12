@@ -20,8 +20,8 @@ export const chapterTable = schema.table(
       .references(() => courseTable.id, { onDelete: "cascade" }),
 
     ...lifecycleDates,
-  }
-  // (table) => [index("chapter_course_index").on(table.courseId)]
+  },
+  (table) => [index().on(table.courseId)]
 )
 
 export const chapterRelations = relations(chapterTable, ({ one, many }) => ({
