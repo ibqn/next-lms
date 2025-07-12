@@ -6,14 +6,9 @@ import { categoryRelations, categoryTable } from "./schema/category"
 import { attachmentRelations, attachmentTable } from "./schema/attachment"
 import { uploadRelations, uploadTable } from "./schema/upload"
 import { chapterRelations, chapterTable } from "./schema/chapter"
+import { env } from "../env"
 
-const envSchema = z.object({
-  DATABASE_URL: z.url(),
-})
-
-export const processEnv = envSchema.parse(process.env)
-
-export const db = drizzle(processEnv.DATABASE_URL, {
+export const db = drizzle(env.DATABASE_URL, {
   schema: {
     user: userTable,
     session: sessionTable,
