@@ -1,4 +1,4 @@
-import { z } from "zod/v4"
+import { z } from "zod"
 import { courseTable, insertCourseSchema } from "../drizzle/schema/course"
 import { createUpdateSchema } from "drizzle-zod"
 

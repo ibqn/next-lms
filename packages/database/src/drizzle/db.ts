@@ -8,7 +8,7 @@ import { uploadRelations, uploadTable } from "./schema/upload"
 import { chapterRelations, chapterTable } from "./schema/chapter"
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z.url(),
 })
 
 export const processEnv = envSchema.parse(process.env)

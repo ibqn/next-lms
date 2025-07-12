@@ -1,6 +1,6 @@
 import { createInsertSchema } from "drizzle-zod"
 import { attachmentTable } from "../drizzle/schema/attachment"
-import { z } from "zod/v4"
+import { z } from "zod"
 
 export const insertAttachmentSchema = createInsertSchema(attachmentTable)
 

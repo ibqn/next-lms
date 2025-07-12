@@ -41,10 +41,8 @@ export const courseRelations = relations(courseTable, ({ one, many }) => ({
 }))
 
 export type Course = InferSelectModel<typeof courseTable> & {
-  user: User | null
-} & {
+  user?: User | null
   attachments?: Attachment[]
-} & {
   chapters?: Chapter[]
 }
 
