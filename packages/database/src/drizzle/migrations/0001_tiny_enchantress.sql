@@ -1,0 +1,1 @@
+DROP INDEX "drizzle"."chapter_course_index";
