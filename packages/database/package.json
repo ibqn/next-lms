@@ -14,14 +14,14 @@
   "dependencies": {
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "argon2": "^0.43.0",
-    "drizzle-orm": "^0.44.2",
+    "argon2": "^0.43.1",
+    "drizzle-orm": "^0.44.3",
     "drizzle-zod": "^0.8.2",
     "postgres": "^3.4.7",
     "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@types/node": "^24.0.13",
+    "@types/node": "^24.0.15",
     "drizzle-kit": "^0.31.4",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
