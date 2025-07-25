@@ -10,22 +10,22 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.17.1
-        version: 1.17.1(hono@4.8.5)
+        version: 1.17.1(hono@4.8.8)
       '@hono/zod-validator':
         specifier: ^0.7.2
-        version: 0.7.2(hono@4.8.5)(zod@4.0.5)
+        version: 0.7.2(hono@4.8.8)(zod@4.0.10)
       database:
         specifier: workspace:*
         version: link:../database
       hono:
-        specifier: ^4.8.5
-        version: 4.8.5
+        specifier: ^4.8.8
+        version: 4.8.8
       mime:
         specifier: ^4.0.7
         version: 4.0.7
       zod:
-        specifier: ^4.0.5
-        version: 4.0.5
+        specifier: ^4.0.10
+        version: 4.0.10
     devDependencies:
       '@types/node':
         specifier: ^24.1.0
@@ -214,8 +214,8 @@ packages:
   get-tsconfig@4.10.1:
     resolution: {integrity: sha512-auHyJ4AgMz7vgS8Hp3N6HXSmlMdUyhSUrfBF16w153rxtLIEOE+HGqaBppczZvnHLqQJfiHotCYpNhl0lUROFQ==}
 
-  hono@4.8.5:
-    resolution: {integrity: sha512-Up2cQbtNz1s111qpnnECdTGqSIUIhZJMLikdKkshebQSEBcoUKq6XJayLGqSZWidiH0zfHRCJqFu062Mz5UuRA==}
+  hono@4.8.8:
+    resolution: {integrity: sha512-GbxTGB93Y+MOwCL2tnf9nE6L2Bn3s9D0pS+Mh1FoU4gkuecMVmg8VvHHLO702tq8y9N2fcrlcP8eCm7/feucng==}
     engines: {node: '>=16.9.0'}
 
   mime@4.0.7:
@@ -234,8 +234,8 @@ packages:
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
-  zod@4.0.5:
-    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
+  zod@4.0.10:
+    resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
 
 snapshots:
 
@@ -314,14 +314,14 @@ snapshots:
   '@esbuild/win32-x64@0.25.5':
     optional: true
 
-  '@hono/node-server@1.17.1(hono@4.8.5)':
+  '@hono/node-server@1.17.1(hono@4.8.8)':
     dependencies:
-      hono: 4.8.5
+      hono: 4.8.8
 
-  '@hono/zod-validator@0.7.2(hono@4.8.5)(zod@4.0.5)':
+  '@hono/zod-validator@0.7.2(hono@4.8.8)(zod@4.0.10)':
     dependencies:
-      hono: 4.8.5
-      zod: 4.0.5
+      hono: 4.8.8
+      zod: 4.0.10
 
   '@types/node@24.1.0':
     dependencies:
@@ -362,7 +362,7 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  hono@4.8.5: {}
+  hono@4.8.8: {}
 
   mime@4.0.7: {}
 
@@ -377,4 +377,4 @@ snapshots:
 
   undici-types@7.8.0: {}
 
-  zod@4.0.5: {}
+  zod@4.0.10: {}
