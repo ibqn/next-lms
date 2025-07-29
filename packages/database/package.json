@@ -15,10 +15,10 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "argon2": "^0.43.1",
-    "drizzle-orm": "^0.44.3",
+    "drizzle-orm": "^0.44.4",
     "drizzle-zod": "^0.8.2",
     "postgres": "^3.4.7",
-    "zod": "^4.0.10"
+    "zod": "^4.0.13"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",

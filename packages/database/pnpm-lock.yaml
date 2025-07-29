@@ -18,17 +18,17 @@ importers:
         specifier: ^0.43.1
         version: 0.43.1
       drizzle-orm:
-        specifier: ^0.44.3
-        version: 0.44.3(postgres@3.4.7)
+        specifier: ^0.44.4
+        version: 0.44.4(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.8.2
-        version: 0.8.2(drizzle-orm@0.44.3(postgres@3.4.7))(zod@4.0.10)
+        version: 0.8.2(drizzle-orm@0.44.4(postgres@3.4.7))(zod@4.0.13)
       postgres:
         specifier: ^3.4.7
         version: 3.4.7
       zod:
-        specifier: ^4.0.10
-        version: 4.0.10
+        specifier: ^4.0.13
+        version: 4.0.13
     devDependencies:
       '@types/node':
         specifier: ^24.1.0
@@ -383,8 +383,8 @@ packages:
     resolution: {integrity: sha512-tCPWVZWZqWVx2XUsVpJRnH9Mx0ClVOf5YUHerZ5so1OKSlqww4zy1R5ksEdGRcO3tM3zj0PYN6V48TbQCL1RfA==}
     hasBin: true
 
-  drizzle-orm@0.44.3:
-    resolution: {integrity: sha512-8nIiYQxOpgUicEL04YFojJmvC4DNO4KoyXsEIqN44+g6gNBr6hmVpWk3uyAt4CaTiRGDwoU+alfqNNeonLAFOQ==}
+  drizzle-orm@0.44.4:
+    resolution: {integrity: sha512-ZyzKFpTC/Ut3fIqc2c0dPZ6nhchQXriTsqTNs4ayRgl6sZcFlMs9QZKPSHXK4bdOf41GHGWf+FrpcDDYwW+W6Q==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -542,8 +542,8 @@ packages:
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
-  zod@4.0.10:
-    resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
+  zod@4.0.13:
+    resolution: {integrity: sha512-jv+zRxuZQxTrFHzxZ46ezL2FtnE+M4HIJHJEwLsZ7UjrXHltdG6HrxvqM0twoVCWxJiYf8WqKjAcjztegpkB+Q==}
 
 snapshots:
 
@@ -743,14 +743,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.3(postgres@3.4.7):
+  drizzle-orm@0.44.4(postgres@3.4.7):
     optionalDependencies:
       postgres: 3.4.7
 
-  drizzle-zod@0.8.2(drizzle-orm@0.44.3(postgres@3.4.7))(zod@4.0.10):
+  drizzle-zod@0.8.2(drizzle-orm@0.44.4(postgres@3.4.7))(zod@4.0.13):
     dependencies:
-      drizzle-orm: 0.44.3(postgres@3.4.7)
-      zod: 4.0.10
+      drizzle-orm: 0.44.4(postgres@3.4.7)
+      zod: 4.0.13
 
   esbuild-register@3.6.0(esbuild@0.25.8):
     dependencies:
@@ -848,4 +848,4 @@ snapshots:
 
   undici-types@7.8.0: {}
 
-  zod@4.0.10: {}
+  zod@4.0.13: {}
