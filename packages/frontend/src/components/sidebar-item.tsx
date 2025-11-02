@@ -34,7 +34,7 @@ export const SidebarItem = ({ icon, label, href, className, ...props }: Props) =
 
       <div
         className={cn(
-          "absolute bottom-0 right-0 top-0 border-2 border-sky-700 transition-all",
+          "absolute top-0 right-0 bottom-0 border-2 border-sky-700 transition-all",
           isActive ? "opacity-100" : "opacity-0"
         )}
       ></div>
