@@ -6,14 +6,7 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { titleSchema, type TitleSchema } from "@/lib/validators/chapter"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -105,11 +98,7 @@ export const TitleForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Chapter Title..."
-                      {...field}
-                      disabled={isSubmitting}
-                    />
+                    <Input placeholder="Chapter Title..." {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormDescription>{"e.g. 'Introduction'"}</FormDescription>
                   <FormMessage />
@@ -118,10 +107,7 @@ export const TitleForm = ({ initialData }: Props) => {
             />
 
             <div className="flex items-center gap-x-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || isPending}
-              >
+              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                 Save
               </Button>
             </div>

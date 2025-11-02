@@ -4,14 +4,7 @@ import { useForm } from "react-hook-form"
 import { CardWrapper } from "@/components/auth/card-wrapper"
 import { type SignupSchema, signupSchema } from "database/src/validators/signup"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -39,9 +32,7 @@ export const SignUpForm = () => {
     resolver: zodResolver(signupSchema),
   })
 
-  const [response, setResponse] = useState<
-    SuccessResponse | ErrorResponse | null
-  >(null)
+  const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
 
   const queryClient = useQueryClient()
 
@@ -79,11 +70,7 @@ export const SignUpForm = () => {
   const isDisabled = form.formState.isSubmitting
 
   return (
-    <CardWrapper
-      headerLabel="Create an account"
-      backButtonLabel="Already have an account?"
-      backButtonHref="/sign-in"
-    >
+    <CardWrapper headerLabel="Create an account" backButtonLabel="Already have an account?" backButtonHref="/sign-in">
       <Form {...form}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
@@ -94,12 +81,7 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="Username"
-                      disabled={isDisabled}
-                    />
+                    <Input {...field} type="text" placeholder="Username" disabled={isDisabled} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,12 +95,7 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="******"
-                      disabled={isDisabled}
-                    />
+                    <Input {...field} type="password" placeholder="******" disabled={isDisabled} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,12 +109,7 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="******"
-                      disabled={isDisabled}
-                    />
+                    <Input {...field} type="password" placeholder="******" disabled={isDisabled} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,9 +118,7 @@ export const SignUpForm = () => {
           </div>
 
           {response?.success && <FormSuccess message={response.message} />}
-          {response?.success === false && (
-            <FormError message={response.error} />
-          )}
+          {response?.success === false && <FormError message={response.error} />}
 
           <Button type="submit" className="w-full" disabled={isDisabled}>
             Sign Up

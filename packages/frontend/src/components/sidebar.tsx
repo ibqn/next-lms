@@ -1,9 +1,7 @@
 import { Logo } from "@/components/logo"
 import { SidebarRoutes } from "@/components/sidebar-routes"
 
-type Props = {}
-
-export const Sidebar = (props: Props) => {
+export const Sidebar = () => {
   return (
     <div className="flex h-full flex-col overflow-y-auto border-r bg-white shadow-xs">
       <div className="p-6">
