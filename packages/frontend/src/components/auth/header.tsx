@@ -12,7 +12,7 @@ export const Header = ({ label }: Props) => {
         <h1 className="text-3xl font-semibold">LMS</h1>
       </div>
 
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-muted-foreground text-sm">{label}</p>
     </div>
   )
 }
