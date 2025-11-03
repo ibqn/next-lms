@@ -16,7 +16,7 @@ import { postSignin } from "@/api/auth"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
-import { ErrorResponse, SuccessResponse } from "database/src/types"
+import { ErrorResponse, SuccessResponse, response as responseWrapper } from "database/src/types"
 
 export const SignInForm = () => {
   const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
@@ -39,7 +39,7 @@ export const SignInForm = () => {
     mutationFn: postSignin,
     onSuccess: async () => {
       console.log("Signin success")
-      setResponse({ success: true, message: "Welcome back" })
+      setResponse(responseWrapper("Welcome back"))
       toast.success("Sign in success", { description: "Welcome back" })
       await queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push(redirect)

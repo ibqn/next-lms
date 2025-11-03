@@ -13,9 +13,11 @@ import { FormSuccess } from "@/components/auth/form-success"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postSignup } from "@/api/auth"
 import { AxiosError } from "axios"
-import type { ErrorResponse, SuccessResponse } from "database/src/types"
+import { ErrorResponse, SuccessResponse } from "database/src/types"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
+import type { User } from "database/src/drizzle/schema/auth"
+import unset from "lodash.unset"
 
 export const SignUpForm = () => {
   const router = useRouter()
@@ -32,7 +34,7 @@ export const SignUpForm = () => {
     resolver: zodResolver(signupSchema),
   })
 
-  const [response, setResponse] = useState<SuccessResponse | ErrorResponse | null>(null)
+  const [response, setResponse] = useState<SuccessResponse<User> | ErrorResponse | null>(null)
 
   const queryClient = useQueryClient()
 
@@ -62,8 +64,8 @@ export const SignUpForm = () => {
 
   const handleSubmit = form.handleSubmit(async (data) => {
     console.log(data)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirm: _, ...signupData } = data
+    const signupData = { ...data, confirm: undefined }
+    unset(signupData, "confirm")
     signup(signupData)
   })
 
