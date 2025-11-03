@@ -3,10 +3,10 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { Course } from "database/src/drizzle/schema/course"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, MoreHorizontalIcon, PencilIcon, TrashIcon } from "lucide-react"
+import { ArrowUpDown, MoreHorizontalIcon, PencilIcon } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import Link from "next/link"
-import { Badge } from "../ui/badge"
+import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 export const courseColumns: ColumnDef<Course>[] = [
@@ -76,10 +76,6 @@ export const courseColumns: ColumnDef<Course>[] = [
                 <PencilIcon className="mr-2 size-4" />
                 Edit
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <TrashIcon className="mr-2 size-4" />
-              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
