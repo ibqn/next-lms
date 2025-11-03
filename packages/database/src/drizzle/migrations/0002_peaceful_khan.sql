@@ -1,1 +1,0 @@
-CREATE INDEX "chapter_course_id_index" ON "drizzle"."chapter" USING btree ("course_id");
