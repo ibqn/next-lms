@@ -2,7 +2,11 @@ import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import type { Context } from "./utils/context"
 import { prettyJSON } from "hono/pretty-json"
-import type { ErrorResponse, SuccessResponse } from "database/src/types"
+import {
+  response,
+  type ErrorResponse,
+  type SuccessResponse,
+} from "database/src/types"
 import { HTTPException } from "hono/http-exception"
 import { getErrorMessage } from "./utils/error"
 import { cors } from "hono/cors"
@@ -24,9 +28,7 @@ app.notFound((c) =>
   c.json<ErrorResponse>({ error: "Not Found", success: false }, 404)
 )
 
-app.get("/", (c) =>
-  c.json<SuccessResponse>({ success: true, message: "Hello Hono!" }, 201)
-)
+app.get("/", (c) => c.json<SuccessResponse>(response("Hello Hono!"), 201))
 
 app.onError((error, c) => {
   if (error instanceof HTTPException) {
