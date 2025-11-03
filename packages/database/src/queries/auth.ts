@@ -10,10 +10,7 @@ export const signUp = async (username: string, password: string) => {
   try {
     const [user] = await db
       .insert(userTable)
-      .values({
-        username,
-        passwordHash,
-      })
+      .values({ username, passwordHash })
       .returning({ id: userTable.id })
 
     const token = generateSessionToken()
