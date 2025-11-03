@@ -3,8 +3,18 @@ import type { Context } from "../utils/context"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import type { Course } from "database/src/drizzle/schema/course"
-import type { SuccessResponse } from "database/src/types"
-import { createCourse, updateCourse } from "database/src/queries/course"
+import type {
+  ErrorResponse,
+  PaginatedSuccessResponse,
+  SuccessResponse,
+} from "database/src/types"
+import {
+  createCourse,
+  getCourseItem,
+  getCourseItems,
+  getCourseItemsCount,
+  updateCourse,
+} from "database/src/queries/course"
 import {
   createCourseSchema,
   updateCourseSchema,
@@ -12,6 +22,7 @@ import {
 import type { User } from "database/src/drizzle/schema/auth"
 import { paramIdSchema } from "database/src/validators/param"
 import { HTTPException } from "hono/http-exception"
+import { paginationSchema } from "database/src/validators/pagination"
 
 export const courseRoute = new Hono<Context>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
@@ -47,3 +58,40 @@ export const courseRoute = new Hono<Context>()
       )
     }
   )
+  .get("/", signedIn, zValidator("query", paginationSchema), async (c) => {
+    const query = c.req.valid("query")
+    const { page, limit } = query
+
+    const courseCount = await getCourseItemsCount()
+    const courseItems = await getCourseItems(query)
+
+    return c.json<PaginatedSuccessResponse<Course[]>>({
+      success: true,
+      data: courseItems,
+      message: "Course items retrieved",
+      pagination: {
+        page,
+        totalPages: Math.ceil(courseCount / limit),
+        totalItems: courseCount,
+      },
+    })
+  })
+  .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id: courseId } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const courseItem = await getCourseItem({ courseId, userId: user.id })
+
+    if (!courseItem) {
+      return c.json<ErrorResponse>(
+        { success: false, error: "Course not found" },
+        404
+      )
+    }
+
+    return c.json<SuccessResponse<Course>>({
+      success: true,
+      data: courseItem,
+      message: "Course retrieved",
+    })
+  })
