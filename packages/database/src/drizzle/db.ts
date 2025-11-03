@@ -1,5 +1,4 @@
 import { drizzle } from "drizzle-orm/postgres-js"
-import { z } from "zod"
 import { sessionRelations, sessionTable, userTable } from "./schema/auth"
 import { courseRelations, courseTable } from "./schema/course"
 import { categoryRelations, categoryTable } from "./schema/category"
