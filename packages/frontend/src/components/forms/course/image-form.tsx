@@ -3,24 +3,11 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  ImageIcon,
-  PencilIcon,
-  PlusCircleIcon,
-  UploadIcon,
-  XIcon,
-} from "lucide-react"
+import { ImageIcon, PencilIcon, PlusCircleIcon, UploadIcon, XIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { imageSchema, ImageSchema } from "@/lib/validators/course"
+import { imageSchema, type ImageSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
@@ -153,9 +140,10 @@ export const ImageForm = ({ initialData }: Props) => {
           <div
             {...getRootProps()}
             className={cn(
-              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg",
-              "border border-dashed border-muted-foreground/25 bg-slate-200 px-5 py-2.5 text-center transition hover:bg-slate-200/25",
-              "ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              `group border-muted-foreground/25 ring-offset-background focus-visible:ring-ring relative grid h-52 w-full
+                cursor-pointer place-items-center rounded-lg border border-dashed bg-slate-200 px-5 py-2.5 text-center
+                transition hover:bg-slate-200/25 focus-visible:ring-2 focus-visible:ring-offset-2
+                focus-visible:outline-hidden`,
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60"
             )}
@@ -164,30 +152,20 @@ export const ImageForm = ({ initialData }: Props) => {
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon
-                    className="size-7 text-slate-500"
-                    aria-hidden="true"
-                  />
+                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
                 </div>
-                <p className="font-medium text-muted-foreground">
-                  Drop the files here
-                </p>
+                <p className="text-muted-foreground font-medium">Drop the files here</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon
-                    className="size-7 text-slate-500"
-                    aria-hidden="true"
-                  />
+                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
                 </div>
                 <div className="flex flex-col gap-px">
-                  <p className="font-medium text-muted-foreground">
+                  <p className="text-muted-foreground font-medium">
                     Drag {`'n'`} drop 1 file here, or click to select a file
                   </p>
-                  <p className="text-sm text-muted-foreground/70">
-                    You can upload 1 file with a maximum size of 4MB
-                  </p>
+                  <p className="text-muted-foreground/70 text-sm">You can upload 1 file with a maximum size of 4MB</p>
                 </div>
               </div>
             )}
@@ -196,7 +174,7 @@ export const ImageForm = ({ initialData }: Props) => {
           {imageUrl && (
             <div className="my-4 flex items-start">
               <div className="group relative aspect-video">
-                <div className="absolute right-1.5 top-1.5 bg-transparent">
+                <div className="absolute top-1.5 right-1.5 bg-transparent">
                   <Button
                     variant="outline"
                     className="h-auto p-1 opacity-0 group-hover:opacity-100"
@@ -224,25 +202,16 @@ export const ImageForm = ({ initialData }: Props) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <input
-                        className="hidden"
-                        {...field}
-                        disabled={isSubmitting}
-                      />
+                      <input className="hidden" {...field} disabled={isSubmitting} />
                     </FormControl>
-                    <FormDescription>
-                      16:9 aspect ratio is recommended
-                    </FormDescription>
+                    <FormDescription>16:9 aspect ratio is recommended</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
               <div className="flex items-center gap-x-2">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !isValid || isPending}
-                >
+                <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                   Save
                 </Button>
               </div>
@@ -252,7 +221,10 @@ export const ImageForm = ({ initialData }: Props) => {
       ) : (
         <>
           {!initialData.imageUrl ? (
-            <div className="flex h-60 items-center justify-center rounded-md border border-dashed border-slate-300 bg-slate-200">
+            <div
+              className="flex h-60 items-center justify-center rounded-md border border-dashed border-slate-300
+                bg-slate-200"
+            >
               <div className="rounded-full border border-dashed border-slate-500 p-4">
                 <ImageIcon className="size-7 text-slate-500" />
               </div>
