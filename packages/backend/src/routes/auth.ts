@@ -3,7 +3,7 @@ import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
 import { signinSchema } from "database/src/validators/signin"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import type { SuccessResponse } from "database/src/types"
+import { response, type SuccessResponse } from "database/src/types"
 import { HTTPException } from "hono/http-exception"
 import { signedIn } from "../middleware/signed-in"
 import { signIn, signUp } from "database/src/queries/auth"
@@ -22,10 +22,7 @@ const authRoute = new Hono<Context>()
     }
 
     setCookie(c, sessionCookieName, token, getSessionCookieOptions())
-    return c.json<SuccessResponse>(
-      { success: true, message: "User created" },
-      201
-    )
+    return c.json<SuccessResponse>(response("User created"), 201)
   })
   .post("/signin", zValidator("json", signinSchema), async (c) => {
     const { username, password } = c.req.valid("json")
@@ -37,14 +34,14 @@ const authRoute = new Hono<Context>()
     }
 
     setCookie(c, sessionCookieName, token, getSessionCookieOptions())
-    return c.json<SuccessResponse>({ success: true, message: "Signed in" }, 201)
+    return c.json<SuccessResponse>(response("Signed in"), 201)
   })
   .get("/signout", signedIn, async (c) => {
     const token = getCookie(c, sessionCookieName)
     if (token) {
       await invalidateSessionToken(token)
       deleteCookie(c, sessionCookieName)
-      return c.json<SuccessResponse>({ success: true, message: "Signed out" })
+      return c.json<SuccessResponse>(response("Signed out"), 200)
     }
     throw new HTTPException(401, {
       message: "You must be signed in to sign out",
