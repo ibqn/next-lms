@@ -20,6 +20,10 @@ export const courseColumns: ColumnDef<Course>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const title = (row.getValue("title") as string) ?? ""
+      return <Link href={`/teacher/courses/${row.id}`}>{title}</Link>
+    },
   },
   {
     accessorKey: "price",
