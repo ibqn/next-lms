@@ -31,6 +31,14 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const price = row.getValue("price") ?? "0"
+      const formattedPrice = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(Number(price))
+      return <span>{formattedPrice}</span>
+    },
   },
   {
     accessorKey: "isPublished",
