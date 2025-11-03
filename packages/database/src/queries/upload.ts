@@ -4,6 +4,7 @@ import type { CreateUploadSchema } from "../validators/upload"
 import { uploadTable, type Upload } from "../drizzle/schema/upload"
 import type { ParamIdSchema } from "../validators/param"
 import { eq } from "drizzle-orm"
+import unset from "lodash.unset"
 
 type CreateUploadOptions = CreateUploadSchema & {
   user: User
@@ -19,15 +20,7 @@ export const createUpload = async ({
       ...uploadData,
       userId: user.id,
     })
-    .returning({
-      id: uploadTable.id,
-      description: uploadTable.description,
-      isPublic: uploadTable.isPublic,
-      filePath: uploadTable.filePath,
-      userId: uploadTable.userId,
-      createdAt: uploadTable.createdAt,
-      updatedAt: uploadTable.updatedAt,
-    })
+    .returning()
 
   return { ...upload, user } satisfies Upload as Upload
 }
@@ -37,16 +30,10 @@ type GetUploadOptions = ParamIdSchema
 export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
   const upload = await db.query.upload.findFirst({
     where: ({ id }, { eq }) => eq(id, uploadId),
-    with: {
-      user: {
-        columns: {
-          username: true,
-          id: true,
-          createdAt: true,
-        },
-      },
-    },
+    with: { user: { columns: { passwordHash: false } } },
   })
+
+  unset(upload, "user.passwordHash")
 
   if (!upload) {
     return null
