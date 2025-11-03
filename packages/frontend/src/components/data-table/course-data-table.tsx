@@ -9,10 +9,15 @@ import {
   getSortedRowModel,
   useReactTable,
   SortingState,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useState, type Dispatch, type SetStateAction } from "react"
 import { Button } from "@/components/ui/button"
+import { Input } from "../ui/input"
+import { useRouter } from "next/navigation"
+import { PlusCircleIcon } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -22,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   pageCount: number
 }
 
-export function DataTable<TData, TValue>({
+export function CourseDataTable<TData, TValue>({
   columns,
   data,
   pagination,
@@ -30,6 +35,9 @@ export function DataTable<TData, TValue>({
   pageCount,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  const router = useRouter()
 
   const table = useReactTable({
     data,
@@ -38,18 +46,34 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     pageCount: pageCount,
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
       pagination,
       sorting,
+      columnFilters,
     },
   })
 
   return (
-    <div>
-      <div className="overflow-hidden rounded-md border">
+    <div className="flex flex-1 flex-col p-6">
+      <div className="flex items-center justify-between py-4">
+        <Input
+          placeholder="Filter courses..."
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
+          className="max-w-sm"
+        />
+
+        <Button onClick={() => router.push(`/teacher/create`)}>
+          <PlusCircleIcon className="size-4" />
+          New Course
+        </Button>
+      </div>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

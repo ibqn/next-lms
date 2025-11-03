@@ -9,7 +9,7 @@ import Link from "next/link"
 import { Badge } from "../ui/badge"
 import { cn } from "@/lib/utils"
 
-export const columns: ColumnDef<Course>[] = [
+export const courseColumns: ColumnDef<Course>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
