@@ -6,14 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2Icon, PlusCircleIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -81,12 +74,7 @@ export const ChapterForm = ({ initialData }: Props) => {
   })
 
   return (
-    <div
-      className={cn(
-        "relative rounded-md border bg-slate-100 p-4",
-        isPendingReorder && "pointer-events-none"
-      )}
-    >
+    <div className={cn("relative rounded-md border bg-slate-100 p-4", isPendingReorder && "pointer-events-none")}>
       {isPendingReorder && (
         <div className="absolute inset-0 flex items-center justify-center rounded-md bg-slate-500/20">
           <Loader2Icon className="size-6 animate-spin text-sky-500" />
@@ -114,36 +102,22 @@ export const ChapterForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Title description..."
-                      {...field}
-                      disabled={isSubmitting}
-                    />
+                    <Input placeholder="Title description..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>
-                    {"e.g. 'Introduction to the course...'"}
-                  </FormDescription>
+                  <FormDescription>{"e.g. 'Introduction to the course...'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button
-              type="submit"
-              disabled={isSubmitting || !isValid || isPending}
-            >
+            <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
               Create
             </Button>
           </form>
         </Form>
       ) : (
         <>
-          <p
-            className={cn(
-              "mt-2 text-sm",
-              !initialData.chapters?.length && "italic text-slate-500"
-            )}
-          >
+          <p className={cn("mt-2 text-sm", !initialData.chapters?.length && "text-slate-500 italic")}>
             {!initialData.chapters?.length && "No chapters yet"}
           </p>
           <ChapterList
@@ -153,9 +127,7 @@ export const ChapterForm = ({ initialData }: Props) => {
             }}
           />
 
-          <p className="mt-4 text-sm text-muted-foreground">
-            Drag {"'n'"} Drop to reorder chapters
-          </p>
+          <p className="text-muted-foreground mt-4 text-sm">Drag {"'n'"} Drop to reorder chapters</p>
         </>
       )}
     </div>
