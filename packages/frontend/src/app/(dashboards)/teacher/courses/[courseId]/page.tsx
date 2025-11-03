@@ -9,9 +9,10 @@ import { PriceForm } from "@/components/forms/course/price-form"
 import { TitleForm } from "@/components/forms/course/title-form"
 import { getQueryClient } from "@/lib/query-client"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
-import { getCourse } from "database/src/queries/course"
+import { getCourseItem } from "database/src/queries/course"
 import { CircleDollarSignIcon, FileIcon, LayoutDashboardIcon, ListChecksIcon } from "lucide-react"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
+import { validateRequest } from "@/auth"
 
 type Props = {
   params: Promise<{
@@ -22,7 +23,13 @@ type Props = {
 export default async function SingleCoursePage({ params }: Props) {
   const { courseId } = await params
 
-  const course = await getCourse({ courseId })
+  const { user } = await validateRequest()
+
+  if (!user) {
+    return redirect("/sign-in")
+  }
+
+  const course = await getCourseItem({ courseId, userId: user.id })
   if (!course) {
     notFound()
   }
