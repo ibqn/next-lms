@@ -9,7 +9,7 @@ export const descriptionSchema = z.object({
 })
 
 export const imageSchema = z.object({
-  imageUrl: z.string().default(""),
+  imageUrl: z.string(),
 })
 
 export const categorySchema = z.object({
