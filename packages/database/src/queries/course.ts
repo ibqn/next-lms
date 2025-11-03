@@ -5,9 +5,14 @@ import type {
   CreateCourseSchema,
   UpdateCourseSchema,
 } from "../validators/course"
-import { eq } from "drizzle-orm"
+import { asc, countDistinct, desc, eq } from "drizzle-orm"
 import type { ParamIdSchema } from "../validators/param"
 import unset from "lodash.unset"
+import {
+  paginationSchema,
+  type PaginationSchema,
+  type SortedBySchema,
+} from "../validators/pagination"
 
 type CreateCourseOptions = CreateCourseSchema & {
   user: User
@@ -24,11 +29,16 @@ export const createCourse = async ({ title, user }: CreateCourseOptions) => {
 
 type GetCourseOptions = {
   courseId: string
+  userId: User["id"]
 }
 
-export const getCourse = async ({ courseId }: GetCourseOptions) => {
+export const getCourseItem = async ({
+  courseId,
+  userId,
+}: GetCourseOptions): Promise<Course | null> => {
   const course = await db.query.course.findFirst({
-    where: ({ id }, { eq }) => eq(id, courseId),
+    where: ({ id, userId: courseUserId }, { eq, and }) =>
+      eq(id, courseId) && and(eq(courseUserId, userId)),
     with: {
       user: { columns: { passwordHash: false } },
       chapters: {
@@ -44,7 +54,7 @@ export const getCourse = async ({ courseId }: GetCourseOptions) => {
 
   unset(course, "user.passwordHash")
 
-  return course satisfies Course as Course
+  return course satisfies Course
 }
 
 type UpdateCourseOptions = UpdateCourseSchema &
@@ -72,4 +82,49 @@ export const updateCourse = async ({
   unset(user, "passwordHash")
 
   return { ...course, user } satisfies Course
+}
+
+export const getCourseItemsCount = async () => {
+  const [{ count }] = await db
+    .select({ count: countDistinct(courseTable.id) })
+    .from(courseTable)
+
+  return count
+}
+
+const getSortedByColumn = (sortedBy: SortedBySchema) => {
+  switch (sortedBy) {
+    case "title":
+      return courseTable.title
+    case "recent":
+      return courseTable.createdAt
+    default:
+      throw new Error("Invalid sortedBy value")
+  }
+}
+
+export const getCourseItems = async (
+  queryParams: Partial<PaginationSchema> = {}
+): Promise<Course[]> => {
+  const params = paginationSchema.parse(queryParams)
+
+  const { limit, page, sortedBy, order } = params
+  const offset = (page - 1) * limit
+
+  const sortedByColumn = getSortedByColumn(sortedBy)
+  const orderBy = order === "desc" ? desc(sortedByColumn) : asc(sortedByColumn)
+
+  const courseItems = await db.query.course.findMany({
+    offset,
+    limit,
+    orderBy: [orderBy, asc(courseTable.id)],
+    with: {
+      category: true,
+      user: { columns: { passwordHash: false } },
+      chapters: true,
+      attachments: true,
+    },
+  })
+
+  return courseItems satisfies Course[]
 }
