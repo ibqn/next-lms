@@ -40,7 +40,7 @@ export async function validateSessionToken(
 
   const sessionData = await db.query.session.findFirst({
     where: ({ id }, { eq }) => eq(id, sessionId),
-    with: { user: true },
+    with: { user: { columns: { passwordHash: false } } },
   })
 
   if (!sessionData) {
