@@ -1,4 +1,4 @@
-import type { CreateAttachmentSchema } from "src/validators/attachment"
+import type { CreateAttachmentSchema } from "../validators/attachment"
 import type { User } from "../drizzle/schema/auth"
 import { attachmentTable, type Attachment } from "../drizzle/schema/attachment"
 import { db } from "../drizzle/db"
