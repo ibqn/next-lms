@@ -6,6 +6,8 @@ import {
 import { sha256 } from "@oslojs/crypto/sha2"
 import { db } from "./drizzle/db"
 import { eq } from "drizzle-orm"
+import type { CreateSessionSchema } from "./validators/session"
+import unset from "lodash.unset"
 
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20)
@@ -19,12 +21,15 @@ export async function createSession(
   userId: string
 ): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
-  const session: Session = {
+  const sessionData: CreateSessionSchema = {
     id: sessionId,
     userId,
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   }
-  await db.insert(sessionTable).values(session)
+  const [session] = await db
+    .insert(sessionTable)
+    .values(sessionData)
+    .returning()
   return session
 }
 
@@ -35,11 +40,7 @@ export async function validateSessionToken(
 
   const sessionData = await db.query.session.findFirst({
     where: ({ id }, { eq }) => eq(id, sessionId),
-    with: {
-      user: {
-        columns: { id: true, username: true, createdAt: true },
-      },
-    },
+    with: { user: true },
   })
 
   if (!sessionData) {
@@ -50,8 +51,11 @@ export async function validateSessionToken(
     id: sessionData.id,
     userId: sessionData.userId,
     expiresAt: sessionData.expiresAt,
+    createdAt: sessionData.createdAt,
+    updatedAt: sessionData.updatedAt,
   }
   const { user } = sessionData
+  unset(user, "passwordHash")
 
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(sessionTable).where(eq(sessionTable.id, session.id))
