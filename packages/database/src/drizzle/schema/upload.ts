@@ -26,7 +26,7 @@ export const uploadRelations = relations(uploadTable, ({ one }) => ({
 }))
 
 export type Upload = InferSelectModel<typeof uploadTable> & {
-  user: User | null
+  user?: User | null
 }
 
 export const insertUploadSchema = createInsertSchema(uploadTable)

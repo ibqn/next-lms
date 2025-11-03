@@ -1,16 +1,14 @@
 import { text, timestamp, uuid } from "drizzle-orm/pg-core"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { schema } from "./schema"
+import { lifecycleDates } from "./utils"
 
 export const userTable = schema.table("user", {
   id: uuid("id").primaryKey().defaultRandom(),
   username: text("username").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  })
-    .notNull()
-    .defaultNow(),
+
+  ...lifecycleDates,
 })
 
 export const userRelations = relations(userTable, ({ many }) => ({}))
@@ -23,6 +21,8 @@ export const sessionTable = schema.table("session", {
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
   }).notNull(),
+
+  ...lifecycleDates,
 })
 
 export const sessionRelations = relations(sessionTable, ({ one }) => ({
