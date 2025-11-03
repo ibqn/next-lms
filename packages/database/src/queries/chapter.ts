@@ -45,18 +45,7 @@ export const createChapter = async ({
       position: (lastChapter?.position ?? 0) + 1,
       title,
     })
-    .returning({
-      id: chapterTable.id,
-      title: chapterTable.title,
-      description: chapterTable.description,
-      courseId: chapterTable.courseId,
-      isPublished: chapterTable.isPublished,
-      videoUrl: chapterTable.videoUrl,
-      isFree: chapterTable.isFree,
-      position: chapterTable.position,
-      createdAt: chapterTable.createdAt,
-      updatedAt: chapterTable.updatedAt,
-    })
+    .returning()
 
   return { ...chapter } satisfies Chapter as Chapter
 }
@@ -128,18 +117,7 @@ export const getChapter = async ({
   user,
 }: GetChapterOptions) => {
   const [chapter] = await db
-    .select({
-      id: chapterTable.id,
-      title: chapterTable.title,
-      description: chapterTable.description,
-      courseId: chapterTable.courseId,
-      isPublished: chapterTable.isPublished,
-      videoUrl: chapterTable.videoUrl,
-      isFree: chapterTable.isFree,
-      position: chapterTable.position,
-      createdAt: chapterTable.createdAt,
-      updatedAt: chapterTable.updatedAt,
-    })
+    .select()
     .from(chapterTable)
     .where(eq(chapterTable.id, chapterId))
 
@@ -196,18 +174,7 @@ export const updateChapter = async ({
       .update(chapterTable)
       .set(data)
       .where(eq(chapterTable.id, chapterId))
-      .returning({
-        id: chapterTable.id,
-        title: chapterTable.title,
-        description: chapterTable.description,
-        isFree: chapterTable.isFree,
-        isPublished: chapterTable.isPublished,
-        videoUrl: chapterTable.videoUrl,
-        courseId: chapterTable.courseId,
-        position: chapterTable.position,
-        createdAt: courseTable.createdAt,
-        updatedAt: courseTable.updatedAt,
-      })
+      .returning()
 
     return {
       data: chapter satisfies Chapter as Chapter,
