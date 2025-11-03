@@ -7,6 +7,7 @@ import type {
 } from "../validators/course"
 import { eq } from "drizzle-orm"
 import type { ParamIdSchema } from "../validators/param"
+import unset from "lodash.unset"
 
 type CreateCourseOptions = CreateCourseSchema & {
   user: User
@@ -15,22 +16,8 @@ type CreateCourseOptions = CreateCourseSchema & {
 export const createCourse = async ({ title, user }: CreateCourseOptions) => {
   const [course] = await db
     .insert(courseTable)
-    .values({
-      userId: user.id,
-      title,
-    })
-    .returning({
-      id: courseTable.id,
-      title: courseTable.title,
-      userId: courseTable.userId,
-      description: courseTable.description,
-      price: courseTable.price,
-      imageUrl: courseTable.imageUrl,
-      categoryId: courseTable.categoryId,
-      isPublished: courseTable.isPublished,
-      createdAt: courseTable.createdAt,
-      updatedAt: courseTable.updatedAt,
-    })
+    .values({ userId: user.id, title })
+    .returning()
 
   return { ...course, user } satisfies Course as Course
 }
@@ -43,45 +30,19 @@ export const getCourse = async ({ courseId }: GetCourseOptions) => {
   const course = await db.query.course.findFirst({
     where: ({ id }, { eq }) => eq(id, courseId),
     with: {
-      user: {
-        columns: {
-          username: true,
-          id: true,
-          createdAt: true,
-        },
-      },
+      user: { columns: { passwordHash: false } },
       chapters: {
-        columns: {
-          id: true,
-          title: true,
-          description: true,
-          isFree: true,
-          isPublished: true,
-          courseId: true,
-          createdAt: true,
-          updatedAt: true,
-          position: true,
-          videoUrl: true,
-        },
         orderBy: (chapters, { asc }) => [asc(chapters.position)],
       },
-      attachments: {
-        columns: {
-          id: true,
-          name: true,
-          url: true,
-          createdAt: true,
-          updatedAt: true,
-          courseId: true,
-          userId: true,
-        },
-      },
+      attachments: true,
     },
   })
 
   if (!course) {
     return null
   }
+
+  unset(course, "user.passwordHash")
 
   return course satisfies Course as Course
 }
@@ -95,33 +56,20 @@ export const updateCourse = async ({
   id,
   user: { id: userId },
   ...data
-}: UpdateCourseOptions) => {
+}: UpdateCourseOptions): Promise<Course> => {
   const [course] = await db
     .update(courseTable)
     .set({ ...data, userId })
     .where(eq(courseTable.id, id))
-    .returning({
-      id: courseTable.id,
-      title: courseTable.title,
-      userId: courseTable.userId,
-      description: courseTable.description,
-      price: courseTable.price,
-      imageUrl: courseTable.imageUrl,
-      categoryId: courseTable.categoryId,
-      isPublished: courseTable.isPublished,
-      createdAt: courseTable.createdAt,
-      updatedAt: courseTable.updatedAt,
-    })
+    .returning()
 
   const user =
     (await db.query.user.findFirst({
       where: ({ id }, { eq }) => eq(id, userId),
-      columns: {
-        id: true,
-        username: true,
-        createdAt: true,
-      },
+      columns: { passwordHash: false },
     })) ?? null
 
-  return { ...course, user } satisfies Course as Course
+  unset(user, "passwordHash")
+
+  return { ...course, user } satisfies Course
 }
