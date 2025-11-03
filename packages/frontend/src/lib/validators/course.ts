@@ -13,7 +13,7 @@ export const imageSchema = z.object({
 })
 
 export const categorySchema = z.object({
-  categoryId: z.string().uuid().nullable(),
+  categoryId: z.uuid().nullable(),
 })
 
 export const priceSchema = z.object({
