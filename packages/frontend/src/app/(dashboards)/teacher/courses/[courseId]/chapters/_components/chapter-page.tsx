@@ -1,6 +1,7 @@
 "use client"
 
 import { chapterQueryOptions } from "@/api/chapter"
+import { DescriptionForm } from "@/components/forms/chapter/description-form"
 import { TitleForm } from "@/components/forms/chapter/title-form"
 import { IconBadge } from "@/components/icon-badge"
 import { useSuspenseQuery } from "@tanstack/react-query"
@@ -42,6 +43,7 @@ export const ChapterPage = ({ chapterId }: Props) => {
           </div>
 
           <TitleForm initialData={chapter} />
+          <DescriptionForm initialData={chapter} />
         </div>
       </div>
     </>
