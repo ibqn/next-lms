@@ -5,7 +5,7 @@ export const titleSchema = z.object({
 })
 
 export const descriptionSchema = z.object({
-  description: z.string().default(""),
+  description: z.string(),
 })
 
 export const imageSchema = z.object({
