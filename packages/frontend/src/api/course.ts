@@ -5,7 +5,6 @@ import type { ApiResponse, PaginatedSuccessResponse, SuccessResponse } from "dat
 import { paginationSchema, PaginationSchema } from "database/src/validators/pagination"
 import { keepPreviousData, queryOptions } from "@tanstack/react-query"
 import { ParamIdSchema } from "database/src/validators/param"
-import { uuid } from "zod"
 
 export const postCourse = async (courseData: CreateCourseSchema) => {
   const response = await axios.post<SuccessResponse<Course>>("/courses", courseData)
