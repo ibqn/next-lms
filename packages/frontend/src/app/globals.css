@@ -4,13 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --background-image-gradient-120: linear-gradient(
-    120deg,
-    var(--tw-gradient-stops)
-  );
+  --background-image-gradient-120: linear-gradient(120deg, var(--tw-gradient-stops));
 
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
 }
 
 @utility container {
