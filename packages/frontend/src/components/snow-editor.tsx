@@ -21,8 +21,6 @@ export const SnowEditor = ({ value, onChange }: SnowEditorProps) => {
   }, [value])
 
   const onTextChange = () => {
-    console.log("Current contents:", editorRef.current?.getContents())
-    console.log(JSON.stringify(editorRef.current?.getContents()))
     onChange?.(JSON.stringify(editorRef.current?.getContents()))
   }
 

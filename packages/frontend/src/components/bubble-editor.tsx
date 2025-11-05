@@ -13,7 +13,11 @@ export const BubbleEditor = ({ value }: BubbleEditorProps) => {
   const { editorRef } = useQuillEditor()
 
   const delta = useMemo(() => {
-    return JSON.parse(value ?? "{}") as Delta
+    try {
+      return JSON.parse(value ?? "{}") as Delta
+    } catch {
+      return {} as Delta
+    }
   }, [value])
 
   useEffect(() => {
