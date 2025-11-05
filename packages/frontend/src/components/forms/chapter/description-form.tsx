@@ -13,7 +13,16 @@ import { chapterQueryOptions, patchChapter } from "@/api/chapter"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Textarea } from "@/components/ui/textarea"
+import dynamic from "next/dynamic"
+
+const SnowEditor = dynamic(() => import("@/components/snow-editor").then((mod) => mod.SnowEditor), { ssr: false })
+const BubbleEditor = dynamic(
+  async () => {
+    const { BubbleEditor } = await import("@/components/bubble-editor")
+    return BubbleEditor
+  },
+  { ssr: false }
+)
 
 type Props = {
   initialData: Chapter
@@ -28,7 +37,7 @@ export const DescriptionForm = ({ initialData }: Props) => {
 
   const form = useForm<DescriptionSchema>({
     defaultValues: {
-      description: initialData.description ?? "",
+      description: initialData.description ?? "{}",
     },
     resolver: zodResolver(descriptionSchema),
   })
@@ -91,7 +100,7 @@ export const DescriptionForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea placeholder="Chapter Description..." {...field} disabled={isSubmitting} />
+                    <SnowEditor {...field} />
                   </FormControl>
                   <FormDescription>{"e.g. 'This chapter is about...'"}</FormDescription>
                   <FormMessage />
@@ -107,9 +116,9 @@ export const DescriptionForm = ({ initialData }: Props) => {
           </form>
         </Form>
       ) : (
-        <p className={cn("mt-2 text-sm", !initialData.description && "text-slate-500 italic")}>
-          {initialData.description || "No description"}
-        </p>
+        <div className={cn("mt-2 text-sm", !initialData.description && "text-slate-500 italic")}>
+          {initialData.description ? <BubbleEditor value={initialData.description} /> : "No description"}
+        </div>
       )}
     </div>
   )
