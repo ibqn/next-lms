@@ -4,9 +4,10 @@ import { chapterQueryOptions } from "@/api/chapter"
 import { AccessForm } from "@/components/forms/chapter/access-form"
 import { DescriptionForm } from "@/components/forms/chapter/description-form"
 import { TitleForm } from "@/components/forms/chapter/title-form"
+import { VideoForm } from "@/components/forms/chapter/video-form"
 import { IconBadge } from "@/components/icon-badge"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { EyeIcon, LayoutDashboardIcon } from "lucide-react"
+import { EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react"
 
 type Props = {
   chapterId: string
@@ -54,6 +55,15 @@ export const ChapterPage = ({ chapterId }: Props) => {
           </div>
 
           <AccessForm initialData={chapter} />
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={VideoIcon} />
+            <h2 className="text-xl">Add a Video</h2>
+          </div>
+
+          <VideoForm initialData={chapter} />
         </div>
       </div>
     </>
