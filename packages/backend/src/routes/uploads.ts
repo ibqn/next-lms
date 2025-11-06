@@ -8,11 +8,7 @@ import { HTTPException } from "hono/http-exception"
 import { access, unlink, writeFile } from "fs/promises"
 import path from "path"
 import type { SuccessResponse } from "database/src/types"
-import {
-  createUpload,
-  deleteUpload,
-  getUpload,
-} from "database/src/queries/upload"
+import { createUpload, deleteUpload, getUpload } from "database/src/queries/upload"
 import type { Upload } from "database/src/drizzle/schema/upload"
 import { paramIdSchema } from "database/src/validators/param"
 import { createReadStream } from "fs"
@@ -116,19 +112,14 @@ async function handleGetFile(upload: Upload) {
 }
 
 export const fileRoute = new Hono<Context>()
-  .get(
-    ":id/protected",
-    signedIn,
-    zValidator("param", paramIdSchema),
-    async (c) => {
-      const { id } = c.req.valid("param")
+  .get(":id/protected", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id } = c.req.valid("param")
 
-      const upload = await handleGetUpload(id)
-      const { stream, contentType } = await handleGetFile(upload)
+    const upload = await handleGetUpload(id)
+    const { stream, contentType } = await handleGetFile(upload)
 
-      return c.body(stream, { headers: { "Content-Type": contentType } })
-    }
-  )
+    return c.body(stream, { headers: { "Content-Type": contentType } })
+  })
   .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
 
