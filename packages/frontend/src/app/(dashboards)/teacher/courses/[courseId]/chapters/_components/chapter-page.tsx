@@ -1,11 +1,12 @@
 "use client"
 
 import { chapterQueryOptions } from "@/api/chapter"
+import { AccessForm } from "@/components/forms/chapter/access-form"
 import { DescriptionForm } from "@/components/forms/chapter/description-form"
 import { TitleForm } from "@/components/forms/chapter/title-form"
 import { IconBadge } from "@/components/icon-badge"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { LayoutDashboardIcon } from "lucide-react"
+import { EyeIcon, LayoutDashboardIcon } from "lucide-react"
 
 type Props = {
   chapterId: string
@@ -44,6 +45,15 @@ export const ChapterPage = ({ chapterId }: Props) => {
 
           <TitleForm initialData={chapter} />
           <DescriptionForm initialData={chapter} />
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={EyeIcon} />
+            <h2 className="text-xl">Access Settings</h2>
+          </div>
+
+          <AccessForm initialData={chapter} />
         </div>
       </div>
     </>

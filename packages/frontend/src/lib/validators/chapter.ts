@@ -8,5 +8,10 @@ export const descriptionSchema = z.object({
   description: z.string(),
 })
 
+export const accessSchema = z.object({
+  isFree: z.boolean(),
+})
+
 export type TitleSchema = z.infer<typeof titleSchema>
 export type DescriptionSchema = z.infer<typeof descriptionSchema>
+export type AccessSchema = z.infer<typeof accessSchema>
