@@ -7,7 +7,7 @@ type Props = Readonly<{
 
 export default async function DashboardLayout({ children }: Props) {
   return (
-    <div className="flex h-full grow">
+    <div className="flex min-h-svh grow">
       <div className="fixed inset-y-0 z-50 h-20 w-full md:pl-56">
         <Navbar />
       </div>
