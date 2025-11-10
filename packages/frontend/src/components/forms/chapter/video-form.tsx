@@ -223,9 +223,14 @@ export const VideoForm = ({ initialData }: Props) => {
               </div>
             </div>
           ) : (
-            <div className="relative aspect-video">
-              <span>TODO: Video Preview</span>
-            </div>
+            <>
+              <div className="relative aspect-video">
+                <span>TODO: Video Preview</span>
+              </div>
+              <div className="text-muted-foreground mt-2 text-sm">
+                Video might take a few minutes to process after upload.
+              </div>
+            </>
           )}
         </>
       )}
