@@ -1,7 +1,7 @@
 "use client"
 
 import type { Chapter } from "database/src/drizzle/schema/chapter"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { PencilIcon, PlusCircleIcon, UploadIcon, VideoIcon, XIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -16,6 +16,7 @@ import { useDropzone } from "react-dropzone"
 import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
 import { patchChapter } from "@/api/chapter"
+import { VideoPlayer } from "@/components/video"
 
 type Props = {
   initialData: Chapter
@@ -114,6 +115,15 @@ export const VideoForm = ({ initialData }: Props) => {
     }
   }
 
+  const videoPlayerOptions = useMemo(
+    () => ({
+      responsive: true,
+      autoplay: true,
+      sources: [{ src: videoUrl, type: "video/mp4" }],
+    }),
+    [videoUrl]
+  )
+
   return (
     <div className="rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
@@ -172,8 +182,8 @@ export const VideoForm = ({ initialData }: Props) => {
 
           {videoUrl && (
             <div className="my-4 flex items-start">
-              <div className="group relative aspect-video">
-                <div className="absolute top-1.5 right-1.5 bg-transparent">
+              <div className="group relative flex aspect-video h-60">
+                <div className="absolute top-1.5 right-1.5 z-30 bg-transparent">
                   <Button
                     variant="outline"
                     className="h-auto p-1 opacity-0 group-hover:opacity-100"
@@ -182,7 +192,9 @@ export const VideoForm = ({ initialData }: Props) => {
                     <XIcon className="size-4" aria-hidden="true" />
                   </Button>
                 </div>
-                <span>TODO: Video Preview</span>
+                <div className="block w-full">
+                  <VideoPlayer options={videoPlayerOptions} />
+                </div>
               </div>
             </div>
           )}
@@ -224,8 +236,8 @@ export const VideoForm = ({ initialData }: Props) => {
             </div>
           ) : (
             <>
-              <div className="relative aspect-video">
-                <span>TODO: Video Preview</span>
+              <div className="block w-full">
+                <VideoPlayer options={videoPlayerOptions} />
               </div>
               <div className="text-muted-foreground mt-2 text-sm">
                 Video might take a few minutes to process after upload.
