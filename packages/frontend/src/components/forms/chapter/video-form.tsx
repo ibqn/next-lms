@@ -182,7 +182,7 @@ export const VideoForm = ({ initialData }: Props) => {
 
           {videoUrl && (
             <div className="my-4 flex items-start">
-              <div className="group relative flex aspect-video h-60">
+              <div className="group relative block w-full">
                 <div className="absolute top-1.5 right-1.5 z-30 bg-transparent">
                   <Button
                     variant="outline"
@@ -192,9 +192,8 @@ export const VideoForm = ({ initialData }: Props) => {
                     <XIcon className="size-4" aria-hidden="true" />
                   </Button>
                 </div>
-                <div className="block w-full">
-                  <VideoPlayer options={videoPlayerOptions} />
-                </div>
+
+                <VideoPlayer options={videoPlayerOptions} />
               </div>
             </div>
           )}
