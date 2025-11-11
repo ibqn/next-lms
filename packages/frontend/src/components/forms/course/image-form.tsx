@@ -189,6 +189,7 @@ export const ImageForm = ({ initialData }: Props) => {
                   className="w-64 rounded-md object-cover"
                   width={120}
                   height={120}
+                  unoptimized
                 />
               </div>
             </div>
@@ -237,6 +238,7 @@ export const ImageForm = ({ initialData }: Props) => {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="Course image"
                 src={initialData.imageUrl}
+                unoptimized
               />
             </div>
           )}
