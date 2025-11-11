@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef } from "react"
+import { type ComponentProps, useEffect, useMemo, useRef } from "react"
 import videojs from "video.js"
 
 import "video.js/dist/video-js.css"
@@ -11,7 +11,7 @@ type VideoPlayer = ReturnType<typeof videojs>
 type VideoPlayerProps = {
   options: VideoPlayerOptions
   onReady?: (player: VideoPlayer) => void
-}
+} & ComponentProps<"div">
 
 const initialOptions: VideoPlayerOptions = {
   controls: true,
@@ -23,7 +23,7 @@ const initialOptions: VideoPlayerOptions = {
   },
 }
 
-export const VideoPlayer = ({ options, onReady }: VideoPlayerProps) => {
+export const VideoPlayer = ({ options, onReady, ...props }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<VideoPlayer>(null)
 
@@ -62,7 +62,7 @@ export const VideoPlayer = ({ options, onReady }: VideoPlayerProps) => {
   }, [playerRef])
 
   return (
-    <div data-vjs-player>
+    <div {...props} data-vjs-player>
       <div ref={videoRef} />
     </div>
   )
