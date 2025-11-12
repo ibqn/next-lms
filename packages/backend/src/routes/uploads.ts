@@ -144,7 +144,7 @@ function optimizeImage(filePath: string, width?: number, quality?: number, forma
 }
 
 export const fileRoute = new Hono<Context>()
-  .get(":id/", zValidator("param", paramIdSchema), async (c) => {
+  .get(":id", zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
     const user = c.get("user")
 
