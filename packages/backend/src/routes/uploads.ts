@@ -103,11 +103,7 @@ async function handleGetFile(upload: Upload) {
 
   const readStream = createReadStream(filePath)
   const stream = Readable.toWeb(readStream) as ReadableStream
-  const contentType = mime.getType(filePath)
-
-  if (!contentType) {
-    throw new HTTPException(500, { message: "Invalid file type" })
-  }
+  const contentType = mime.getType(filePath) ?? "text/plain"
 
   return { stream, contentType, filePath }
 }
@@ -187,6 +183,7 @@ export const fileRoute = new Hono<Context>()
     }
 
     const { stream, contentType, filePath } = await handleGetFile(upload)
+    console.log("contentType", contentType)
 
     const isImage = contentType.startsWith("image/")
     const shouldOptimize = isImage && (width || quality || format)
