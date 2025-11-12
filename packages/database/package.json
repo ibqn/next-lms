@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/lodash.unset": "^4.5.9",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
     "drizzle-kit": "^0.31.6",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
