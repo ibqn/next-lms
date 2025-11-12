@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 export const imageQuerySchema = z.object({
-  w: z.string().optional().transform((val) => val ? parseInt(val, 10) : undefined),
-  q: z.string().optional().transform((val) => val ? parseInt(val, 10) : undefined),
+  w: z.coerce.number().positive().optional(),
+  q: z.coerce.number().min(1).max(100).optional(),
   format: z.enum(["webp", "jpeg", "jpg", "png", "avif"]).optional()
 })
 
