@@ -23,7 +23,7 @@ export function customImageLoader({ src, width, quality }: ImageLoaderProps): st
   params.set("format", "webp")
 
   const queryString = params.toString()
-  const url = `${API_BASE_URL}/uploads/${uploadId}?${queryString}`
+  const url = `${API_BASE_URL}/uploads/${uploadId}/image?${queryString}`
 
   return url
 }

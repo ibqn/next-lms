@@ -144,32 +144,23 @@ function optimizeImage(filePath: string, width?: number, quality?: number, forma
 }
 
 export const fileRoute = new Hono<Context>()
-  .get(":id/protected", signedIn, zValidator("param", paramIdSchema), async (c) => {
+  .get(":id/", zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
-
-    const upload = await handleGetUpload(id)
-    const { stream, contentType } = await handleGetFile(upload)
-
-    return c.body(stream, { headers: { "Content-Type": contentType } })
-  })
-  .get(":id/public", zValidator("param", paramIdSchema), async (c) => {
-    const { id } = c.req.valid("param")
+    const user = c.get("user")
 
     const upload = await handleGetUpload(id)
 
-    if (!upload.isPublic) {
-      throw new HTTPException(403, { message: "Upload is not public" })
+    if (!upload.isPublic && !user) {
+      throw new HTTPException(403, { message: "Unauthorized" })
     }
 
     const { stream, contentType } = await handleGetFile(upload)
 
     return c.body(stream, { headers: { "Content-Type": contentType } })
   })
-  .get(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+  .get(":id/image", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const user = c.get("user")
     const { id } = c.req.valid("param")
-
-    console.log("new endpoint")
 
     // Get optimization parameters from query
     const width = c.req.query("w") ? parseInt(c.req.query("w") as string) : undefined
@@ -183,7 +174,6 @@ export const fileRoute = new Hono<Context>()
     }
 
     const { stream, contentType, filePath } = await handleGetFile(upload)
-    console.log("contentType", contentType)
 
     const isImage = contentType.startsWith("image/")
     const shouldOptimize = isImage && (width || quality || format)
