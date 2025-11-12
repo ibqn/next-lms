@@ -14,6 +14,7 @@ import { paramIdSchema } from "database/src/validators/param"
 import { createReadStream } from "fs"
 import { Readable } from "stream"
 import mime from "mime"
+import sharp, { type FormatEnum } from "sharp"
 
 export const uploadRoute = new Hono<Context>()
   .post("/", signedIn, zValidator("form", uploadSchema), async (c) => {
@@ -108,7 +109,42 @@ async function handleGetFile(upload: Upload) {
     throw new HTTPException(500, { message: "Invalid file type" })
   }
 
-  return { stream, contentType }
+  return { stream, contentType, filePath }
+}
+
+function optimizeImage(filePath: string, width?: number, quality?: number, format?: string, contentType?: string) {
+  let sharpInstance = sharp(filePath)
+
+  if (width) {
+    sharpInstance = sharpInstance.resize(width, null, {
+      withoutEnlargement: true,
+      fit: "inside",
+    })
+  }
+
+  if (format) {
+    const supportedFormats = ["webp", "jpeg", "jpg", "png", "avif"]
+
+    if (!supportedFormats.includes(format)) {
+      throw new HTTPException(400, { message: "Unsupported format" })
+    }
+
+    sharpInstance = sharpInstance.toFormat(format as keyof FormatEnum, { quality: quality || 80 })
+  } else if (quality && contentType) {
+    const formatMap = {
+      "image/jpeg": "jpeg",
+      "image/png": "png",
+      "image/webp": "webp",
+    } as const
+
+    const sharpFormat = formatMap[contentType as keyof typeof formatMap]
+
+    if (sharpFormat) {
+      sharpInstance = sharpInstance.toFormat(sharpFormat, { quality })
+    }
+  }
+
+  return sharpInstance
 }
 
 export const fileRoute = new Hono<Context>()
@@ -132,4 +168,48 @@ export const fileRoute = new Hono<Context>()
     const { stream, contentType } = await handleGetFile(upload)
 
     return c.body(stream, { headers: { "Content-Type": contentType } })
+  })
+  .get(":id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const user = c.get("user")
+    const { id } = c.req.valid("param")
+
+    console.log("new endpoint")
+
+    // Get optimization parameters from query
+    const width = c.req.query("w") ? parseInt(c.req.query("w") as string) : undefined
+    const quality = c.req.query("q") ? parseInt(c.req.query("q") as string) : undefined
+    const format = c.req.query("format")
+
+    const upload = await handleGetUpload(id)
+
+    if (!upload.isPublic && !user) {
+      throw new HTTPException(403, { message: "Unauthorized" })
+    }
+
+    const { stream, contentType, filePath } = await handleGetFile(upload)
+
+    const isImage = contentType.startsWith("image/")
+    const shouldOptimize = isImage && (width || quality || format)
+
+    if (!shouldOptimize) {
+      return c.body(stream, { headers: { "Content-Type": contentType } })
+    }
+
+    const sharpInstance = optimizeImage(filePath, width, quality, format, contentType)
+    const optimizedBuffer = await sharpInstance.toBuffer()
+    const optimizedContentType = format ? `image/${format}` : contentType
+
+    const optimizedStream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(optimizedBuffer)
+        controller.close()
+      },
+    })
+
+    return c.body(optimizedStream, {
+      headers: {
+        "Content-Type": optimizedContentType,
+        "Cache-Control": "public, max-age=31536000",
+      },
+    })
   })
