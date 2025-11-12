@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
-import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
+import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
 import { patchChapter } from "@/api/chapter"
 import { VideoPlayer } from "@/components/video"
@@ -78,7 +78,7 @@ export const VideoForm = ({ initialData }: Props) => {
       const onUploadSuccess = ({ response }: UploadSuccess) => {
         const upload = response.data
         console.log("upload", upload)
-        form.setValue("videoUrl", getProtectedUrl(upload))
+        form.setValue("videoUrl", getUrl(upload))
       }
 
       await uploadFiles({

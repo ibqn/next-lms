@@ -68,13 +68,6 @@ export const uploadFiles = async ({ files, onUploadProgress, onUploadSuccess, on
   return responses
 }
 
-export const getPublicUrl = (upload: Upload) => {
-  if (!upload.isPublic) {
-    return null
-  }
-  return `/uploads/${upload.id}/public`
-}
-
-export const getProtectedUrl = (upload: Upload) => {
-  return `/images/${upload.id}`
+export const getUrl = (upload: Upload) => {
+  return `/uploads/${upload.id}`
 }

@@ -3,19 +3,13 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  FileIcon,
-  PencilIcon,
-  PlusCircleIcon,
-  UploadIcon,
-  XIcon,
-} from "lucide-react"
+import { FileIcon, PencilIcon, PlusCircleIcon, UploadIcon, XIcon } from "lucide-react"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
-import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
+import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -68,7 +62,7 @@ export const FileForm = ({ initialData }: Props) => {
         console.log("upload", upload)
         addAttachment({
           name: upload.filePath,
-          url: getProtectedUrl(upload),
+          url: getUrl(upload),
         })
       }
 
@@ -144,8 +138,10 @@ export const FileForm = ({ initialData }: Props) => {
             {...getRootProps()}
             className={cn(
               "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg",
-              "border border-dashed border-muted-foreground/25 bg-slate-200 px-5 py-2.5 text-center transition hover:bg-slate-200/25",
-              "ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              `border-muted-foreground/25 border border-dashed bg-slate-200 px-5 py-2.5 text-center transition
+                hover:bg-slate-200/25`,
+              `ring-offset-background focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2
+                focus-visible:outline-hidden`,
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60"
             )}
@@ -154,37 +150,27 @@ export const FileForm = ({ initialData }: Props) => {
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon
-                    className="size-7 text-slate-500"
-                    aria-hidden="true"
-                  />
+                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
                 </div>
-                <p className="font-medium text-muted-foreground">
-                  Drop the files here
-                </p>
+                <p className="text-muted-foreground font-medium">Drop the files here</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed border-slate-500 p-4">
-                  <UploadIcon
-                    className="size-7 text-slate-500"
-                    aria-hidden="true"
-                  />
+                  <UploadIcon className="size-7 text-slate-500" aria-hidden="true" />
                 </div>
                 <div className="flex flex-col gap-px">
-                  <p className="font-medium text-muted-foreground">
+                  <p className="text-muted-foreground font-medium">
                     Drag {`'n'`} drop files here, or click to select files
                   </p>
-                  <p className="text-sm text-muted-foreground/70">
-                    You can upload files with a maximum size of 4MB
-                  </p>
+                  <p className="text-muted-foreground/70 text-sm">You can upload files with a maximum size of 4MB</p>
                 </div>
               </div>
             )}
           </div>
 
           <div className="mt-4 space-y-4">
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-2 text-sm">
               Add anything your students might need to complete the course.
             </p>
           </div>
@@ -204,11 +190,7 @@ export const FileForm = ({ initialData }: Props) => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <Link
-                              className="line-clamp-1 text-xs"
-                              target="_blank"
-                              href={field.value.url}
-                            >
+                            <Link className="line-clamp-1 text-xs" target="_blank" href={field.value.url}>
                               {field.value.name}{" "}
                             </Link>
                           </FormControl>
@@ -231,10 +213,7 @@ export const FileForm = ({ initialData }: Props) => {
               ))}
 
               <div className="flex items-center gap-x-2">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !isValid || isPending}
-                >
+                <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                   Save
                 </Button>
               </div>
@@ -244,7 +223,7 @@ export const FileForm = ({ initialData }: Props) => {
       ) : (
         <>
           {initialData.attachments && initialData.attachments.length === 0 && (
-            <p className="mt-2 text-sm italic text-slate-500">No Attachments</p>
+            <p className="mt-2 text-sm text-slate-500 italic">No Attachments</p>
           )}
         </>
       )}

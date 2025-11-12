@@ -14,7 +14,7 @@ import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
-import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
+import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
 import { Image } from "@/components/optimized-image"
 
@@ -78,7 +78,7 @@ export const ImageForm = ({ initialData }: Props) => {
       const onUploadSuccess = ({ response }: UploadSuccess) => {
         const upload = response.data
         console.log("upload", upload)
-        form.setValue("imageUrl", getProtectedUrl(upload))
+        form.setValue("imageUrl", getUrl(upload))
       }
 
       await uploadFiles({
