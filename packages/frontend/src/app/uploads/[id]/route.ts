@@ -12,7 +12,6 @@ export async function GET(request: Request, { params }: Props) {
 
   const response = await axios.get(`${env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
     withCredentials: true,
-    responseType: "arraybuffer",
     headers: {
       Cookie: cookies,
     },
