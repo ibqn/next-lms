@@ -13,10 +13,10 @@ import { useMutation } from "@tanstack/react-query"
 import { patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import Image from "next/image"
 import { useDropzone } from "react-dropzone"
 import { getProtectedUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
+import { Image } from "@/components/optimized-image"
 
 type Props = {
   initialData: Course
@@ -189,7 +189,6 @@ export const ImageForm = ({ initialData }: Props) => {
                   className="w-64 rounded-md object-cover"
                   width={120}
                   height={120}
-                  unoptimized
                 />
               </div>
             </div>
@@ -238,7 +237,6 @@ export const ImageForm = ({ initialData }: Props) => {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="Course image"
                 src={initialData.imageUrl}
-                unoptimized
               />
             </div>
           )}
