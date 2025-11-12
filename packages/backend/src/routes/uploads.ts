@@ -15,6 +15,7 @@ import { createReadStream } from "fs"
 import { Readable } from "stream"
 import mime from "mime"
 import sharp, { type FormatEnum } from "sharp"
+import { imageQuerySchema } from "../validators/image"
 
 export const uploadRoute = new Hono<Context>()
   .post("/", signedIn, zValidator("form", uploadSchema), async (c) => {
@@ -158,14 +159,10 @@ export const fileRoute = new Hono<Context>()
 
     return c.body(stream, { headers: { "Content-Type": contentType } })
   })
-  .get(":id/image", signedIn, zValidator("param", paramIdSchema), async (c) => {
+  .get(":id/image", signedIn, zValidator("param", paramIdSchema), zValidator("query", imageQuerySchema), async (c) => {
     const user = c.get("user")
     const { id } = c.req.valid("param")
-
-    // Get optimization parameters from query
-    const width = c.req.query("w") ? parseInt(c.req.query("w") as string) : undefined
-    const quality = c.req.query("q") ? parseInt(c.req.query("q") as string) : undefined
-    const format = c.req.query("format")
+    const { w: width, q: quality, format } = c.req.valid("query")
 
     const upload = await handleGetUpload(id)
 
@@ -196,7 +193,7 @@ export const fileRoute = new Hono<Context>()
     return c.body(optimizedStream, {
       headers: {
         "Content-Type": optimizedContentType,
-        "Cache-Control": "public, max-age=31536000",
+        // "Cache-Control": "public, max-age=31536000",
       },
     })
   })
