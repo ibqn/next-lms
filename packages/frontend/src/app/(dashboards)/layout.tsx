@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: Props) {
       <div className="fixed inset-y-0 z-50 hidden h-full w-56 flex-col md:flex">
         <Sidebar />
       </div>
-      <main className="flex h-full grow pt-20 md:pl-56">{children}</main>
+      <main className="flex grow flex-col pt-20 md:pl-56">{children}</main>
     </div>
   )
 }

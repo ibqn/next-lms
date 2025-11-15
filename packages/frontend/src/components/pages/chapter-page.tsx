@@ -10,6 +10,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { ArrowLeftIcon, EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { Banner } from "@/components/banner"
 
 type Props = {
   chapterId: string
@@ -30,6 +31,10 @@ export const ChapterPage = ({ chapterId }: Props) => {
 
   return (
     <>
+      {!chapter.isPublished && (
+        <Banner label="This chapter is not published yet. It will not be visible in the course." variant="warning" />
+      )}
+
       <div className="flex grow flex-col p-6">
         <div className="mb-4 flex">
           <Link href={`/teacher/courses/${chapter.courseId}`} className="flex items-center text-sm hover:opacity-75">
