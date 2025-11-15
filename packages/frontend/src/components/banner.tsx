@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority"
 import { AlertTriangleIcon, CheckCircleIcon } from "lucide-react"
 
-const bannerVariants = cva("border text-center p4 text-sm flex items-center w-full", {
+const bannerVariants = cva("border text-center p-4 text-sm flex items-center w-full", {
   variants: {
     variant: {
       warning: "bg-yellow-200/80 border-yellow-300 text-primary",
