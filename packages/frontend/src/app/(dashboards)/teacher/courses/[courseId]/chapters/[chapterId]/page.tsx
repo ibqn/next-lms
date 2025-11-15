@@ -3,7 +3,7 @@ import { getQueryClient } from "@/lib/query-client"
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
-import { ChapterPage } from "../_components/chapter-page"
+import { ChapterPage } from "@/components/pages/chapter-page"
 
 type Props = {
   params: Promise<{
