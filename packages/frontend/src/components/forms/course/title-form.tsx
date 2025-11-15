@@ -7,18 +7,11 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { titleSchema, type TitleSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
-import { patchCourse } from "@/api/course"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { courseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 
 type Props = {
@@ -43,6 +36,8 @@ export const TitleForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
+  const queryClient = useQueryClient()
+
   const { mutate: updateCourse, isPending } = useMutation({
     mutationFn: (payload: TitleSchema) => patchCourse(courseId, payload),
     onSuccess: ({ data }) => {
@@ -53,12 +48,17 @@ export const TitleForm = ({ initialData }: Props) => {
         description: `The course title '${title}' was updated successfully`,
       })
       toggleEdit()
-      router.refresh()
     },
     onError: () => {
       toast.error("Update course error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
@@ -91,25 +91,16 @@ export const TitleForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      placeholder="Course Title..."
-                      {...field}
-                      disabled={isSubmitting}
-                    />
+                    <Input placeholder="Course Title..." {...field} disabled={isSubmitting} />
                   </FormControl>
-                  <FormDescription>
-                    {"e.g. 'Introduction to Computer Science'"}
-                  </FormDescription>
+                  <FormDescription>{"e.g. 'Introduction to Computer Science'"}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex items-center gap-x-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || isPending}
-              >
+              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                 Save
               </Button>
             </div>
