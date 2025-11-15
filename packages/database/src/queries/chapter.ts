@@ -17,11 +17,7 @@ type CreateChapterOptions = CreateChapterSchema & {
   user: User
 }
 
-export const createChapter = async ({
-  title,
-  courseId,
-  user,
-}: CreateChapterOptions) => {
+export const createChapter = async ({ title, courseId, user }: CreateChapterOptions) => {
   const [course] = await db
     .select({ id: courseTable.id, userId: courseTable.userId })
     .from(courseTable)
@@ -55,10 +51,7 @@ type ReorderChapterOptions = {
   user: User
 }
 
-export const reorderChapters = async ({
-  reorderList,
-  user,
-}: ReorderChapterOptions) => {
+export const reorderChapters = async ({ reorderList, user }: ReorderChapterOptions) => {
   const result = reorderChapterSchema.safeParse(reorderList)
   if (!result.success) {
     return null
@@ -84,9 +77,7 @@ export const reorderChapters = async ({
   const [course] = await db
     .select({ id: courseTable.id, userId: courseTable.userId })
     .from(courseTable)
-    .where(
-      and(eq(courseTable.userId, user.id), eq(courseTable.id, chapter.courseId))
-    )
+    .where(and(eq(courseTable.userId, user.id), eq(courseTable.id, chapter.courseId)))
 
   if (!course) {
     return null
@@ -94,11 +85,7 @@ export const reorderChapters = async ({
 
   const trxResult = await db.transaction(async (trx) => {
     const reorderPromises = reorderData.map(({ id, position }) =>
-      trx
-        .update(chapterTable)
-        .set({ position })
-        .where(eq(chapterTable.id, id))
-        .returning({ id: chapterTable.id })
+      trx.update(chapterTable).set({ position }).where(eq(chapterTable.id, id)).returning({ id: chapterTable.id })
     )
 
     const updatedChapters = await Promise.all(reorderPromises)
@@ -112,14 +99,8 @@ export type GetChapterOptions = ParamIdSchema & {
   user: User
 }
 
-export const getChapter = async ({
-  id: chapterId,
-  user,
-}: GetChapterOptions) => {
-  const [chapter] = await db
-    .select()
-    .from(chapterTable)
-    .where(eq(chapterTable.id, chapterId))
+export const getChapter = async ({ id: chapterId, user }: GetChapterOptions) => {
+  const [chapter] = await db.select().from(chapterTable).where(eq(chapterTable.id, chapterId))
 
   if (!chapter) {
     return null
@@ -128,9 +109,7 @@ export const getChapter = async ({
   const [course] = await db
     .select({ id: courseTable.id })
     .from(courseTable)
-    .where(
-      and(eq(courseTable.id, chapter.courseId), eq(courseTable.userId, user.id))
-    )
+    .where(and(eq(courseTable.id, chapter.courseId), eq(courseTable.userId, user.id)))
 
   if (!course) {
     return null
@@ -161,20 +140,14 @@ export const updateChapter = async ({
   const [course] = await db
     .select({ id: courseTable.id, userId: courseTable.userId })
     .from(courseTable)
-    .where(
-      and(eq(courseTable.userId, user.id), eq(courseTable.id, chapter.courseId))
-    )
+    .where(and(eq(courseTable.userId, user.id), eq(courseTable.id, chapter.courseId)))
 
   if (!course) {
     return { success: false, error: "Not authorized to update chapter" }
   }
 
   try {
-    const [chapter] = await db
-      .update(chapterTable)
-      .set(data)
-      .where(eq(chapterTable.id, chapterId))
-      .returning()
+    const [chapter] = await db.update(chapterTable).set(data).where(eq(chapterTable.id, chapterId)).returning()
 
     return {
       data: chapter satisfies Chapter as Chapter,

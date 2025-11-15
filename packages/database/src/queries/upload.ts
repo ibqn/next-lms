@@ -10,10 +10,7 @@ type CreateUploadOptions = CreateUploadSchema & {
   user: User
 }
 
-export const createUpload = async ({
-  user,
-  ...uploadData
-}: CreateUploadOptions) => {
+export const createUpload = async ({ user, ...uploadData }: CreateUploadOptions) => {
   const [upload] = await db
     .insert(uploadTable)
     .values({

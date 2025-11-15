@@ -8,10 +8,7 @@ export const signUp = async (username: string, password: string) => {
   const passwordHash = await argon2.hash(password)
 
   try {
-    const [user] = await db
-      .insert(userTable)
-      .values({ username, passwordHash })
-      .returning({ id: userTable.id })
+    const [user] = await db.insert(userTable).values({ username, passwordHash }).returning({ id: userTable.id })
 
     const token = generateSessionToken()
     await createSession(token, user.id)
