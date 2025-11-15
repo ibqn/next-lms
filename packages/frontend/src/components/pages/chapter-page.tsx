@@ -7,7 +7,9 @@ import { TitleForm } from "@/components/forms/chapter/title-form"
 import { VideoForm } from "@/components/forms/chapter/video-form"
 import { IconBadge } from "@/components/icon-badge"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react"
+import { ArrowLeftIcon, EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react"
+import Link from "next/link"
+import { notFound } from "next/navigation"
 
 type Props = {
   chapterId: string
@@ -17,7 +19,7 @@ export const ChapterPage = ({ chapterId }: Props) => {
   const { data: chapter } = useSuspenseQuery(chapterQueryOptions(chapterId))
 
   if (chapter === null) {
-    return <div>Not found</div>
+    return notFound()
   }
 
   const requiredFields = [chapter.title, chapter.description, chapter.videoUrl]
@@ -28,42 +30,51 @@ export const ChapterPage = ({ chapterId }: Props) => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">Chapter Creation</h1>
-          <span className="text-sm text-slate-700">Complete all fields {completionStats}</span>
+      <div className="flex grow flex-col p-6">
+        <div className="mb-4 flex">
+          <Link href={`/teacher/courses/${chapter.courseId}`} className="flex items-center text-sm hover:opacity-75">
+            <ArrowLeftIcon className="mr-2 size-4" />
+            Back to course setup
+          </Link>
         </div>
-      </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="space-y-4">
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={LayoutDashboardIcon} />
-              <h2 className="text-xl">Customize your chapter</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-y-2">
+            <h1 className="text-2xl font-medium">Chapter Creation</h1>
+            <span className="text-sm text-slate-700">Complete all fields {completionStats}</span>
+          </div>
+        </div>
+
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="space-y-4">
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={LayoutDashboardIcon} />
+                <h2 className="text-xl">Customize your chapter</h2>
+              </div>
             </div>
+
+            <TitleForm initialData={chapter} />
+            <DescriptionForm initialData={chapter} />
           </div>
 
-          <TitleForm initialData={chapter} />
-          <DescriptionForm initialData={chapter} />
-        </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={EyeIcon} />
+              <h2 className="text-xl">Access Settings</h2>
+            </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-x-2">
-            <IconBadge icon={EyeIcon} />
-            <h2 className="text-xl">Access Settings</h2>
+            <AccessForm initialData={chapter} />
           </div>
 
-          <AccessForm initialData={chapter} />
-        </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={VideoIcon} />
+              <h2 className="text-xl">Add a Video</h2>
+            </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-x-2">
-            <IconBadge icon={VideoIcon} />
-            <h2 className="text-xl">Add a Video</h2>
+            <VideoForm initialData={chapter} />
           </div>
-
-          <VideoForm initialData={chapter} />
         </div>
       </div>
     </>
