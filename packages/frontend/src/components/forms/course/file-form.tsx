@@ -137,10 +137,9 @@ export const FileForm = ({ initialData }: Props) => {
           <div
             {...getRootProps()}
             className={cn(
-              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg",
-              `border-muted-foreground/25 border border-dashed bg-slate-200 px-5 py-2.5 text-center transition
-                hover:bg-slate-200/25`,
-              `ring-offset-background focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2
+              `group border-muted-foreground/25 ring-offset-background focus-visible:ring-ring relative grid h-52 w-full
+                cursor-pointer place-items-center rounded-lg border border-dashed bg-slate-200 px-5 py-2.5 text-center
+                transition hover:bg-slate-200/25 focus-visible:ring-2 focus-visible:ring-offset-2
                 focus-visible:outline-hidden`,
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60"
