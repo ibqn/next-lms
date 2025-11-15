@@ -7,10 +7,7 @@ type CreateAttachmentOptions = {
   attachmentsData: CreateAttachmentSchema
   user: User
 }
-export const createAttachment = async ({
-  attachmentsData,
-  user,
-}: CreateAttachmentOptions) => {
+export const createAttachment = async ({ attachmentsData, user }: CreateAttachmentOptions) => {
   const attachments = await db
     .insert(attachmentTable)
     .values(
@@ -20,15 +17,7 @@ export const createAttachment = async ({
       }))
     )
     .onConflictDoNothing()
-    .returning({
-      id: attachmentTable.id,
-      name: attachmentTable.name,
-      url: attachmentTable.url,
-      courseId: attachmentTable.courseId,
-      userId: attachmentTable.userId,
-      createdAt: attachmentTable.createdAt,
-      updatedAt: attachmentTable.updatedAt,
-    })
+    .returning()
 
   return attachments satisfies Attachment[] as Attachment[]
 }
