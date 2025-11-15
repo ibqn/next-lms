@@ -1,30 +1,20 @@
 import { courseTable, type Course } from "../drizzle/schema/course"
 import type { User } from "../drizzle/schema/auth"
 import { db } from "../drizzle/db"
-import type {
-  CreateCourseSchema,
-  UpdateCourseSchema,
-} from "../validators/course"
+import type { CreateCourseSchema, UpdateCourseSchema } from "../validators/course"
 import { asc, countDistinct, desc, eq } from "drizzle-orm"
 import type { ParamIdSchema } from "../validators/param"
 import unset from "lodash.unset"
-import {
-  paginationSchema,
-  type PaginationSchema,
-  type SortedBySchema,
-} from "../validators/pagination"
+import { paginationSchema, type PaginationSchema, type SortedBySchema } from "../validators/pagination"
 
 type CreateCourseOptions = CreateCourseSchema & {
   user: User
 }
 
-export const createCourse = async ({ title, user }: CreateCourseOptions) => {
-  const [course] = await db
-    .insert(courseTable)
-    .values({ userId: user.id, title })
-    .returning()
+export const createCourse = async ({ title, user }: CreateCourseOptions): Promise<Course> => {
+  const [course] = await db.insert(courseTable).values({ userId: user.id, title }).returning()
 
-  return { ...course, user } satisfies Course as Course
+  return { ...course, user } satisfies Course
 }
 
 type GetCourseOptions = {
@@ -32,13 +22,9 @@ type GetCourseOptions = {
   userId: User["id"]
 }
 
-export const getCourseItem = async ({
-  courseId,
-  userId,
-}: GetCourseOptions): Promise<Course | null> => {
+export const getCourseItem = async ({ courseId, userId }: GetCourseOptions): Promise<Course | null> => {
   const course = await db.query.course.findFirst({
-    where: ({ id, userId: courseUserId }, { eq, and }) =>
-      eq(id, courseId) && and(eq(courseUserId, userId)),
+    where: ({ id, userId: courseUserId }, { eq, and }) => and(eq(id, courseId), eq(courseUserId, userId)),
     with: {
       user: { columns: { passwordHash: false } },
       chapters: {
@@ -62,11 +48,7 @@ type UpdateCourseOptions = UpdateCourseSchema &
     user: User
   }
 
-export const updateCourse = async ({
-  id,
-  user: { id: userId },
-  ...data
-}: UpdateCourseOptions): Promise<Course> => {
+export const updateCourse = async ({ id, user: { id: userId }, ...data }: UpdateCourseOptions): Promise<Course> => {
   const [course] = await db
     .update(courseTable)
     .set({ ...data, userId })
@@ -85,9 +67,7 @@ export const updateCourse = async ({
 }
 
 export const getCourseItemsCount = async () => {
-  const [{ count }] = await db
-    .select({ count: countDistinct(courseTable.id) })
-    .from(courseTable)
+  const [{ count }] = await db.select({ count: countDistinct(courseTable.id) }).from(courseTable)
 
   return count
 }
@@ -103,9 +83,7 @@ const getSortedByColumn = (sortedBy: SortedBySchema) => {
   }
 }
 
-export const getCourseItems = async (
-  queryParams: Partial<PaginationSchema> = {}
-): Promise<Course[]> => {
+export const getCourseItems = async (queryParams: Partial<PaginationSchema> = {}): Promise<Course[]> => {
   const params = paginationSchema.parse(queryParams)
 
   const { limit, page, sortedBy, order } = params
