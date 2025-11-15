@@ -33,9 +33,9 @@ export const courseListQueryOptions = (paramsInput: Partial<PaginationSchema> = 
   })
 }
 
-export const getEventItem = async ({ id }: ParamIdSchema) => {
+export const getCourseItem = async ({ id }: ParamIdSchema) => {
   try {
-    const { data: response } = await axios.get<ApiResponse<Event>>(`/course/${id}`)
+    const { data: response } = await axios.get<ApiResponse<Course>>(`/course/${id}`)
     if (!response.success) {
       return null
     }
@@ -46,10 +46,10 @@ export const getEventItem = async ({ id }: ParamIdSchema) => {
   }
 }
 
-export const eventQueryOptions = (paramId?: ParamIdSchema) => {
+export const courseQueryOptions = (paramId?: ParamIdSchema) => {
   return queryOptions({
-    queryKey: ["event", paramId?.id] as const,
-    queryFn: () => (paramId?.id ? getEventItem({ id: paramId?.id }) : null),
+    queryKey: ["course", paramId?.id] as const,
+    queryFn: () => (paramId?.id ? getCourseItem({ id: paramId?.id }) : null),
     enabled: !!paramId?.id,
   })
 }
