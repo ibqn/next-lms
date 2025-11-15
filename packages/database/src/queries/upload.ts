@@ -10,7 +10,7 @@ type CreateUploadOptions = CreateUploadSchema & {
   user: User
 }
 
-export const createUpload = async ({ user, ...uploadData }: CreateUploadOptions) => {
+export const createUpload = async ({ user, ...uploadData }: CreateUploadOptions): Promise<Upload> => {
   const [upload] = await db
     .insert(uploadTable)
     .values({
@@ -19,12 +19,12 @@ export const createUpload = async ({ user, ...uploadData }: CreateUploadOptions)
     })
     .returning()
 
-  return { ...upload, user } satisfies Upload as Upload
+  return { ...upload, user } satisfies Upload
 }
 
 type GetUploadOptions = ParamIdSchema
 
-export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
+export const getUpload = async ({ id: uploadId }: GetUploadOptions): Promise<Upload | null> => {
   const upload = await db.query.upload.findFirst({
     where: ({ id }, { eq }) => eq(id, uploadId),
     with: { user: { columns: { passwordHash: false } } },
@@ -36,11 +36,15 @@ export const getUpload = async ({ id: uploadId }: GetUploadOptions) => {
     return null
   }
 
-  return upload satisfies Upload as Upload
+  return upload satisfies Upload
 }
 
 type DeleteUploadOptions = ParamIdSchema
 
-export const deleteUpload = async ({ id: uploadId }: DeleteUploadOptions) => {
-  return await db.delete(uploadTable).where(eq(uploadTable.id, uploadId))
+export const deleteUpload = async ({ id: uploadId }: DeleteUploadOptions): Promise<{ id: string }> => {
+  const [removedItem] = await db
+    .delete(uploadTable)
+    .where(eq(uploadTable.id, uploadId))
+    .returning({ id: uploadTable.id })
+  return removedItem
 }
