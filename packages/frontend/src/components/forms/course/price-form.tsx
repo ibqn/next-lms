@@ -7,14 +7,7 @@ import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { priceSchema, type PriceSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
@@ -95,9 +88,7 @@ export const PriceForm = ({ initialData }: Props) => {
                 <FormItem>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                        $
-                      </span>
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
                       <Input
                         className="pl-8"
                         placeholder="Course Price..."
@@ -114,10 +105,7 @@ export const PriceForm = ({ initialData }: Props) => {
             />
 
             <div className="flex items-center gap-x-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting || !isValid || isPending}
-              >
+              <Button type="submit" disabled={isSubmitting || !isValid || isPending}>
                 Save
               </Button>
             </div>
@@ -126,7 +114,7 @@ export const PriceForm = ({ initialData }: Props) => {
       ) : initialData.price ? (
         <p className="mt-2 text-sm">{formatPrice(initialData.price)}</p>
       ) : (
-        <p className="mt-2 text-sm italic text-slate-500">No price</p>
+        <p className="mt-2 text-sm text-slate-500 italic">No price</p>
       )}
     </div>
   )
