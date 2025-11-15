@@ -35,13 +35,13 @@ export const courseListQueryOptions = (paramsInput: Partial<PaginationSchema> = 
 
 export const getCourseItem = async ({ id }: ParamIdSchema) => {
   try {
-    const { data: response } = await axios.get<ApiResponse<Course>>(`/course/${id}`)
+    const { data: response } = await axios.get<ApiResponse<Course>>(`/courses/${id}`)
     if (!response.success) {
       return null
     }
     return response.data
   } catch (error) {
-    console.log("Error fetching event item:", error)
+    console.log("Error fetching course item:", error)
     return null
   }
 }
