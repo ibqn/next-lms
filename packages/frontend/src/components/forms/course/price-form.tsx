@@ -10,8 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
-import { patchCourse } from "@/api/course"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { courseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { formatPrice } from "@/lib/format-price"
 
@@ -26,7 +26,7 @@ export const PriceForm = ({ initialData }: Props) => {
 
   const toggleEdit = () => setIsEditing((prev) => !prev)
 
-  const form = useForm<PriceSchema>({
+  const form = useForm({
     defaultValues: {
       price: initialData.price ?? null,
     },
@@ -36,6 +36,8 @@ export const PriceForm = ({ initialData }: Props) => {
   const { isSubmitting, isValid } = form.formState
 
   const router = useRouter()
+
+  const queryClient = useQueryClient()
 
   const { mutate: updateCourse, isPending } = useMutation({
     mutationFn: (payload: PriceSchema) => patchCourse(courseId, payload),
@@ -55,6 +57,12 @@ export const PriceForm = ({ initialData }: Props) => {
       toast.error("Update course error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
@@ -93,7 +101,7 @@ export const PriceForm = ({ initialData }: Props) => {
                         className="pl-8"
                         placeholder="Course Price..."
                         {...field}
-                        value={field.value ?? ""}
+                        value={field.value?.toString() ?? ""}
                         disabled={isSubmitting}
                       />
                     </div>

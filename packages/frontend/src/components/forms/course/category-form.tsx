@@ -9,8 +9,8 @@ import { categorySchema, type CategorySchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
-import { patchCourse } from "@/api/course"
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
+import { courseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Combobox } from "@/components/combobox"
@@ -45,6 +45,8 @@ export const CategoryForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
+  const queryClient = useQueryClient()
+
   const { mutate: updateCourse, isPending } = useMutation({
     mutationFn: (payload: CategorySchema) => patchCourse(courseId, payload),
     onSuccess: ({ data }) => {
@@ -60,6 +62,12 @@ export const CategoryForm = ({ initialData }: Props) => {
       toast.error("Update course error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 

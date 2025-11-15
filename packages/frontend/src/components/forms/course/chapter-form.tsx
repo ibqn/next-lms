@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { titleSchema } from "@/lib/validators/chapter"
@@ -16,6 +16,7 @@ import type { TitleSchema } from "@/lib/validators/course"
 import { Input } from "@/components/ui/input"
 import { postChapter, postReorderChapters } from "@/api/chapter"
 import { ChapterList } from "@/components/chapter-list"
+import { courseQueryOptions } from "@/api/course"
 
 type Props = {
   initialData: Course
@@ -37,6 +38,8 @@ export const ChapterForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
+  const queryClient = useQueryClient()
+
   const { mutate: createChapter, isPending } = useMutation({
     mutationFn: (payload: TitleSchema) => postChapter({ ...payload, courseId }),
     onSuccess: () => {
@@ -50,6 +53,12 @@ export const ChapterForm = ({ initialData }: Props) => {
       toast.error("Create chapter error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
