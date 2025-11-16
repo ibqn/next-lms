@@ -2,7 +2,7 @@ import { courseTable, type Course } from "../drizzle/schema/course"
 import type { User } from "../drizzle/schema/auth"
 import { db } from "../drizzle/db"
 import type { CreateCourseSchema, UpdateCourseSchema } from "../validators/course"
-import { asc, countDistinct, desc, eq } from "drizzle-orm"
+import { and, asc, countDistinct, desc, eq } from "drizzle-orm"
 import type { ParamIdSchema } from "../validators/param"
 import unset from "lodash.unset"
 import { paginationSchema, type PaginationSchema, type SortedBySchema } from "../validators/pagination"
@@ -105,4 +105,21 @@ export const getCourseItems = async (queryParams: Partial<PaginationSchema> = {}
   })
 
   return courseItems satisfies Course[]
+}
+
+type DeleteCourseOptions = ParamIdSchema & {
+  user: User
+}
+
+export const deleteCourse = async ({ id: courseId, user }: DeleteCourseOptions): Promise<{ id: string } | null> => {
+  const [course] = await db
+    .delete(courseTable)
+    .where(and(eq(courseTable.id, courseId), eq(courseTable.userId, user.id)))
+    .returning()
+
+  if (!course) {
+    return null
+  }
+
+  return { id: course.id }
 }
