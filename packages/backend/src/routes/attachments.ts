@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import type { Context } from "../utils/context"
+import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import type { SuccessResponse } from "database/src/types"
@@ -13,7 +13,7 @@ import path from "path"
 import { access, unlink } from "fs/promises"
 import { deleteUpload, getUpload } from "database/src/queries/upload"
 
-export const attachmentRoute = new Hono<Context>()
+export const attachmentRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createAttachmentSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User

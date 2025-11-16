@@ -1,4 +1,4 @@
-import type { Context } from "../utils/context"
+import type { ExtEnv } from "../utils/extended-env"
 import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
 import { signinSchema } from "database/src/validators/signin"
@@ -11,7 +11,7 @@ import type { User } from "database/src/drizzle/schema/auth"
 import { getSessionCookieOptions, sessionCookieName } from "database/src/cookie"
 import { invalidateSessionToken } from "database/src/lucia"
 
-const authRoute = new Hono<Context>()
+const authRoute = new Hono<ExtEnv>()
   .post("/signup", zValidator("json", signinSchema), async (c) => {
     const { username, password } = c.req.valid("json")
 

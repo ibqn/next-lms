@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import type { Context } from "../utils/context"
+import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { uploadSchema } from "../validators/upload"
 import { zValidator } from "@hono/zod-validator"
@@ -17,7 +17,7 @@ import mime from "mime"
 import sharp, { type FormatEnum } from "sharp"
 import { imageQuerySchema } from "../validators/image"
 
-export const uploadRoute = new Hono<Context>()
+export const uploadRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("form", uploadSchema), async (c) => {
     const { file, ...uploadData } = c.req.valid("form")
     const user = c.get("user") as User
@@ -144,7 +144,7 @@ function optimizeImage(filePath: string, width?: number, quality?: number, forma
   return sharpInstance
 }
 
-export const fileRoute = new Hono<Context>()
+export const fileRoute = new Hono<ExtEnv>()
   .get(":id", zValidator("param", paramIdSchema), async (c) => {
     const { id } = c.req.valid("param")
     const user = c.get("user")

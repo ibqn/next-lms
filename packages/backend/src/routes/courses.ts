@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import type { Context } from "../utils/context"
+import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import type { Course } from "database/src/drizzle/schema/course"
@@ -18,7 +18,7 @@ import { paramIdSchema } from "database/src/validators/param"
 import { HTTPException } from "hono/http-exception"
 import { paginationSchema } from "database/src/validators/pagination"
 
-export const courseRoute = new Hono<Context>()
+export const courseRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User

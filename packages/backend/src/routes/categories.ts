@@ -1,20 +1,16 @@
 import { Hono } from "hono"
-import type { Context } from "../utils/context"
+import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { getCategories } from "database/src/queries/category"
 import type { Category } from "database/src/drizzle/schema/category"
 import type { SuccessResponse } from "database/src/types"
 
-export const categoryRoutes = new Hono<Context>().get(
-  "/",
-  signedIn,
-  async (c) => {
-    const categories = await getCategories()
+export const categoryRoutes = new Hono<ExtEnv>().get("/", signedIn, async (c) => {
+  const categories = await getCategories()
 
-    return c.json<SuccessResponse<Category[]>>({
-      message: "Categories received",
-      data: categories,
-      success: true,
-    })
-  }
-)
+  return c.json<SuccessResponse<Category[]>>({
+    message: "Categories received",
+    data: categories,
+    success: true,
+  })
+})

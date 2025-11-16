@@ -1,6 +1,6 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
-import type { Context } from "./utils/context"
+import type { ExtEnv } from "./utils/extended-env"
 import { prettyJSON } from "hono/pretty-json"
 import { response, type ErrorResponse, type SuccessResponse } from "database/src/types"
 import { HTTPException } from "hono/http-exception"
@@ -16,7 +16,7 @@ import { categoryRoutes } from "./routes/categories"
 import { attachmentRoute } from "./routes/attachments"
 import { chapterRoute } from "./routes/chapters"
 
-const app = new Hono<Context>()
+const app = new Hono<ExtEnv>()
 
 app.use(prettyJSON())
 
