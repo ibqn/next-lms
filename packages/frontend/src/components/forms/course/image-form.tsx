@@ -9,8 +9,8 @@ import { imageSchema, type ImageSchema } from "@/lib/validators/course"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
-import { patchCourse } from "@/api/course"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { courseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
@@ -40,6 +40,8 @@ export const ImageForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
+  const queryClient = useQueryClient()
+
   const { mutate: updateCourse, isPending } = useMutation({
     mutationFn: (payload: ImageSchema) => patchCourse(courseId, payload),
     onSuccess: ({ data }) => {
@@ -55,6 +57,12 @@ export const ImageForm = ({ initialData }: Props) => {
       toast.error("Update course error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
