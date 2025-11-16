@@ -21,8 +21,9 @@ export const courseColumns: ColumnDef<Course>[] = [
       )
     },
     cell: ({ row }) => {
+      const course = row.original
       const title = (row.getValue("title") as string) ?? ""
-      return <Link href={`/teacher/courses/${row.id}`}>{title}</Link>
+      return <Link href={`/teacher/courses/${course.id}`}>{title}</Link>
     },
   },
   {
