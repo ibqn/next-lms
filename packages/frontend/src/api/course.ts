@@ -16,6 +16,17 @@ export const patchCourse = async (courseId: string, courseData: UpdateCourseSche
   return response.data
 }
 
+export const deleteCourse = async (courseId: string) => {
+  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/courses/${courseId}`)
+
+  if (!response.success) {
+    return null
+  }
+  const { data: deletedChapter } = response
+
+  return deletedChapter
+}
+
 export const getCourseItems = async (params?: PaginationSchema) => {
   const { data: response } = await axios.get<PaginatedSuccessResponse<Course[]>>("/courses", { params })
   const { data: courseItems, pagination } = response
