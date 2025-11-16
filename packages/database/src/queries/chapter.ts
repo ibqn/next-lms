@@ -99,7 +99,7 @@ export type GetChapterOptions = ParamIdSchema & {
   user: User
 }
 
-export const getChapter = async ({ id: chapterId, user }: GetChapterOptions) => {
+export const getChapter = async ({ id: chapterId, user }: GetChapterOptions): Promise<Chapter | null> => {
   const [chapter] = await db.select().from(chapterTable).where(eq(chapterTable.id, chapterId))
 
   if (!chapter) {
@@ -115,7 +115,7 @@ export const getChapter = async ({ id: chapterId, user }: GetChapterOptions) => 
     return null
   }
 
-  return chapter satisfies Chapter as Chapter
+  return chapter satisfies Chapter
 }
 
 type UpdateChapterOptions = UpdateChapterSchema &
@@ -150,7 +150,7 @@ export const updateChapter = async ({
     const [chapter] = await db.update(chapterTable).set(data).where(eq(chapterTable.id, chapterId)).returning()
 
     return {
-      data: chapter satisfies Chapter as Chapter,
+      data: chapter satisfies Chapter,
       success: true,
       message: "Chapter updated",
     }
