@@ -2,14 +2,15 @@
 
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import { Button } from "@/components/ui/button"
-import { Trash } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { ConfirmModal } from "@/components/modals/confirm-modal"
 import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ParamIdSchema } from "database/src/validators/param"
-import { deleteChapter } from "@/api/chapter"
+import type { ParamIdSchema } from "database/src/validators/param"
+import { chapterQueryOptions, deleteChapter, patchChapter } from "@/api/chapter"
 import { toast } from "sonner"
 import { courseQueryOptions } from "@/api/course"
+import type { PublishSchema } from "@/lib/validators/chapter"
 
 type ChapterActionsProps = {
   chapter: Chapter
@@ -23,7 +24,7 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
 
   const queryClient = useQueryClient()
 
-  const { mutate: removeChapter, isPending } = useMutation({
+  const { mutate: removeChapter, isPending: isRemovePending } = useMutation({
     mutationFn: (payload: ParamIdSchema) => deleteChapter(payload.id),
     onSuccess: (data) => {
       console.log("data:", data)
@@ -46,15 +47,45 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
     },
   })
 
+  const { mutate: updateChapter, isPending: isUpdatePending } = useMutation({
+    mutationFn: (payload: PublishSchema) => patchChapter(chapter.id, payload),
+    onSuccess: (chapter) => {
+      console.log("data:", chapter)
+
+      toast.success("Update chapter success", {
+        description: `The chapter access settings updated successfully`,
+      })
+      router.refresh()
+    },
+    onError: () => {
+      toast.error("Update chapter error", {
+        description: "Something went wrong!",
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: chapterQueryOptions({ id: chapter.id }).queryKey,
+      })
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: chapter.courseId }).queryKey,
+      })
+      router.refresh()
+    },
+  })
+
+  const togglePublish = () => {
+    updateChapter({ isPublished: !isPublished })
+  }
+
   return (
     <div className="flex items-center gap-x-2">
-      <Button variant="outline" size="sm" disabled={disabled}>
+      <Button variant="outline" size="sm" disabled={disabled || isUpdatePending} onClick={togglePublish}>
         {isPublished ? "Unpublish" : "Publish"}
       </Button>
 
       <ConfirmModal onConfirm={() => removeChapter({ id: chapter.id })}>
-        <Button size="sm" disabled={isPending}>
-          <Trash className="size-4" />
+        <Button size="sm" disabled={isRemovePending}>
+          <TrashIcon className="size-4" />
         </Button>
       </ConfirmModal>
     </div>
