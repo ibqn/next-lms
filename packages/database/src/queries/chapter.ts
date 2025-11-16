@@ -162,3 +162,36 @@ export const updateChapter = async ({
     return { success: false, error: "Failed to update chapter" }
   }
 }
+
+type DeleteChapterOptions = ParamIdSchema & {
+  user: User
+}
+
+export const deleteChapter = async ({ id: chapterId, user }: DeleteChapterOptions): Promise<{ id: string | null }> => {
+  const chapter = await db.transaction(async (trx) => {
+    const [chapter] = await trx.delete(chapterTable).where(eq(chapterTable.id, chapterId)).returning()
+
+    if (!chapter) {
+      return null
+    }
+
+    const course = await trx.query.course.findFirst({
+      where: ({ id, userId }, { eq, and }) => and(eq(id, chapter.courseId), eq(userId, user.id)),
+      with: { chapters: true },
+    })
+
+    if (!course) {
+      return null
+    }
+
+    const hasPublishedChapters = course.chapters.some(({ isPublished }) => isPublished)
+
+    if (!hasPublishedChapters) {
+      await trx.update(courseTable).set({ isPublished: false }).where(eq(courseTable.id, course.id))
+    }
+
+    return chapter
+  })
+
+  return { id: chapter?.id ?? null }
+}

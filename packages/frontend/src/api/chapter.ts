@@ -15,6 +15,17 @@ export const postChapter = async (chapterData: CreateChapterSchema) => {
   return chapter
 }
 
+export const deleteChapter = async (chapterId: string) => {
+  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/chapters/${chapterId}`)
+
+  if (!response.success) {
+    return null
+  }
+  const { data: deletedChapter } = response
+
+  return deletedChapter
+}
+
 export const postReorderChapters = async (reorderList: ReorderChapterSchema) => {
   const { data: response } = await axios.post<ApiResponse<{ id: string }[]>>("/chapters/reorder", reorderList)
 
