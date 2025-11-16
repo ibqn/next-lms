@@ -66,7 +66,7 @@ export const DescriptionForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: chapterQueryOptions(chapterId).queryKey,
+        queryKey: chapterQueryOptions({ id: chapterId }).queryKey,
       })
     },
   })

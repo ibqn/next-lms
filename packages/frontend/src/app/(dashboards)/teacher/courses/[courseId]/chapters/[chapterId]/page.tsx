@@ -14,7 +14,7 @@ export default async function SingleChapterPage({ params }: Props) {
   const { chapterId } = await params
 
   const queryClient = getQueryClient()
-  queryClient.prefetchQuery(chapterQueryOptions(chapterId))
+  queryClient.prefetchQuery(chapterQueryOptions({ id: chapterId }))
 
   return (
     <Suspense fallback="Loading...">

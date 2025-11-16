@@ -1,8 +1,9 @@
 import type { CreateChapterSchema, ReorderChapterSchema, UpdateChapterSchema } from "database/src/validators/chapter"
 import { axios } from "./axios"
 import type { ApiResponse } from "database/src/types"
-import { Chapter } from "database/src/drizzle/schema/chapter"
+import type { Chapter } from "database/src/drizzle/schema/chapter"
 import { queryOptions } from "@tanstack/react-query"
+import type { ParamIdSchema } from "database/src/validators/param"
 
 export const postChapter = async (chapterData: CreateChapterSchema) => {
   const { data: response } = await axios.post<ApiResponse<Chapter>>("/chapters", chapterData)
@@ -37,7 +38,7 @@ export const postReorderChapters = async (reorderList: ReorderChapterSchema) => 
   return chapterIds
 }
 
-export const getChapter = async (chapterId: string) => {
+export const getChapterItem = async ({ id: chapterId }: ParamIdSchema) => {
   try {
     const { data: response } = await axios.get<ApiResponse<Chapter>>(`/chapters/${chapterId}`)
 
@@ -52,10 +53,11 @@ export const getChapter = async (chapterId: string) => {
   }
 }
 
-export const chapterQueryOptions = (courseId: string) =>
+export const chapterQueryOptions = (paramId?: ParamIdSchema) =>
   queryOptions({
-    queryKey: ["chapters", courseId] as const,
-    queryFn: () => getChapter(courseId),
+    queryKey: ["chapters", paramId?.id ?? null] as const,
+    queryFn: () => (paramId ? getChapterItem(paramId) : null),
+    enabled: !!paramId?.id,
   })
 
 export const patchChapter = async (chapterId: string, chapterData: UpdateChapterSchema) => {

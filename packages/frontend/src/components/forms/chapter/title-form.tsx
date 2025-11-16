@@ -44,7 +44,7 @@ export const TitleForm = ({ initialData }: Props) => {
     mutationFn: (payload: TitleSchema) => patchChapter(chapterId, payload),
     onSettled: async () => {
       await queryClient.invalidateQueries({
-        queryKey: chapterQueryOptions(chapterId).queryKey,
+        queryKey: chapterQueryOptions({ id: chapterId }).queryKey,
       })
       router.refresh()
     },

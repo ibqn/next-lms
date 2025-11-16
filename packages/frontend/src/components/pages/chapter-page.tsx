@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const ChapterPage = ({ chapterId }: Props) => {
-  const { data: chapter } = useSuspenseQuery(chapterQueryOptions(chapterId))
+  const { data: chapter } = useSuspenseQuery(chapterQueryOptions({ id: chapterId }))
 
   if (chapter === null) {
     return notFound()
