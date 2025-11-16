@@ -36,7 +36,7 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
       router.push(`/teacher/courses/${chapter.courseId}`)
     },
     onError: () => {
-      toast.error("Update course error", {
+      toast.error("Update chapter error", {
         description: "Something went wrong!",
       })
     },
