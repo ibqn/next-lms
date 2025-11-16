@@ -11,7 +11,7 @@ import { ArrowLeftIcon, EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-r
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Banner } from "@/components/banner"
-import { ChapterActions } from "@/components/chapter-actions"
+import { ChapterActions } from "@/components/actions/chapter-actions"
 
 type Props = {
   chapterId: string
