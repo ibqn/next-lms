@@ -5,18 +5,19 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { FileIcon, PencilIcon, PlusCircleIcon, UploadIcon, XIcon } from "lucide-react"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
 import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
-import { deleteUpload } from "@/api/upload"
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { attachmentSchema, AttachmentSchema } from "@/lib/validators/course"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import Link from "next/link"
-import { postAttachment } from "@/api/attachment"
+import { deleteAttachment, postAttachment } from "@/api/attachment"
+import { courseQueryOptions } from "@/api/course"
+import { ConfirmModal } from "@/components/modals/confirm-modal"
 
 type Props = {
   initialData: Course
@@ -31,13 +32,15 @@ export const FileForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
+  const queryClient = useQueryClient()
+
   const { mutate: createAttachment, isPending } = useMutation({
     mutationFn: postAttachment,
     onSuccess: ({ data }) => {
       console.log("data:", data)
 
       toast("Create attachment success", {
-        description: `The course image updated successfully`,
+        description: `The course attachments were created successfully`,
       })
       toggleEdit()
       router.refresh()
@@ -46,6 +49,12 @@ export const FileForm = ({ initialData }: Props) => {
       toast.error("Create attachment error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
@@ -60,7 +69,7 @@ export const FileForm = ({ initialData }: Props) => {
       const onUploadSuccess = ({ response }: UploadSuccess) => {
         const upload = response.data
         console.log("upload", upload)
-        addAttachment({
+        addAttachmentItem({
           name: upload.filePath,
           url: getUrl(upload),
         })
@@ -73,15 +82,21 @@ export const FileForm = ({ initialData }: Props) => {
     },
   })
 
-  const { mutate: removeUpload } = useMutation({
-    mutationFn: deleteUpload,
+  const { mutate: removeAttachment, isPending: isRemovingAttachment } = useMutation({
+    mutationFn: deleteAttachment,
     onSuccess: () => {
-      console.log("Upload removed")
+      console.log("Attachment removed")
     },
     onError: () => {
-      toast.error("Remove upload error", {
+      toast.error("Remove attachment error", {
         description: "Something went wrong!",
       })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
     },
   })
 
@@ -102,8 +117,8 @@ export const FileForm = ({ initialData }: Props) => {
   })
 
   const {
-    append: addAttachment,
-    remove: removeAttachment,
+    append: addAttachmentItem,
+    remove: removeAttachmentItem,
     fields: attachmentFields,
   } = useFieldArray({
     control: form.control,
@@ -113,7 +128,7 @@ export const FileForm = ({ initialData }: Props) => {
   const { isSubmitting, isValid } = form.formState
 
   return (
-    <div className="rounded-md border bg-slate-100 p-4">
+    <div className="flex flex-col gap-2 rounded-md border bg-slate-100 p-4">
       <div className="flex items-center justify-between font-medium">
         <span>Course attachments</span>
         <Button variant="ghost" onClick={toggleEdit}>
@@ -202,7 +217,7 @@ export const FileForm = ({ initialData }: Props) => {
                     variant="ghost"
                     size="icon"
                     onClick={() => {
-                      removeAttachment(index)
+                      removeAttachmentItem(index)
                     }}
                     disabled={isDisabled}
                   >
@@ -224,6 +239,27 @@ export const FileForm = ({ initialData }: Props) => {
           {initialData.attachments && initialData.attachments.length === 0 && (
             <p className="mt-2 text-sm text-slate-500 italic">No Attachments</p>
           )}
+
+          <div className="flex flex-col gap-2">
+            {initialData.attachments?.map((attachment) => (
+              <div
+                key={attachment.url}
+                className="flex items-center gap-2 rounded-md border border-sky-200 bg-sky-100 p-3 text-sky-700"
+              >
+                <FileIcon className="size-4 shrink-0" />
+                <div className="grow">
+                  <Link className="line-clamp-1 text-xs" target="_blank" href={attachment.url}>
+                    {attachment.name}
+                  </Link>
+                </div>
+                <ConfirmModal onConfirm={() => removeAttachment(attachment.id)}>
+                  <Button className="size-8" variant="ghost" size="icon" disabled={isRemovingAttachment}>
+                    <XIcon />
+                  </Button>
+                </ConfirmModal>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>
