@@ -16,11 +16,7 @@ async function seed() {
 
   console.log("⏳ Seeding...")
   const start = Date.now()
-  const items = await db
-    .insert(categoryTable)
-    .values(values)
-    .onConflictDoNothing()
-    .returning({ id: categoryTable.id })
+  const items = await db.insert(categoryTable).values(values).onConflictDoNothing().returning({ id: categoryTable.id })
 
   const end = Date.now()
   console.log(`${items.length} item(s) inserted.`)

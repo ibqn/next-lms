@@ -9,9 +9,7 @@ export type ErrorResponse<E = string> = {
   error: E
 }
 
-export type ApiResponse<T = void, E = string> =
-  | SuccessResponse<T>
-  | ErrorResponse<E>
+export type ApiResponse<T = void, E = string> = SuccessResponse<T> | ErrorResponse<E>
 
 export type PaginatedSuccessResponse<T> = SuccessResponse<T> & {
   pagination: {
@@ -21,10 +19,7 @@ export type PaginatedSuccessResponse<T> = SuccessResponse<T> & {
   }
 }
 
-export const response = <T = void>(
-  message: string,
-  value?: T
-): SuccessResponse<T> => ({
+export const response = <T = void>(message: string, value?: T): SuccessResponse<T> => ({
   success: true,
   message,
   data: value as T,

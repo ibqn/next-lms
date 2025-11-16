@@ -1,8 +1,5 @@
 import { sessionTable, type Session, type User } from "./drizzle/schema/auth"
-import {
-  encodeBase32LowerCaseNoPadding,
-  encodeHexLowerCase,
-} from "@oslojs/encoding"
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { db } from "./drizzle/db"
 import { eq } from "drizzle-orm"
@@ -16,26 +13,18 @@ export function generateSessionToken(): string {
   return token
 }
 
-export async function createSession(
-  token: string,
-  userId: string
-): Promise<Session> {
+export async function createSession(token: string, userId: string): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
   const sessionData: CreateSessionSchema = {
     id: sessionId,
     userId,
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   }
-  const [session] = await db
-    .insert(sessionTable)
-    .values(sessionData)
-    .returning()
+  const [session] = await db.insert(sessionTable).values(sessionData).returning()
   return session
 }
 
-export async function validateSessionToken(
-  token: string
-): Promise<SessionValidationResult> {
+export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
 
   const sessionData = await db.query.session.findFirst({
@@ -64,10 +53,7 @@ export async function validateSessionToken(
 
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
-    await db
-      .update(sessionTable)
-      .set({ expiresAt: session.expiresAt })
-      .where(eq(sessionTable.id, session.id))
+    await db.update(sessionTable).set({ expiresAt: session.expiresAt }).where(eq(sessionTable.id, session.id))
   }
 
   return { session, user }
