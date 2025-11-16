@@ -48,8 +48,8 @@ export const getCourseItem = async ({ id }: ParamIdSchema) => {
 
 export const courseQueryOptions = (paramId?: ParamIdSchema) => {
   return queryOptions({
-    queryKey: ["course", paramId?.id] as const,
-    queryFn: () => (paramId?.id ? getCourseItem({ id: paramId?.id }) : null),
+    queryKey: ["course", paramId?.id ?? null] as const,
+    queryFn: () => (paramId ? getCourseItem(paramId) : null),
     enabled: !!paramId?.id,
   })
 }
