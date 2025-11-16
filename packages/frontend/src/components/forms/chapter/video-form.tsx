@@ -9,13 +9,13 @@ import { videoSchema, VideoSchema } from "@/lib/validators/chapter"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
 import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
-import { patchChapter } from "@/api/chapter"
+import { chapterQueryOptions, patchChapter } from "@/api/chapter"
 import { VideoPlayer } from "@/components/video"
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 }
 
 export const VideoForm = ({ initialData }: Props) => {
-  const { id: courseId } = initialData
+  const { id: chapterId } = initialData
 
   const [isEditing, setIsEditing] = useState(false)
 
@@ -40,8 +40,10 @@ export const VideoForm = ({ initialData }: Props) => {
 
   const router = useRouter()
 
-  const { mutate: updateCourse, isPending } = useMutation({
-    mutationFn: (payload: VideoSchema) => patchChapter(courseId, payload),
+  const queryClient = useQueryClient()
+
+  const { mutate: updateChapter, isPending } = useMutation({
+    mutationFn: (payload: VideoSchema) => patchChapter(chapterId, payload),
     onSuccess: (data) => {
       console.log("data:", data)
 
@@ -56,11 +58,17 @@ export const VideoForm = ({ initialData }: Props) => {
         description: "Something went wrong!",
       })
     },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: chapterQueryOptions(chapterId).queryKey,
+      })
+      router.refresh()
+    },
   })
 
   const onSubmit = form.handleSubmit((data) => {
     console.log(data)
-    updateCourse(data)
+    updateChapter(data)
   })
 
   const isDisabled = isSubmitting || isPending
