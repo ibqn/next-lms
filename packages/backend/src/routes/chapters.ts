@@ -75,12 +75,9 @@ export const chapterRoute = new Hono<Context>()
 
     const response = await deleteChapter({ id, user })
 
-    if (!response.id) {
+    if (!response?.id) {
       throw new HTTPException(404, { message: "Could not delete chapter" })
     }
 
-    return c.json<SuccessResponse<{ id: string | null }>>(
-      { success: true, message: "Chapter deleted", data: response },
-      200
-    )
+    return c.json<SuccessResponse<{ id: string }>>({ success: true, message: "Chapter deleted", data: response }, 200)
   })

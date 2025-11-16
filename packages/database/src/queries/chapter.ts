@@ -167,7 +167,7 @@ type DeleteChapterOptions = ParamIdSchema & {
   user: User
 }
 
-export const deleteChapter = async ({ id: chapterId, user }: DeleteChapterOptions): Promise<{ id: string | null }> => {
+export const deleteChapter = async ({ id: chapterId, user }: DeleteChapterOptions): Promise<{ id: string } | null> => {
   const chapter = await db.transaction(async (trx) => {
     const [chapter] = await trx.delete(chapterTable).where(eq(chapterTable.id, chapterId)).returning()
 
@@ -193,5 +193,9 @@ export const deleteChapter = async ({ id: chapterId, user }: DeleteChapterOption
     return chapter
   })
 
-  return { id: chapter?.id ?? null }
+  if (!chapter) {
+    return null
+  }
+
+  return { id: chapter.id }
 }
