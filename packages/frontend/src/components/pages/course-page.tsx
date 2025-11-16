@@ -12,7 +12,8 @@ import { CategoryForm } from "@/components/forms/course/category-form"
 import { ChapterForm } from "@/components/forms/course/chapter-form"
 import { PriceForm } from "@/components/forms/course/price-form"
 import { FileForm } from "@/components/forms/course/file-form"
-import { Banner } from "../banner"
+import { Banner } from "@/components/banner"
+import { CourseActions } from "@/components/actions/course-actions"
 
 type Props = {
   courseId: string
@@ -49,6 +50,8 @@ export const CoursePage = ({ courseId }: Props) => {
             <h1 className="text-2xl">Course setup</h1>
             <span className="text-sm text-slate-700">Complete all fields {completionText}</span>
           </div>
+
+          <CourseActions course={course} disabled={!isCompleted} />
         </div>
 
         <div className="mt-16 grid grow grid-cols-1 gap-6 lg:grid-cols-2">
