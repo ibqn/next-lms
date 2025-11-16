@@ -75,6 +75,12 @@ export const ChapterForm = ({ initialData }: Props) => {
         description: "Something went wrong!",
       })
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+      })
+      router.refresh()
+    },
   })
 
   const onSubmit = form.handleSubmit((data) => {
