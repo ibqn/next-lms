@@ -11,6 +11,7 @@ import { ArrowLeftIcon, EyeIcon, LayoutDashboardIcon, VideoIcon } from "lucide-r
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Banner } from "@/components/banner"
+import { ChapterActions } from "@/components/chapter-actions"
 
 type Props = {
   chapterId: string
@@ -28,6 +29,8 @@ export const ChapterPage = ({ chapterId }: Props) => {
   const totalFields = requiredFields.length
   const completedFields = requiredFields.filter(Boolean).length
   const completionStats = `(${completedFields}/${totalFields})`
+
+  const isCompleted = requiredFields.every(Boolean)
 
   return (
     <>
@@ -48,6 +51,8 @@ export const ChapterPage = ({ chapterId }: Props) => {
             <h1 className="text-2xl font-medium">Chapter Creation</h1>
             <span className="text-sm text-slate-700">Complete all fields {completionStats}</span>
           </div>
+
+          <ChapterActions chapter={chapter} disabled={!isCompleted} />
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
