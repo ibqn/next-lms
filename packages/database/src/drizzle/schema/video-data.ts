@@ -14,9 +14,6 @@ export const videoDataTable = schema.table("video-data", {
   ...lifecycleDates,
 })
 
-export const videoDataRelations = relations(
-  videoDataTable,
-  ({ one, many }) => ({})
-)
+export const videoDataRelations = relations(videoDataTable, ({ one, many }) => ({}))
 
 export type VideoData = InferSelectModel<typeof videoDataTable>

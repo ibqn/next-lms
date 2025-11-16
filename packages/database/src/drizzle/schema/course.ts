@@ -47,7 +47,5 @@ export type Course = InferSelectModel<typeof courseTable> & {
 }
 
 export const insertCourseSchema = createInsertSchema(courseTable, {
-  title: z
-    .string()
-    .min(3, { message: "Title should have at least 3 characters." }),
+  title: z.string().min(3, { message: "Title should have at least 3 characters." }),
 })

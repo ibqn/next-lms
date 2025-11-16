@@ -22,15 +22,9 @@ export const userProgressTable = schema.table(
     isCompleted: boolean("is_completed").default(false),
     ...lifecycleDates,
   },
-  (table) => [
-    index().on(table.chapterId),
-    unique().on(table.chapterId, table.userId),
-  ]
+  (table) => [index().on(table.chapterId), unique().on(table.chapterId, table.userId)]
 )
 
-export const chapterRelations = relations(
-  userProgressTable,
-  ({ one, many }) => ({})
-)
+export const chapterRelations = relations(userProgressTable, ({ one, many }) => ({}))
 
 export type UserProgress = InferSelectModel<typeof userProgressTable>
