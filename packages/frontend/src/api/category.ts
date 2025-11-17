@@ -4,9 +4,14 @@ import { axios } from "./axios"
 import { queryOptions } from "@tanstack/react-query"
 
 export const getCategories = async () => {
-  const response = await axios.get<SuccessResponse<Category[]>>("/categories")
+  const { data: response } = await axios.get<SuccessResponse<Category[]>>("/categories")
 
-  return response.data
+  if (!response.success) {
+    return null
+  }
+  const { data: categories } = response
+
+  return categories
 }
 
 export const categoryQueryOptions = () => queryOptions({ queryKey: ["categories"], queryFn: getCategories })

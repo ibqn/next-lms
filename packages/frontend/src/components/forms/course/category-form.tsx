@@ -22,12 +22,12 @@ type Props = {
 
 export const CategoryForm = ({ initialData }: Props) => {
   const { id: courseId } = initialData
-  const { data: response } = useSuspenseQuery(categoryQueryOptions())
+  const { data: categories } = useSuspenseQuery(categoryQueryOptions())
 
-  const categories =
-    response?.data.map(({ id, name }) => ({
-      label: name,
-      value: id,
+  const categoryOptions =
+    categories?.map((category) => ({
+      label: category.name,
+      value: category.id,
     })) ?? []
 
   const [isEditing, setIsEditing] = useState(false)
@@ -76,7 +76,7 @@ export const CategoryForm = ({ initialData }: Props) => {
     updateCourse(data)
   })
 
-  const selectedCategory = categories.find((category) => category.value === initialData.categoryId)
+  const selectedCategory = categories?.find((category) => category.id === initialData.categoryId)
 
   return (
     <div className="rounded-md border bg-slate-100 p-4">
@@ -102,7 +102,7 @@ export const CategoryForm = ({ initialData }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox {...field} options={categories} />
+                    <Combobox {...field} options={categoryOptions} />
                   </FormControl>
                   <FormDescription>Select a category for your course</FormDescription>
                   <FormMessage />
@@ -119,7 +119,7 @@ export const CategoryForm = ({ initialData }: Props) => {
         </Form>
       ) : (
         <p className={cn("mt-2 text-sm", !initialData.categoryId && "text-slate-500 italic")}>
-          {selectedCategory?.label || "No Category"}
+          {selectedCategory?.name || "No Category"}
         </p>
       )}
     </div>
