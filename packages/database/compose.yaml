@@ -2,7 +2,7 @@ name: next-lms
 
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     ports:
       - "5432:5432"
