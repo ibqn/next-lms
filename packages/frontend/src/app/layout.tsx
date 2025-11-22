@@ -23,12 +23,7 @@ type Props = Readonly<{
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "flex min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}
-      >
+      <body className={cn("bg-background flex min-h-screen font-sans antialiased", fontSans.variable)}>
         <Providers>{children}</Providers>
         <Toaster />
       </body>
