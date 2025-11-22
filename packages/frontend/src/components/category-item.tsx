@@ -21,7 +21,6 @@ export const CategoryItem = ({ category }: CategoryItemProps) => {
   const isSelected = currentCategory === category.name.toLowerCase()
 
   const handleClick = () => {
-    console.log("Category clicked:", category.name)
     const url = qs.stringifyUrl(
       {
         url: pathname,
@@ -32,7 +31,6 @@ export const CategoryItem = ({ category }: CategoryItemProps) => {
       },
       { skipNull: true, skipEmptyString: true }
     )
-    console.log("Navigating to URL:", url)
     router.push(url)
   }
 
