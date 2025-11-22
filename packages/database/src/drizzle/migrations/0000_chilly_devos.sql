@@ -99,7 +99,7 @@ CREATE TABLE "drizzle"."user_progress" (
 	CONSTRAINT "user_progress_chapter_id_user_id_unique" UNIQUE("chapter_id","user_id")
 );
 --> statement-breakpoint
-CREATE TABLE "drizzle"."video-data" (
+CREATE TABLE "drizzle"."video_data" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"asset_id" uuid,
 	"chapter_id" uuid,
@@ -119,7 +119,7 @@ ALTER TABLE "drizzle"."stripe_customer" ADD CONSTRAINT "stripe_customer_user_id_
 ALTER TABLE "drizzle"."upload" ADD CONSTRAINT "upload_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "drizzle"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "drizzle"."user_progress" ADD CONSTRAINT "user_progress_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "drizzle"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "drizzle"."user_progress" ADD CONSTRAINT "user_progress_chapter_id_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "drizzle"."chapter"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "drizzle"."video-data" ADD CONSTRAINT "video-data_chapter_id_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "drizzle"."chapter"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "drizzle"."video_data" ADD CONSTRAINT "video_data_chapter_id_chapter_id_fk" FOREIGN KEY ("chapter_id") REFERENCES "drizzle"."chapter"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "attachment_course_id_index" ON "drizzle"."attachment" USING btree ("course_id");--> statement-breakpoint
 CREATE INDEX "chapter_course_id_index" ON "drizzle"."chapter" USING btree ("course_id");--> statement-breakpoint
 CREATE INDEX "user_progress_chapter_id_index" ON "drizzle"."user_progress" USING btree ("chapter_id");

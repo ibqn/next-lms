@@ -4,7 +4,7 @@ import { lifecycleDates } from "./utils"
 import { relations, type InferSelectModel } from "drizzle-orm"
 import { chapterTable } from "./chapter"
 
-export const videoDataTable = schema.table("video-data", {
+export const videoDataTable = schema.table("video_data", {
   id: uuid("id").primaryKey().defaultRandom(),
 
   assetId: uuid("asset_id"),

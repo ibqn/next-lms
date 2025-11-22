@@ -77,12 +77,8 @@
           "tableFrom": "attachment",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -91,12 +87,8 @@
           "tableFrom": "attachment",
           "tableTo": "course",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "course_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["course_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -151,12 +143,8 @@
           "tableFrom": "session",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -212,9 +200,7 @@
         "user_username_unique": {
           "name": "user_username_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "username"
-          ]
+          "columns": ["username"]
         }
       },
       "policies": {},
@@ -260,9 +246,7 @@
         "category_name_unique": {
           "name": "category_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -362,12 +346,8 @@
           "tableFrom": "chapter",
           "tableTo": "course",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "course_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["course_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -377,9 +357,7 @@
         "chapter_title_unique": {
           "name": "chapter_title_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "title"
-          ]
+          "columns": ["title"]
         }
       },
       "policies": {},
@@ -462,12 +440,8 @@
           "tableFrom": "course",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -476,12 +450,8 @@
           "tableFrom": "course",
           "tableTo": "category",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -537,12 +507,8 @@
           "tableFrom": "purchase",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -551,12 +517,8 @@
           "tableFrom": "purchase",
           "tableTo": "course",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "course_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["course_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -612,12 +574,8 @@
           "tableFrom": "stripe_customer",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -627,9 +585,7 @@
         "stripe_customer_stripe_customer_id_unique": {
           "name": "stripe_customer_stripe_customer_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "stripe_customer_id"
-          ]
+          "columns": ["stripe_customer_id"]
         }
       },
       "policies": {},
@@ -694,12 +650,8 @@
           "tableFrom": "upload",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -778,12 +730,8 @@
           "tableFrom": "user_progress",
           "tableTo": "user",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -792,12 +740,8 @@
           "tableFrom": "user_progress",
           "tableTo": "chapter",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "chapter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chapter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -807,18 +751,15 @@
         "user_progress_chapter_id_user_id_unique": {
           "name": "user_progress_chapter_id_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "chapter_id",
-            "user_id"
-          ]
+          "columns": ["chapter_id", "user_id"]
         }
       },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "drizzle.video-data": {
-      "name": "video-data",
+    "drizzle.video_data": {
+      "name": "video_data",
       "schema": "drizzle",
       "columns": {
         "id": {
@@ -857,17 +798,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "video-data_chapter_id_chapter_id_fk": {
-          "name": "video-data_chapter_id_chapter_id_fk",
-          "tableFrom": "video-data",
+        "video_data_chapter_id_chapter_id_fk": {
+          "name": "video_data_chapter_id_chapter_id_fk",
+          "tableFrom": "video_data",
           "tableTo": "chapter",
           "schemaTo": "drizzle",
-          "columnsFrom": [
-            "chapter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chapter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
