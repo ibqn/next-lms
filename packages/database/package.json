@@ -5,7 +5,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "tsx --env-file-if-exists=.env src/index.ts",
-    "seed": "tsx --env-file-if-exists=.env src/seed.ts",
+    "seed": "pnpm run seed:categories && pnpm run seed:users",
+    "seed:categories": "tsx --env-file-if-exists=.env src/seed-categories.ts",
+    "seed:users": "tsx --env-file-if-exists=.env src/seed-users.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
