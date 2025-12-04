@@ -2,7 +2,9 @@
   "name": "backend",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file-if-exists=.env src/index.ts"
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "build": "tsc",
+    "start": "tsx --env-file-if-exists=.env src/index.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
