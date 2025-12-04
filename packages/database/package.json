@@ -17,7 +17,7 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "argon2": "^0.44.0",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.0",
     "drizzle-zod": "^0.8.3",
     "lodash.unset": "^4.5.2",
     "postgres": "^3.4.7",
@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/lodash.unset": "^4.5.9",
     "@types/node": "^24.10.1",
-    "drizzle-kit": "^0.31.7",
+    "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
