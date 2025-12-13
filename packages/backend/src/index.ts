@@ -75,6 +75,7 @@ export const routes = app
   .route("/chapters", chapterRoute)
 
 const port = 3333
-console.log(`Server is running on http://localhost:${port}`)
+const hostname = "0.0.0.0"
+console.log(`Server is running on http://${hostname}:${port}`)
 
-serve({ fetch: app.fetch, port })
+serve({ fetch: app.fetch, port, hostname })
