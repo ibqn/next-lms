@@ -5,14 +5,17 @@ import Link from "next/link"
 import { Image } from "@/components/optimized-image"
 import { IconBadge } from "./icon-badge"
 import { BookOpenIcon } from "lucide-react"
+import { formatPrice } from "@/lib/format-price"
 
 type CourseCardProps = {
   course: Course
 }
 
 export const CourseCard = ({ course }: CourseCardProps) => {
+  const progress = null
+
   return (
-    <Link href={`/courses/${course.id}`}>
+    <Link href={`/course/${course.id}`}>
       <div className="group h-full overflow-hidden rounded-lg border p-3 transition hover:shadow-sm">
         <div className="relative aspect-video w-full rounded-md">
           {course.imageUrl && <Image fill className="object-cover" src={course.imageUrl} alt={course.title} />}
@@ -28,9 +31,15 @@ export const CourseCard = ({ course }: CourseCardProps) => {
               {course.chapters?.length} {course.chapters?.length === 1 ? "chapter" : "chapters"}
             </span>
           </div>
-
-          {}
         </div>
+
+        {progress !== null ? (
+          <div>TODO: progress</div>
+        ) : (
+          <p className="text-base font-medium text-slate-700 md:text-sm">
+            {course.price ? formatPrice(course.price) : "Free"}
+          </p>
+        )}
       </div>
     </Link>
   )
