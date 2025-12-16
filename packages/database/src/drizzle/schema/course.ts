@@ -2,7 +2,7 @@ import { boolean, text, uuid, real } from "drizzle-orm/pg-core"
 import { lifecycleDates } from "./utils"
 import { schema } from "./schema"
 import { relations, type InferSelectModel } from "drizzle-orm"
-import { categoryTable } from "./category"
+import { categoryTable, type Category } from "./category"
 import { userTable, type User } from "./auth"
 import { attachmentTable, type Attachment } from "./attachment"
 import { createInsertSchema } from "drizzle-zod"
@@ -44,6 +44,7 @@ export type Course = InferSelectModel<typeof courseTable> & {
   user?: User | null
   attachments?: Attachment[]
   chapters?: Chapter[]
+  category?: Category | null
 }
 
 export const insertCourseSchema = createInsertSchema(courseTable, {
