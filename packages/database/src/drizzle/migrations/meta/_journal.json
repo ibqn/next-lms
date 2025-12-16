@@ -15,6 +15,13 @@
       "when": 1764789965811,
       "tag": "0001_slow_king_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765884697656,
+      "tag": "0002_slim_black_panther",
+      "breakpoints": true
     }
   ]
 }
