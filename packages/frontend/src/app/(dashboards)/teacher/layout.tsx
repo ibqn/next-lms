@@ -1,8 +1,9 @@
 import { validateRequest } from "@/auth"
 import { redirect } from "next/navigation"
+import type { ReactNode } from "react"
 
 type Props = Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>
 
 export default async function TeacherLayout({ children }: Props) {
