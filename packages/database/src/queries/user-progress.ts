@@ -3,13 +3,14 @@ import { db } from "../drizzle/db"
 import type { User } from "../drizzle/schema/auth"
 import { chapterTable } from "../drizzle/schema/chapter"
 import { userProgressTable } from "../drizzle/schema/user-progress"
+import type { Course } from "../drizzle/schema/course"
 
 type GetUserProgressOptions = {
-  courseId: string
-  user: User
+  courseId: Course["id"]
+  userId: User["id"]
 }
 
-export const getCourseProgress = async ({ courseId, user }: GetUserProgressOptions) => {
+export const getCourseProgress = async ({ courseId, userId }: GetUserProgressOptions) => {
   const publishedChapters = await db
     .select()
     .from(chapterTable)
@@ -22,7 +23,7 @@ export const getCourseProgress = async ({ courseId, user }: GetUserProgressOptio
     .innerJoin(chapterTable, eq(userProgressTable.chapterId, chapterTable.id))
     .where(
       and(
-        eq(userProgressTable.userId, user.id),
+        eq(userProgressTable.userId, userId),
         eq(chapterTable.courseId, courseId),
         eq(userProgressTable.isCompleted, true)
       )
