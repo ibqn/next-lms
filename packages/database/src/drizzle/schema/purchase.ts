@@ -1,8 +1,9 @@
 import { uuid } from "drizzle-orm/pg-core"
 import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
-import { courseTable } from "./course"
-import { userTable } from "./auth"
+import { courseTable, type Course } from "./course"
+import { userTable, type User } from "./auth"
+import { relations, type InferSelectModel } from "drizzle-orm"
 
 export const purchaseTable = schema.table("purchase", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -15,3 +16,13 @@ export const purchaseTable = schema.table("purchase", {
 
   ...lifecycleDates,
 })
+
+export const purchaseRelations = relations(purchaseTable, ({ one }) => ({
+  user: one(userTable, { fields: [purchaseTable.userId], references: [userTable.id] }),
+  course: one(courseTable, { fields: [purchaseTable.courseId], references: [courseTable.id] }),
+}))
+
+export type Purchase = InferSelectModel<typeof purchaseTable> & {
+  user?: User | null
+  course?: Course | null
+}

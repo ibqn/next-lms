@@ -16,6 +16,7 @@ import {
   userRoleRelations,
   userRoleTable,
 } from "./schema/role"
+import { purchaseRelations, purchaseTable } from "./schema/purchase"
 
 export const db = drizzle(env.DATABASE_URL, {
   schema: {
@@ -41,5 +42,7 @@ export const db = drizzle(env.DATABASE_URL, {
     permissionRelations,
     rolePermission: rolePermissionTable,
     rolePermissionRelations,
+    purchase: purchaseTable,
+    purchaseRelations,
   },
 })
