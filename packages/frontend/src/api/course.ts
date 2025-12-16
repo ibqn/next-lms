@@ -4,7 +4,8 @@ import { axios } from "./axios"
 import type { ApiResponse, PaginatedSuccessResponse, SuccessResponse } from "database/src/types"
 import { paginationSchema, PaginationSchema } from "database/src/validators/pagination"
 import { keepPreviousData, queryOptions } from "@tanstack/react-query"
-import { ParamIdSchema } from "database/src/validators/param"
+import type { ParamIdSchema } from "database/src/validators/param"
+import { courseQuerySchema, type CourseQuerySchema } from "database/src/validators/course-query"
 
 export const postCourse = async (courseData: CreateCourseSchema) => {
   const response = await axios.post<SuccessResponse<Course>>("/courses", courseData)
@@ -32,10 +33,11 @@ export const getCourseItems = async (params?: PaginationSchema) => {
   const { data: courseItems, pagination } = response
   return { courseItems, pagination }
 }
+
 export type GetCourseItems = Awaited<ReturnType<typeof getCourseItems>>
 
-export const courseListQueryOptions = (paramsInput: Partial<PaginationSchema> = {}) => {
-  const params = paginationSchema.parse(paramsInput)
+export const courseListQueryOptions = (paramsInput?: Partial<PaginationSchema>) => {
+  const params = paginationSchema.parse(paramsInput ?? {})
 
   return queryOptions({
     queryKey: ["course-list", params] as const,
@@ -62,5 +64,23 @@ export const courseQueryOptions = (paramId?: ParamIdSchema) => {
     queryKey: ["course", paramId?.id ?? null] as const,
     queryFn: () => (paramId ? getCourseItem(paramId) : null),
     enabled: !!paramId?.id,
+  })
+}
+
+export const getExploreCourseItems = async (params?: PaginationSchema & CourseQuerySchema) => {
+  const { data: response } = await axios.get<PaginatedSuccessResponse<Course[]>>("/courses/explore", { params })
+  const { data: courseItems, pagination } = response
+  return { courseItems, pagination }
+}
+
+export type GetExploreCourseItems = Awaited<ReturnType<typeof getExploreCourseItems>>
+
+export const exploreCourseListQueryOptions = (paramsInput?: Partial<PaginationSchema & CourseQuerySchema>) => {
+  const params = paginationSchema.and(courseQuerySchema).parse(paramsInput ?? {})
+
+  return queryOptions({
+    queryKey: ["explore-course-list", params] as const,
+    queryFn: () => getExploreCourseItems(params),
+    placeholderData: keepPreviousData,
   })
 }

@@ -10,6 +10,8 @@ import {
   getCourseItem,
   getCourseItems,
   getCourseItemsCount,
+  getExploreCourseItems,
+  getExploreCourseItemsCount,
   updateCourse,
 } from "database/src/queries/course"
 import { createCourseSchema, updateCourseSchema } from "database/src/validators/course"
@@ -17,6 +19,8 @@ import type { User } from "database/src/drizzle/schema/auth"
 import { paramIdSchema } from "database/src/validators/param"
 import { HTTPException } from "hono/http-exception"
 import { paginationSchema } from "database/src/validators/pagination"
+import { courseQuerySchema } from "database/src/validators/course-query"
+import { getCategoryId } from "database/src/queries/category"
 
 export const courseRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
@@ -46,6 +50,29 @@ export const courseRoute = new Hono<ExtEnv>()
 
     const courseCount = await getCourseItemsCount()
     const courseItems = await getCourseItems(query)
+
+    return c.json<PaginatedSuccessResponse<Course[]>>({
+      success: true,
+      data: courseItems,
+      message: "Course items retrieved",
+      pagination: {
+        page,
+        totalPages: Math.ceil(courseCount / limit),
+        totalItems: courseCount,
+      },
+    })
+  })
+  .get("/explore", signedIn, zValidator("query", paginationSchema.and(courseQuerySchema)), async (c) => {
+    const query = c.req.valid("query")
+    const { page, limit, category, searchTitle } = query
+
+    let categoryId: string | undefined
+    if (category) {
+      categoryId = await getCategoryId(category)
+    }
+
+    const courseCount = await getExploreCourseItemsCount({ category: categoryId, searchTitle })
+    const courseItems = await getExploreCourseItems({ ...query, category: categoryId })
 
     return c.json<PaginatedSuccessResponse<Course[]>>({
       success: true,
