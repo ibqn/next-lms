@@ -12,7 +12,7 @@ export const ExplorePage = () => {
   return (
     <>
       <SearchInput className="mx-6 mt-6 flex md:hidden" />
-      <div className="flex w-full flex-col p-6">
+      <div className="flex w-full flex-col space-y-4 p-6">
         {categories && <Categories categoryItems={categories} />}
 
         <ExploreCourseList />
