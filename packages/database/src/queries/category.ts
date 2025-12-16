@@ -9,3 +9,12 @@ export const getCategories = async (): Promise<Category[]> => {
 
   return categories satisfies Category[]
 }
+
+export const getCategoryId = async (categoryName: string): Promise<string | undefined> => {
+  const category = await db.query.category.findFirst({
+    where: ({ name }, { ilike }) => ilike(name, `%${categoryName}%`),
+    columns: { id: true },
+  })
+
+  return category ? category.id : undefined
+}
