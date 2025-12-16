@@ -15,6 +15,7 @@ import { uploadRoute, fileRoute } from "./routes/uploads"
 import { categoryRoutes } from "./routes/categories"
 import { attachmentRoute } from "./routes/attachments"
 import { chapterRoute } from "./routes/chapters"
+import { purchaseRoute } from "./routes/purchase"
 
 const app = new Hono<ExtEnv>()
 
@@ -73,6 +74,7 @@ export const routes = app
   .route("/categories", categoryRoutes)
   .route("/attachments", attachmentRoute)
   .route("/chapters", chapterRoute)
+  .route("/purchases", purchaseRoute)
 
 const port = 3333
 const hostname = "0.0.0.0"
