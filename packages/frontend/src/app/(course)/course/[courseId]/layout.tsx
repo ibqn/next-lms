@@ -1,7 +1,7 @@
 import { courseQueryOptions } from "@/api/course"
 import { validateRequest } from "@/auth"
-import { CourseNavbar } from "@/components/course-navbar"
-import { CourseSidebar } from "@/components/course-sidebar"
+import { CourseNavbar } from "@/components/course/course-navbar"
+import { CourseSidebar } from "@/components/course/course-sidebar"
 import { getQueryClient } from "@/lib/query-client"
 import { paramIdSchema } from "database/src/validators/param"
 import { notFound, redirect } from "next/navigation"
@@ -30,14 +30,14 @@ export default async function CourseIdLayout({ children, params }: CourseIdLayou
 
   return (
     <Suspense fallback="Loading...">
-      <div className="h-full">
+      <div className="flex h-full flex-1">
         <div className="fixed inset-y-0 z-50 h-20 w-full md:pl-80">
           <CourseNavbar />
         </div>
         <div className="fixed inset-y-0 z-50 hidden h-full w-80 flex-col md:flex">
           <CourseSidebar />
         </div>
-        <main className="h-full pt-20 md:pl-80">{children}</main>
+        <main className="flex h-full flex-1 pt-20 md:pl-80">{children}</main>
       </div>
     </Suspense>
   )
