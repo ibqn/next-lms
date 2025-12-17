@@ -7,6 +7,7 @@ import type { ParamIdSchema } from "../validators/param"
 import unset from "lodash.unset"
 import { paginationSchema, type PaginationSchema, type SortedBySchema } from "../validators/pagination"
 import { courseQuerySchema, type CourseQuerySchema } from "../validators/course-query"
+import { chapterTable } from "../drizzle/schema/chapter"
 
 type CreateCourseOptions = CreateCourseSchema & {
   user: User
@@ -172,7 +173,7 @@ export const getExploreCourseItems = async (queryParams?: CourseQuerySchema & Pa
     with: {
       user: { columns: { passwordHash: false } },
       category: true,
-      chapters: { where: eq(courseTable.isPublished, true) },
+      chapters: { where: eq(chapterTable.isPublished, true) },
     },
   })
 
