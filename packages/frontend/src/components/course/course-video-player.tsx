@@ -21,14 +21,16 @@ export const CourseVideoPlayer = ({ isLocked, videoUrl }: CourseVideoPlayerProps
   )
 
   return (
-    <div className="relative aspect-video">
+    <div className="relative">
       {!isLocked && !videoPlayerOptions && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
+        <div className="absolute inset-0 flex aspect-video items-center justify-center bg-slate-800">
           <Loader2Icon className="text-secondary size-8 animate-spin" />
         </div>
       )}
       {isLocked && (
-        <div className="text-secondary absolute inset-0 flex items-center justify-center gap-y-2 bg-slate-800">
+        <div
+          className="text-secondary absolute inset-0 flex aspect-video items-center justify-center gap-y-2 bg-slate-800"
+        >
           <LockIcon className="size-8" />
           <p className="text-sm">This chapter is locked</p>
         </div>

@@ -11,9 +11,13 @@ export const ExploreCourseList = () => {
   const category = searchParams.get("category") ?? undefined
   const searchTitle = searchParams.get("title") ?? undefined
 
-  const { data } = useQuery(exploreCourseListQueryOptions({ category, searchTitle }))
+  const { data, isLoading } = useQuery(exploreCourseListQueryOptions({ category, searchTitle }))
 
   const { courseItems: courses = [] } = data ?? {}
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
