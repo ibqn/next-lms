@@ -3,7 +3,7 @@
 import type { Course } from "database/src/drizzle/schema/course"
 import Link from "next/link"
 import { Image } from "@/components/optimized-image"
-import { IconBadge } from "./icon-badge"
+import { IconBadge } from "@/components/icon-badge"
 import { BookOpenIcon } from "lucide-react"
 import { formatPrice } from "@/lib/format-price"
 

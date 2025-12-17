@@ -4,7 +4,7 @@ import { courseQueryOptions } from "@/api/course"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import type { Course } from "database/src/drizzle/schema/course"
 import { useParams } from "next/navigation"
-import { CourseSidebarChapter } from "@/components/course-sidebar-chapter"
+import { CourseSidebarChapter } from "@/components/course/course-sidebar-chapter"
 
 export const CourseSidebar = () => {
   const { courseId } = useParams<{ courseId: Course["id"] }>()

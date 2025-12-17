@@ -3,7 +3,7 @@
 import { exploreCourseListQueryOptions } from "@/api/course"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
-import { CourseCard } from "./course-card"
+import { CourseCard } from "./course/course-card"
 
 export const ExploreCourseList = () => {
   const searchParams = useSearchParams()

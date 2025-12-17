@@ -1,5 +1,5 @@
 import { NavbarRoutes } from "@/components/navbar-routes"
-import { CourseMobileSidebar } from "@/components/course-mobile-sidebar"
+import { CourseMobileSidebar } from "@/components/course/course-mobile-sidebar"
 
 export const CourseNavbar = () => {
   return (
