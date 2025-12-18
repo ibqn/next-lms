@@ -5,6 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import type { Course } from "database/src/drizzle/schema/course"
 import { useParams } from "next/navigation"
 import { CourseSidebarChapter } from "@/components/course/course-sidebar-chapter"
+import { Heading } from "@/components/heading"
 
 export const CourseSidebar = () => {
   const { courseId } = useParams<{ courseId: Course["id"] }>()
@@ -12,12 +13,14 @@ export const CourseSidebar = () => {
   const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto border-r shadow-sm">
-      <div className="flex flex-col border-b p-8">
+    <div className="flex h-full flex-col gap-y-8 overflow-y-auto border-r shadow-sm">
+      <div className="flex flex-col px-6 py-8">
+        <Heading>course title</Heading>
         <h1 className="font-semibold">{course?.title}</h1>
       </div>
 
       <div className="flex w-full flex-col">
+        <Heading className="px-6">course content</Heading>
         {course?.chapters?.map((chapter) => (
           <CourseSidebarChapter key={chapter.id} chapter={chapter} />
         ))}

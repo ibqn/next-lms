@@ -5,6 +5,7 @@ import { courseQueryOptions } from "@/api/course"
 import { Banner } from "@/components/banner"
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
+import { Heading } from "@/components/heading"
 import { useQuery } from "@tanstack/react-query"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import type { Course } from "database/src/drizzle/schema/course"
@@ -36,9 +37,12 @@ export default function ChapterIdPage() {
         </div>
 
         <div className="flex flex-col items-center justify-between p-4 md:flex-row">
-          <h2 className="mb-2 text-2xl font-semibold">{chapter?.title}</h2>
+          <div>
+            <Heading>chapter title</Heading>
+            <h2 className="mb-2 text-2xl font-semibold">{chapter?.title}</h2>
+          </div>
 
-          {purchased ? <div>todo</div> : <CourseEnrollButton courseId={chapter?.id} price={course?.price} />}
+          {purchased ? <div>todo progress</div> : <CourseEnrollButton courseId={chapter?.id} price={course?.price} />}
         </div>
       </div>
     </div>
