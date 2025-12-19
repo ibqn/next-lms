@@ -126,7 +126,7 @@ export const VideoForm = ({ initialData }: Props) => {
   const videoPlayerOptions = useMemo(
     () => ({
       responsive: true,
-      autoplay: true,
+      autoplay: false,
       sources: [{ src: videoUrl, type: "video/mp4" }],
     }),
     [videoUrl]
