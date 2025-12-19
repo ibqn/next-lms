@@ -7,10 +7,12 @@ import { Banner } from "@/components/banner"
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
 import { Heading } from "@/components/heading"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import type { Course } from "database/src/drizzle/schema/course"
+import { FileIcon } from "lucide-react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { useParams } from "next/navigation"
 
 type ChapterParams = {
@@ -30,7 +32,7 @@ export default function ChapterIdPage() {
   )
 
   const { data: chapter } = useQuery(chapterQueryOptions({ id: chapterId }))
-  const { data: course } = useQuery(courseQueryOptions({ id: courseId }))
+  const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
 
   const isLocked = false
   const isCompleted = false
@@ -63,6 +65,27 @@ export default function ChapterIdPage() {
             "No description"
           )}
         </div>
+
+        {course?.attachments && course.attachments.length > 0 && (
+          <div className="p-4">
+            <Heading>attachments</Heading>
+            <ul className="mt-2 flex flex-col gap-y-2">
+              {course.attachments.map((attachment) => (
+                <div
+                  key={attachment.url}
+                  className="flex items-center gap-2 rounded-md border border-sky-200 bg-sky-100 p-3 text-sky-700"
+                >
+                  <FileIcon className="size-4 shrink-0" />
+                  <div className="grow">
+                    <Link className="line-clamp-1 text-xs" target="_blank" href={attachment.url}>
+                      {attachment.name}
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )
