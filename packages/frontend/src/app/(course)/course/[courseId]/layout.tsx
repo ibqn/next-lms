@@ -31,13 +31,13 @@ export default async function CourseIdLayout({ children, params }: CourseIdLayou
   return (
     <Suspense fallback="Loading...">
       <div className="flex h-full flex-1">
-        <div className="fixed inset-y-0 z-50 h-20 w-full md:pl-80">
+        <div className="fixed inset-y-0 z-50 h-20 w-full lg:pl-80">
           <CourseNavbar />
         </div>
-        <div className="fixed inset-y-0 z-50 hidden h-full w-80 flex-col md:flex">
+        <div className="fixed inset-y-0 z-50 hidden h-full w-80 flex-col lg:flex">
           <CourseSidebar />
         </div>
-        <main className="flex h-full flex-1 pt-20 md:pl-80">{children}</main>
+        <main className="flex h-full flex-1 pt-20 lg:pl-80">{children}</main>
       </div>
     </Suspense>
   )

@@ -6,7 +6,7 @@ import { VisuallyHidden } from "@/components/visually-hidden"
 export const CourseMobileSidebar = () => {
   return (
     <Sheet>
-      <SheetTrigger className="pr-4 transition hover:opacity-75 md:hidden">
+      <SheetTrigger className="pr-4 transition hover:opacity-75 lg:hidden">
         <MenuIcon />
       </SheetTrigger>
       <SheetContent side="left" className="w-72 bg-white p-0">
