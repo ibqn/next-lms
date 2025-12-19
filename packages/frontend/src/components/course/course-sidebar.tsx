@@ -20,7 +20,7 @@ export const CourseSidebar = () => {
       </div>
 
       <div className="flex w-full flex-col">
-        <Heading className="px-6">course content</Heading>
+        <Heading className="px-6">course chapters</Heading>
         {course?.chapters?.map((chapter) => (
           <CourseSidebarChapter key={chapter.id} chapter={chapter} />
         ))}

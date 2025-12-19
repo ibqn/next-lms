@@ -7,8 +7,8 @@ import { Loader2Icon } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
 type CourseEnrollButtonProps = {
-  courseId: Course["id"]
-  price: Course["price"]
+  courseId?: Course["id"]
+  price?: Course["price"]
 }
 
 export const CourseEnrollButton = ({ courseId, price }: CourseEnrollButtonProps) => {
