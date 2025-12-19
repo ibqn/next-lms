@@ -14,13 +14,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
+import { courseQueryOptions } from "@/api/course"
 
 type Props = {
   initialData: Chapter
 }
 
 export const AccessForm = ({ initialData }: Props) => {
-  const { id: chapterId } = initialData
+  const { id: chapterId, courseId } = initialData
 
   const [isEditing, setIsEditing] = useState(false)
 
@@ -58,6 +59,9 @@ export const AccessForm = ({ initialData }: Props) => {
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: chapterQueryOptions({ id: chapterId }).queryKey,
+      })
+      queryClient.invalidateQueries({
+        queryKey: courseQueryOptions({ id: courseId }).queryKey,
       })
     },
   })
