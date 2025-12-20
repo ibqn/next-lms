@@ -10,12 +10,13 @@ import { signIn, signUp } from "database/src/queries/auth"
 import type { User } from "database/src/drizzle/schema/auth"
 import { getSessionCookieOptions, sessionCookieName } from "database/src/cookie"
 import { invalidateSessionToken } from "database/src/lucia"
+import { signupSchema } from "database/src/validators/signup"
 
 const authRoute = new Hono<ExtEnv>()
-  .post("/signup", zValidator("json", signinSchema), async (c) => {
-    const { username, password } = c.req.valid("json")
+  .post("/signup", zValidator("json", signupSchema), async (c) => {
+    const inputData = c.req.valid("json")
 
-    const { token } = await signUp(username, password)
+    const { token } = await signUp(inputData)
 
     if (!token) {
       throw new HTTPException(409, { message: "Username already exists" })
@@ -25,9 +26,9 @@ const authRoute = new Hono<ExtEnv>()
     return c.json<SuccessResponse>(response("User created"), 201)
   })
   .post("/signin", zValidator("json", signinSchema), async (c) => {
-    const { username, password } = c.req.valid("json")
+    const inputData = c.req.valid("json")
 
-    const { token } = await signIn(username, password)
+    const { token } = await signIn(inputData)
 
     if (!token) {
       throw new HTTPException(401, { message: "Invalid username or password" })
