@@ -1,0 +1,1 @@
+ALTER TABLE "drizzle"."stripe_customer" ALTER COLUMN "stripe_customer_id" SET NOT NULL;
