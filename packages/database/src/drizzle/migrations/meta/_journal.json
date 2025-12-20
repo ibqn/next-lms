@@ -29,6 +29,20 @@
       "when": 1766215604644,
       "tag": "0003_many_roughhouse",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1766219585294,
+      "tag": "0004_quick_sunfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1766219672642,
+      "tag": "0005_shallow_rogue",
+      "breakpoints": true
     }
   ]
 }

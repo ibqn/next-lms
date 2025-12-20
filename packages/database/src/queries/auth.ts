@@ -3,12 +3,17 @@ import { db } from "../drizzle/db"
 import { userTable } from "../drizzle/schema/auth"
 import { createSession, generateSessionToken } from "../lucia"
 import postgres from "postgres"
+import type { SigninSchema } from "../validators/signin"
+import type { SignupSchema } from "../validators/signup"
 
-export const signUp = async (username: string, password: string) => {
-  const passwordHash = await argon2.hash(password)
+export const signUp = async (inputData: SignupSchema) => {
+  const passwordHash = await argon2.hash(inputData.password)
 
   try {
-    const [user] = await db.insert(userTable).values({ username, passwordHash }).returning({ id: userTable.id })
+    const [user] = await db
+      .insert(userTable)
+      .values({ ...inputData, passwordHash })
+      .returning({ id: userTable.id })
 
     const token = generateSessionToken()
     await createSession(token, user.id)
@@ -22,16 +27,16 @@ export const signUp = async (username: string, password: string) => {
   }
 }
 
-export const signIn = async (username: string, password: string) => {
+export const signIn = async (inputData: SigninSchema) => {
   const user = await db.query.user.findFirst({
-    where: ({ username: u }, { eq }) => eq(u, username),
+    where: ({ email }, { eq }) => eq(email, inputData.email),
   })
 
   if (!user) {
     return { token: null }
   }
 
-  const validPassword = await argon2.verify(user.passwordHash, password)
+  const validPassword = await argon2.verify(user.passwordHash, inputData.password)
 
   if (!validPassword) {
     return { token: null }

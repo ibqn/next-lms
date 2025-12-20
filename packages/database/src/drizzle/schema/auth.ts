@@ -6,7 +6,8 @@ import { userRoleTable, type UserRole } from "./role"
 
 export const userTable = schema.table("user", {
   id: uuid("id").primaryKey().defaultRandom(),
-  username: text("username").notNull().unique(),
+  username: text("username").notNull(),
+  email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
 
   ...lifecycleDates,

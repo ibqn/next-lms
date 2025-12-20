@@ -23,7 +23,7 @@ async function seed() {
   const users = [
     {
       username: "ibqn",
-      email: "evgen.ibqn@gmail.com",
+      email: "ibqn@gmail.com",
       passwordHash: await argon2.hash("rootme99"),
     },
     {
@@ -36,11 +36,7 @@ async function seed() {
   console.log("⏳ Seeding...")
   const start = Date.now()
 
-  const insertedUsers = await db
-    .insert(userTable)
-    .values(users)
-    .onConflictDoNothing()
-    .returning({ id: userTable.id, username: userTable.username })
+  const insertedUsers = await db.insert(userTable).values(users).onConflictDoNothing().returning()
 
   console.log(`${insertedUsers.length} user item(s) inserted.`)
 
@@ -80,7 +76,7 @@ async function seed() {
 
   console.log(`${adminPermissionsResult.length} admin permission(s) inserted.`)
 
-  const [user] = await db.select({ id: userTable.id }).from(userTable).where(eq(userTable.username, "ibqn"))
+  const [user] = await db.select({ id: userTable.id }).from(userTable).where(eq(userTable.email, users[0].email))
 
   const userRoleResult = await db
     .insert(userRoleTable)

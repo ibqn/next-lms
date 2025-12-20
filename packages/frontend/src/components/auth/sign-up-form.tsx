@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { CardWrapper } from "@/components/auth/card-wrapper"
-import { type SignupSchema, signupSchema } from "database/src/validators/signup"
+import { signupFormSchema, SignupFormSchema, type SignupSchema } from "database/src/validators/signup"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -25,13 +25,14 @@ export const SignUpForm = () => {
 
   const redirect = searchParams.get("redirect") ?? "/"
 
-  const form = useForm<SignupSchema>({
+  const form = useForm<SignupFormSchema>({
     defaultValues: {
       username: "",
+      email: "",
       password: "",
       confirm: "",
     },
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(signupFormSchema),
   })
 
   const [response, setResponse] = useState<SuccessResponse<User> | ErrorResponse | null>(null)
@@ -66,7 +67,7 @@ export const SignUpForm = () => {
     console.log(data)
     const signupData = { ...data, confirm: undefined }
     unset(signupData, "confirm")
-    signup(signupData)
+    signup(signupData satisfies SignupSchema)
   })
 
   const isDisabled = form.formState.isSubmitting
@@ -84,6 +85,20 @@ export const SignUpForm = () => {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input {...field} type="text" placeholder="Username" disabled={isDisabled} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="email" placeholder="Email" disabled={isDisabled} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

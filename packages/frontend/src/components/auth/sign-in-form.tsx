@@ -24,7 +24,7 @@ export const SignInForm = () => {
   const form = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   })
@@ -70,18 +70,12 @@ export const SignInForm = () => {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      autoComplete="username"
-                      placeholder="Username"
-                      disabled={isDisabled}
-                    />
+                    <Input {...field} type="email" autoComplete="username" placeholder="Email" disabled={isDisabled} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
