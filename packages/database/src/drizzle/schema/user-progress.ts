@@ -1,14 +1,13 @@
-import { uuid, boolean, index, unique } from "drizzle-orm/pg-core"
+import { uuid, boolean, primaryKey, index } from "drizzle-orm/pg-core"
 import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
 import { relations, type InferSelectModel } from "drizzle-orm"
-import { chapterTable } from "./chapter"
-import { userTable } from "./auth"
+import { chapterTable, type Chapter } from "./chapter"
+import { userTable, type User } from "./auth"
 
 export const userProgressTable = schema.table(
   "user_progress",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
       .notNull()
       .references(() => userTable.id, {
@@ -22,9 +21,15 @@ export const userProgressTable = schema.table(
     isCompleted: boolean("is_completed").default(false),
     ...lifecycleDates,
   },
-  (table) => [index().on(table.chapterId), unique().on(table.chapterId, table.userId)]
+  (table) => [primaryKey({ columns: [table.userId, table.chapterId] }), index().on(table.chapterId)]
 )
 
-export const chapterRelations = relations(userProgressTable, ({ one, many }) => ({}))
+export const userProgressRelations = relations(userProgressTable, ({ one }) => ({
+  user: one(userTable, { fields: [userProgressTable.userId], references: [userTable.id] }),
+  chapter: one(chapterTable, { fields: [userProgressTable.chapterId], references: [chapterTable.id] }),
+}))
 
-export type UserProgress = InferSelectModel<typeof userProgressTable>
+export type UserProgress = InferSelectModel<typeof userProgressTable> & {
+  user?: User | null
+  chapter?: Chapter | null
+}
