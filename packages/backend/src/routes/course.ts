@@ -3,7 +3,7 @@ import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import type { Course } from "database/src/drizzle/schema/course"
-import type { ErrorResponse, PaginatedSuccessResponse, SuccessResponse } from "database/src/types"
+import { response, type ErrorResponse, type PaginatedSuccessResponse, type SuccessResponse } from "database/src/types"
 import {
   createCourse,
   deleteCourse,
@@ -21,6 +21,7 @@ import { HTTPException } from "hono/http-exception"
 import { paginationSchema } from "database/src/validators/pagination"
 import { courseQuerySchema } from "database/src/validators/course-query"
 import { getCategoryId } from "database/src/queries/category"
+import { getCourseProgress, type CourseProgress } from "database/src/queries/user-progress"
 
 export const courseRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
@@ -100,6 +101,14 @@ export const courseRoute = new Hono<ExtEnv>()
       data: courseItem,
       message: "Course retrieved",
     })
+  })
+  .get("/:id/progress", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id: courseId } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const userProgress = await getCourseProgress({ courseId, userId: user.id })
+
+    return c.json<SuccessResponse<CourseProgress>>(response("Course progress retrieved", userProgress))
   })
   .delete("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const user = c.get("user") as User
