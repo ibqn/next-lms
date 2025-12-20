@@ -1,4 +1,4 @@
-import { uuid, primaryKey } from "drizzle-orm/pg-core"
+import { uuid, primaryKey, index } from "drizzle-orm/pg-core"
 import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
 import { courseTable, type Course } from "./course"
@@ -17,7 +17,7 @@ export const purchaseTable = schema.table(
 
     ...lifecycleDates,
   },
-  (table) => [primaryKey({ columns: [table.userId, table.courseId] })]
+  (table) => [primaryKey({ columns: [table.userId, table.courseId] }), index().on(table.courseId)]
 )
 
 export const purchaseRelations = relations(purchaseTable, ({ one }) => ({

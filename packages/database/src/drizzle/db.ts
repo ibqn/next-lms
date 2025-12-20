@@ -17,6 +17,8 @@ import {
   userRoleTable,
 } from "./schema/role"
 import { purchaseRelations, purchaseTable } from "./schema/purchase"
+import { userProgressRelations, userProgressTable } from "./schema/user-progress"
+import { stripeCustomerRelations, stripeCustomerTable } from "./schema/stripe-customer"
 
 export const db = drizzle(env.DATABASE_URL, {
   schema: {
@@ -44,5 +46,9 @@ export const db = drizzle(env.DATABASE_URL, {
     rolePermissionRelations,
     purchase: purchaseTable,
     purchaseRelations,
+    userProgress: userProgressTable,
+    userProgressRelations,
+    stripeCustomer: stripeCustomerTable,
+    stripeCustomerRelations,
   },
 })
