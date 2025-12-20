@@ -1,4 +1,5 @@
 import { courseQueryOptions } from "@/api/course"
+import { progressQueryOptions } from "@/api/progress"
 import { purchaseQueryOptions } from "@/api/purchase"
 import { validateRequest } from "@/auth"
 import { CourseNavbar } from "@/components/course/course-navbar"
@@ -29,6 +30,7 @@ export default async function CourseIdLayout({ children, params }: CourseIdLayou
 
   await queryClient.prefetchQuery(courseQueryOptions({ id: courseIdParseResult.data.id }))
   await queryClient.prefetchQuery(purchaseQueryOptions({ id: courseIdParseResult.data.id }))
+  await queryClient.prefetchQuery(progressQueryOptions({ id: courseIdParseResult.data.id }))
 
   return (
     <Suspense fallback="Loading...">

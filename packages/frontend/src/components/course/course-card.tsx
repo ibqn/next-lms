@@ -6,13 +6,17 @@ import { Image } from "@/components/optimized-image"
 import { IconBadge } from "@/components/icon-badge"
 import { BookOpenIcon } from "lucide-react"
 import { formatPrice } from "@/lib/format-price"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { progressQueryOptions } from "@/api/progress"
+import { CourseProgress } from "./course-progress"
 
 type CourseCardProps = {
   course: Course
 }
 
 export const CourseCard = ({ course }: CourseCardProps) => {
-  const progress = null
+  const { data } = useSuspenseQuery(progressQueryOptions({ id: course.id }))
+  const { progressPercentage = null } = data ?? {}
 
   return (
     <Link href={`/course/${course.id}`}>
@@ -33,8 +37,12 @@ export const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         </div>
 
-        {progress !== null ? (
-          <div>TODO: progress</div>
+        {progressPercentage !== null ? (
+          <CourseProgress
+            size="sm"
+            variant={progressPercentage === 100 ? "success" : "default"}
+            value={progressPercentage}
+          />
         ) : (
           <p className="text-base font-medium text-slate-700 md:text-sm">
             {course.price ? formatPrice(course.price) : "Free"}
