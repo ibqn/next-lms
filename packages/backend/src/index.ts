@@ -17,6 +17,7 @@ import { attachmentRoute } from "./routes/attachment"
 import { chapterRoute } from "./routes/chapter"
 import { purchaseRoute } from "./routes/purchase"
 import { pinoLogger } from "./middleware/pino-logger"
+import { stripeRoute } from "./routes/stripe"
 
 const app = new Hono<ExtEnv>()
 
@@ -77,6 +78,7 @@ export const routes = app
   .route("/attachments", attachmentRoute)
   .route("/chapters", chapterRoute)
   .route("/purchases", purchaseRoute)
+  .route("/stripe", stripeRoute)
 
 const port = 3333
 const hostname = "0.0.0.0"
