@@ -2,8 +2,8 @@
 
 import { chapterQueryOptions } from "@/api/chapter"
 import { courseQueryOptions } from "@/api/course"
+import { purchaseQueryOptions } from "@/api/purchase"
 import { Banner } from "@/components/banner"
-
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
 import { Heading } from "@/components/heading"
@@ -33,10 +33,10 @@ export default function ChapterIdPage() {
 
   const { data: chapter } = useQuery(chapterQueryOptions({ id: chapterId }))
   const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
+  const { data: purchase } = useSuspenseQuery(purchaseQueryOptions({ id: courseId }))
 
   const isLocked = false
   const isCompleted = false
-  const purchased = false
 
   return (
     <div className="flex w-full flex-1">
@@ -54,7 +54,7 @@ export default function ChapterIdPage() {
             <h2 className="mb-2 text-2xl font-semibold">{chapter?.title}</h2>
           </div>
 
-          {purchased ? <div>todo progress</div> : <CourseEnrollButton courseId={chapter?.id} price={course?.price} />}
+          {purchase ? <div>todo progress</div> : <CourseEnrollButton courseId={course?.id} price={course?.price} />}
         </div>
 
         <div className="p-4">
