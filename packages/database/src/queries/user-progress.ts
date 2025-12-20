@@ -38,3 +38,5 @@ export const getCourseProgress = async ({ courseId, userId }: GetUserProgressOpt
     progressPercentage,
   }
 }
+
+export type CourseProgress = Awaited<ReturnType<typeof getCourseProgress>>
