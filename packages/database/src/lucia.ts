@@ -41,14 +41,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
     return { session: null, user: null }
   }
 
-  const session: Session = {
-    id: sessionData.id,
-    userId: sessionData.userId,
-    expiresAt: sessionData.expiresAt,
-    createdAt: sessionData.createdAt,
-    updatedAt: sessionData.updatedAt,
-  }
-  const { user } = sessionData
+  const { user, ...session } = sessionData
   unset(user, "passwordHash")
 
   if (Date.now() >= session.expiresAt.getTime()) {
