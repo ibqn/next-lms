@@ -16,9 +16,11 @@ import { categoryRoutes } from "./routes/category"
 import { attachmentRoute } from "./routes/attachment"
 import { chapterRoute } from "./routes/chapter"
 import { purchaseRoute } from "./routes/purchase"
+import { pinoLogger } from "./middleware/pino-logger"
 
 const app = new Hono<ExtEnv>()
 
+app.use(pinoLogger())
 app.use(prettyJSON())
 
 app.notFound((c) => c.json<ErrorResponse>({ error: "Not Found", success: false }, 404))
