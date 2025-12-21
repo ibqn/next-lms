@@ -17,7 +17,7 @@ type CreateChapterOptions = CreateChapterSchema & {
   user: User
 }
 
-export const createChapter = async ({ title, courseId, user }: CreateChapterOptions) => {
+export const createChapter = async ({ title, courseId, user }: CreateChapterOptions): Promise<Chapter | null> => {
   const [course] = await db
     .select({ id: courseTable.id, userId: courseTable.userId })
     .from(courseTable)
@@ -43,7 +43,7 @@ export const createChapter = async ({ title, courseId, user }: CreateChapterOpti
     })
     .returning()
 
-  return { ...chapter } satisfies Chapter as Chapter
+  return chapter satisfies Chapter
 }
 
 type ReorderChapterOptions = {
@@ -95,11 +95,14 @@ export const reorderChapters = async ({ reorderList, user }: ReorderChapterOptio
   return trxResult
 }
 
-export type GetChapterOptions = ParamIdSchema & {
-  user: User
+export type GetDashboardChapterOptions = ParamIdSchema & {
+  userId: User["id"]
 }
 
-export const getChapter = async ({ id: chapterId, user }: GetChapterOptions): Promise<Chapter | null> => {
+export const getDashboardChapter = async ({
+  id: chapterId,
+  userId,
+}: GetDashboardChapterOptions): Promise<Chapter | null> => {
   const [chapter] = await db.select().from(chapterTable).where(eq(chapterTable.id, chapterId))
 
   if (!chapter) {
@@ -109,7 +112,33 @@ export const getChapter = async ({ id: chapterId, user }: GetChapterOptions): Pr
   const [course] = await db
     .select({ id: courseTable.id })
     .from(courseTable)
-    .where(and(eq(courseTable.id, chapter.courseId), eq(courseTable.userId, user.id)))
+    .where(and(eq(courseTable.id, chapter.courseId), eq(courseTable.userId, userId)))
+
+  if (!course) {
+    return null
+  }
+
+  return chapter satisfies Chapter
+}
+
+export type GetChapterOptions = ParamIdSchema & {
+  userId: User["id"]
+}
+
+export const getChapter = async ({ id: chapterId }: GetChapterOptions): Promise<Chapter | null> => {
+  const [chapter] = await db
+    .select()
+    .from(chapterTable)
+    .where(and(eq(chapterTable.id, chapterId), eq(chapterTable.isPublished, true)))
+
+  if (!chapter) {
+    return null
+  }
+
+  const [course] = await db
+    .select({ id: courseTable.id })
+    .from(courseTable)
+    .where(and(eq(courseTable.id, chapter.courseId), eq(courseTable.isPublished, true)))
 
   if (!course) {
     return null

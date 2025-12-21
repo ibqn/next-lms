@@ -52,9 +52,9 @@ type GetCourseOptions = {
   userId: User["id"]
 }
 
-export const getCourseItem = async ({ courseId, userId }: GetCourseOptions): Promise<Course | null> => {
+export const getCourseItem = async ({ courseId }: GetCourseOptions): Promise<Course | null> => {
   const course = await db.query.course.findFirst({
-    where: ({ id, userId: courseUserId }, { eq, and }) => and(eq(id, courseId), eq(courseUserId, userId)),
+    where: ({ id }, { eq }) => eq(id, courseId),
     with: {
       user: { columns: { passwordHash: false } },
       chapters: {

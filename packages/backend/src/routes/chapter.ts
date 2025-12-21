@@ -3,7 +3,13 @@ import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
 import { response, type SuccessResponse } from "database/src/types"
-import { createChapter, reorderChapters, getChapter, deleteChapter } from "database/src/queries/chapter"
+import {
+  createChapter,
+  reorderChapters,
+  getChapter,
+  deleteChapter,
+  getDashboardChapter,
+} from "database/src/queries/chapter"
 import { updateChapter } from "database/src/queries/chapter"
 import {
   createChapterSchema,
@@ -51,7 +57,7 @@ const chapterDashboardRoute = new Hono<ExtEnv>()
     const { id } = c.req.valid("param")
     const user = c.get("user") as User
 
-    const chapter = await getChapter({ id, user })
+    const chapter = await getDashboardChapter({ id, userId: user.id })
 
     if (!chapter) {
       throw new HTTPException(404, { message: "Chapter not found" })
@@ -114,7 +120,7 @@ const chapterExploreRoute = new Hono<ExtEnv>()
     const { id } = c.req.valid("param")
     const user = c.get("user") as User
 
-    const chapter = await getChapter({ id, user })
+    const chapter = await getChapter({ id, userId: user.id })
 
     if (!chapter) {
       throw new HTTPException(404, { message: "Chapter not found" })
