@@ -18,8 +18,8 @@ POST {{baseUrl}}/api/auth/signup
 Content-Type: application/json
 
 {
-  "username": "testuser",
-  "email": "testuser@example.com",
+  "username": "benji",
+  "email": "benji@gmail.com",
   "password": "password123",
   "confirmPassword": "password123"
 }
@@ -76,14 +76,16 @@ Cookie: {{sessionCookie}}
 
 ###
 
+@courseId = 8e8632bd-db9d-40d1-a9f5-cc3c565c6d11
+
 ### Get Course by ID (requires authentication)
-GET {{baseUrl}}/api/courses/course-id-here
+GET {{baseUrl}}/api/courses/{{courseId}}
 Cookie: {{sessionCookie}}
 
 ###
 
 ### Update Course (requires authentication)
-PATCH {{baseUrl}}/api/courses/course-id-here
+PATCH {{baseUrl}}/api/courses/{{courseId}}
 Content-Type: application/json
 Cookie: {{sessionCookie}}
 
@@ -97,13 +99,13 @@ Cookie: {{sessionCookie}}
 ###
 
 ### Delete Course (requires authentication)
-DELETE {{baseUrl}}/api/courses/course-id-here
+DELETE {{baseUrl}}/api/courses/{{courseId}}
 Cookie: {{sessionCookie}}
 
 ###
 
 ### Get Course Progress (requires authentication)
-GET {{baseUrl}}/api/courses/course-id-here/progress
+GET {{baseUrl}}/api/courses/{{courseId}}/progress
 Cookie: {{sessionCookie}}
 
 ###
@@ -121,7 +123,7 @@ Cookie: {{sessionCookie}}
   "title": "Getting Started",
   "description": "Introduction chapter",
   "videoUrl": "https://example.com/video.mp4",
-  "courseId": "course-id-here",
+  "courseId": "{{courseId}}",
   "isPublished": false,
   "isFree": true
 }
@@ -142,14 +144,16 @@ Cookie: {{sessionCookie}}
 
 ###
 
+@chapterId = chapter-id-here
+
 ### Get Chapter by ID (requires authentication)
-GET {{baseUrl}}/api/chapters/chapter-id-here
+GET {{baseUrl}}/api/chapters/{{chapterId}}
 Cookie: {{sessionCookie}}
 
 ###
 
 ### Update Chapter (requires authentication)
-PATCH {{baseUrl}}/api/chapters/chapter-id-here
+PATCH {{baseUrl}}/api/chapters/{{chapterId}}
 Content-Type: application/json
 Cookie: {{sessionCookie}}
 
@@ -164,7 +168,7 @@ Cookie: {{sessionCookie}}
 ###
 
 ### Delete Chapter (requires authentication)
-DELETE {{baseUrl}}/api/chapters/chapter-id-here
+DELETE {{baseUrl}}/api/chapters/{{chapterId}}
 Cookie: {{sessionCookie}}
 
 ###
@@ -205,20 +209,22 @@ Test image description
 
 ###
 
+@uploadId = upload-id-here
+
 ### Get Upload by ID (requires authentication)
-GET {{baseUrl}}/api/uploads/upload-id-here
+GET {{baseUrl}}/api/uploads/{{uploadId}}
 Cookie: {{sessionCookie}}
 
 ###
 
 ### Get Upload Image with Query Params (requires authentication)
-GET {{baseUrl}}/api/uploads/upload-id-here/image?width=300&height=200&format=webp&quality=80
+GET {{baseUrl}}/api/uploads/{{uploadId}}/image?width=300&height=200&format=webp&quality=80
 Cookie: {{sessionCookie}}
 
 ###
 
 ### Delete Upload (requires authentication)
-DELETE {{baseUrl}}/api/uploads/upload-id-here
+DELETE {{baseUrl}}/api/uploads/{{uploadId}}
 Cookie: {{sessionCookie}}
 
 ###
@@ -242,15 +248,17 @@ Cookie: {{sessionCookie}}
     {
       "name": "Course Material",
       "url": "/uploads/material.pdf",
-      "courseId": "course-id-here"
+      "courseId": "{{courseId}}"
     }
   ]
 }
 
 ###
 
+@attachmentId = attachment-id-here
+
 ### Delete Attachment (requires authentication)
-DELETE {{baseUrl}}/api/attachments/attachment-id-here
+DELETE {{baseUrl}}/api/attachments/{{attachmentId}}
 Cookie: {{sessionCookie}}
 
 ###
@@ -260,7 +268,7 @@ Cookie: {{sessionCookie}}
 # =============================================================================
 
 ### Get Purchase by Course ID (requires authentication)
-GET {{baseUrl}}/api/purchases/course-id-here
+GET {{baseUrl}}/api/purchases/{{courseId}}
 Cookie: {{sessionCookie}}
 
 ###
@@ -270,7 +278,7 @@ Cookie: {{sessionCookie}}
 # =============================================================================
 
 ### Create Stripe Checkout Session (requires authentication)
-POST {{baseUrl}}/api/stripe/checkout/course-id-here
+POST {{baseUrl}}/api/stripe/checkout/{{courseId}}
 Content-Type: application/json
 Cookie: {{sessionCookie}}
 
@@ -302,13 +310,11 @@ Stripe-Signature: whsec_test_signature
 # COMMON VARIABLES TO UPDATE
 # =============================================================================
 
-# Replace these with actual IDs after creating resources:
-# - course-id-here
-# - chapter-id-here
-# - upload-id-here
-# - attachment-id-here
-# - user-id
-# - filename.jpg
+# Update these variables with actual IDs after creating resources:
+# @courseId = your-actual-course-id
+# @chapterId = your-actual-chapter-id
+# @uploadId = your-actual-upload-id
+# @attachmentId = your-actual-attachment-id
 
 # Note: Most endpoints require authentication via session cookie.
 # Make sure to sign in first and use the session token in subsequent requests.
