@@ -1,4 +1,4 @@
-import { boolean, index, integer, text, uuid } from "drizzle-orm/pg-core"
+import { boolean, index, integer, text, unique, uuid } from "drizzle-orm/pg-core"
 import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
 import { relations, type InferSelectModel } from "drizzle-orm"
@@ -21,7 +21,7 @@ export const chapterTable = schema.table(
 
     ...lifecycleDates,
   },
-  (table) => [index().on(table.courseId)]
+  (table) => [index().on(table.courseId), unique().on(table.courseId, table.title)]
 )
 
 export const chapterRelations = relations(chapterTable, ({ one }) => ({

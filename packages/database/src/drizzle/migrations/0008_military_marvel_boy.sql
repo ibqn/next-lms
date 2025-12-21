@@ -1,0 +1,1 @@
+ALTER TABLE "drizzle"."chapter" ADD CONSTRAINT "chapter_course_id_title_unique" UNIQUE("course_id","title");
