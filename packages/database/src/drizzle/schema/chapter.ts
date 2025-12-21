@@ -8,7 +8,7 @@ export const chapterTable = schema.table(
   "chapter",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    title: text("title").unique().notNull(),
+    title: text("title").notNull(),
     description: text("description"),
     videoUrl: text("video_url"),
     position: integer("position"),

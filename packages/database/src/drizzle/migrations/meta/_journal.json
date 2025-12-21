@@ -50,6 +50,13 @@
       "when": 1766220423595,
       "tag": "0006_solid_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1766352116846,
+      "tag": "0007_big_skaar",
+      "breakpoints": true
     }
   ]
 }
