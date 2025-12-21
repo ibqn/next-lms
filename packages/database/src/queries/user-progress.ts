@@ -1,9 +1,10 @@
 import { and, eq } from "drizzle-orm"
 import { db } from "../drizzle/db"
 import type { User } from "../drizzle/schema/auth"
-import { chapterTable } from "../drizzle/schema/chapter"
-import { userProgressTable } from "../drizzle/schema/user-progress"
+import { chapterTable, type Chapter } from "../drizzle/schema/chapter"
+import { userProgressTable, type UserProgress } from "../drizzle/schema/user-progress"
 import type { Course } from "../drizzle/schema/course"
+import type { ProgressChapterSchema } from "../validators/chapter"
 
 type GetUserProgressOptions = {
   courseId: Course["id"]
@@ -40,3 +41,43 @@ export const getCourseProgress = async ({ courseId, userId }: GetUserProgressOpt
 }
 
 export type CourseProgress = Awaited<ReturnType<typeof getCourseProgress>>
+
+type ToggleChapterProgressOptions = {
+  chapterId: Chapter["id"]
+  userId: User["id"]
+} & ProgressChapterSchema
+
+export const toggleChapterProgress = async ({
+  chapterId,
+  userId,
+  isCompleted,
+}: ToggleChapterProgressOptions): Promise<UserProgress | null> => {
+  const [chapter] = await db.select().from(chapterTable).where(eq(chapterTable.id, chapterId))
+
+  if (!chapter) {
+    return null
+  }
+
+  const purchase = await db.query.purchase.findFirst({
+    where: (purchase, { eq, and }) => and(eq(purchase.courseId, chapter.courseId), eq(purchase.userId, userId)),
+  })
+
+  if (!purchase) {
+    return null
+  }
+
+  const [userProgress] = await db
+    .insert(userProgressTable)
+    .values({
+      userId,
+      chapterId,
+      isCompleted,
+    })
+    .onConflictDoUpdate({
+      target: [userProgressTable.userId, userProgressTable.chapterId],
+      set: { isCompleted },
+    })
+    .returning()
+
+  return userProgress satisfies UserProgress
+}

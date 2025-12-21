@@ -2,14 +2,21 @@ import { Hono } from "hono"
 import type { ExtEnv } from "../utils/extended-env"
 import { signedIn } from "../middleware/signed-in"
 import { zValidator } from "@hono/zod-validator"
-import type { SuccessResponse } from "database/src/types"
+import { response, type SuccessResponse } from "database/src/types"
 import { createChapter, reorderChapters, getChapter, deleteChapter } from "database/src/queries/chapter"
 import { updateChapter } from "database/src/queries/chapter"
-import { createChapterSchema, reorderChapterSchema, updateChapterSchema } from "database/src/validators/chapter"
+import {
+  createChapterSchema,
+  progressChapterSchema,
+  reorderChapterSchema,
+  updateChapterSchema,
+} from "database/src/validators/chapter"
 import type { User } from "database/src/drizzle/schema/auth"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import { HTTPException } from "hono/http-exception"
 import { paramIdSchema } from "database/src/validators/param"
+import { toggleChapterProgress } from "database/src/queries/user-progress"
+import type { UserProgress } from "database/src/drizzle/schema/user-progress"
 
 export const chapterRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createChapterSchema), async (c) => {
@@ -40,6 +47,26 @@ export const chapterRoute = new Hono<ExtEnv>()
       data: reorderedChapters,
     })
   })
+  .patch(
+    "/:id/progress",
+    signedIn,
+    zValidator("param", paramIdSchema),
+    zValidator("json", progressChapterSchema),
+    async (c) => {
+      const { id: chapterId } = c.req.valid("param")
+      const user = c.get("user") as User
+
+      const inputData = c.req.valid("json")
+
+      const toggleUserProgress = await toggleChapterProgress({ chapterId, userId: user.id, ...inputData })
+
+      if (!toggleUserProgress) {
+        throw new HTTPException(404, { message: "Could not toggle chapter progress" })
+      }
+
+      return c.json<SuccessResponse<UserProgress>>(response("Chapter progress toggled", toggleUserProgress), 200)
+    }
+  )
   .get("/:id", zValidator("param", paramIdSchema), signedIn, async (c) => {
     const { id } = c.req.valid("param")
     const user = c.get("user") as User
