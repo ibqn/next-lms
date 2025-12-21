@@ -35,7 +35,11 @@ export const CourseVideoPlayer = ({ isLocked, videoUrl }: CourseVideoPlayerProps
           <p className="text-sm">This chapter is locked</p>
         </div>
       )}
-      <div className="block">{videoPlayerOptions && <VideoPlayer options={videoPlayerOptions} />}</div>
+      {videoPlayerOptions && (
+        <div className="block">
+          <VideoPlayer options={videoPlayerOptions} />
+        </div>
+      )}
     </div>
   )
 }
