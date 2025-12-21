@@ -2,21 +2,22 @@
 
 import { chapterQueryOptions } from "@/api/chapter"
 import { courseQueryOptions } from "@/api/course"
-import { progressQueryOptions } from "@/api/progress"
+import { patchUserChapterProgress, progressQueryOptions } from "@/api/progress"
 import { purchaseQueryOptions } from "@/api/purchase"
 import { Banner } from "@/components/banner"
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
 import { CourseProgressButton } from "@/components/course/course-progress-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
 import { Heading } from "@/components/heading"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import type { Course } from "database/src/drizzle/schema/course"
 import { FileIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useMemo } from "react"
+import { toast } from "sonner"
 
 type ChapterParams = {
   chapterId: Chapter["id"]
@@ -33,6 +34,10 @@ export default function ChapterIdPage() {
     },
     { ssr: false }
   )
+
+  const queryClient = useQueryClient()
+
+  const router = useRouter()
 
   const { data: chapter } = useSuspenseQuery(chapterQueryOptions({ id: chapterId }))
   const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
@@ -59,6 +64,31 @@ export default function ChapterIdPage() {
     return course.chapters[currentChapterIndex + 1].id
   }, [course?.chapters, chapterId])
 
+  const { mutate: setChapterProgress, isPending } = useMutation({
+    mutationFn: async (isCompleted: boolean) =>
+      patchUserChapterProgress({
+        id: chapterId,
+        isCompleted,
+      }),
+    onSuccess: (data) => {
+      console.log("Toggled chapter progress:", data)
+      toast.success(`Chapter marked as "completed"}`)
+
+      if (nextChapterId) {
+        router.push(`${nextChapterId}`)
+      }
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["progress"] })
+    },
+  })
+
+  const handleChapterEnd = () => {
+    if (!isCompleted && !isPending) {
+      setChapterProgress(true)
+    }
+  }
+
   return (
     <div className="flex w-full flex-1 flex-col">
       {isCompleted && <Banner variant="success" label="You already completed this chapter." />}
@@ -66,7 +96,7 @@ export default function ChapterIdPage() {
 
       <div className="mx-auto flex w-full max-w-4xl flex-col pb-20">
         <div className="p-4">
-          <CourseVideoPlayer isLocked={isLocked} videoUrl={chapter?.videoUrl ?? null} />
+          <CourseVideoPlayer isLocked={isLocked} videoUrl={chapter?.videoUrl ?? null} onEnd={handleChapterEnd} />
         </div>
 
         <div className="flex flex-col items-center justify-between p-4 md:flex-row">

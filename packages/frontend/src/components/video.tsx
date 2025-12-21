@@ -11,6 +11,7 @@ type VideoPlayer = ReturnType<typeof videojs>
 type VideoPlayerProps = {
   options: VideoPlayerOptions
   onReady?: (player: VideoPlayer) => void
+  onEnd?: () => void
 } & ComponentProps<"div">
 
 const initialOptions: VideoPlayerOptions = {
@@ -23,7 +24,7 @@ const initialOptions: VideoPlayerOptions = {
   },
 }
 
-export const VideoPlayer = ({ options, onReady, ...props }: VideoPlayerProps) => {
+export const VideoPlayer = ({ options, onReady, onEnd, ...props }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<VideoPlayer>(null)
 
@@ -42,13 +43,17 @@ export const VideoPlayer = ({ options, onReady, ...props }: VideoPlayerProps) =>
         videojs.log("player is ready")
         onReady?.(player)
       }))
+
+      player.on("ended", () => {
+        onEnd?.()
+      })
     } else {
       const player = playerRef.current
 
       player.autoplay(options.autoplay)
       player.src(options.sources)
     }
-  }, [options, videoRef, onReady, mergedOptions])
+  }, [options, videoRef, onReady, onEnd, mergedOptions])
 
   useEffect(() => {
     const player = playerRef.current

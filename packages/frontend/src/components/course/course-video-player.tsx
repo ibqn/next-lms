@@ -5,9 +5,10 @@ import { VideoPlayer } from "@/components/video"
 type CourseVideoPlayerProps = {
   isLocked: boolean
   videoUrl: string | null
+  onEnd?: () => void
 }
 
-export const CourseVideoPlayer = ({ isLocked, videoUrl }: CourseVideoPlayerProps) => {
+export const CourseVideoPlayer = ({ isLocked, videoUrl, onEnd }: CourseVideoPlayerProps) => {
   const videoPlayerOptions = useMemo(
     () =>
       videoUrl
@@ -37,7 +38,7 @@ export const CourseVideoPlayer = ({ isLocked, videoUrl }: CourseVideoPlayerProps
       )}
       {videoPlayerOptions && (
         <div className="block">
-          <VideoPlayer options={videoPlayerOptions} />
+          <VideoPlayer options={videoPlayerOptions} onEnd={onEnd} />
         </div>
       )}
     </div>
