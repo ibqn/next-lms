@@ -6,6 +6,7 @@ import { progressQueryOptions } from "@/api/progress"
 import { purchaseQueryOptions } from "@/api/purchase"
 import { Banner } from "@/components/banner"
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
+import { CourseProgressButton } from "@/components/course/course-progress-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
 import { Heading } from "@/components/heading"
 import { useSuspenseQuery } from "@tanstack/react-query"
@@ -41,12 +42,25 @@ export default function ChapterIdPage() {
   const isLocked = useMemo(() => !chapter?.isFree && !purchase, [chapter, purchase])
 
   const isCompleted = useMemo(
-    () => progress?.completedChapters.some(({ id }) => id === chapterId),
+    () => progress?.completedChapters.some(({ id }) => id === chapterId) ?? false,
     [progress, chapterId]
   )
 
+  const nextChapterId = useMemo(() => {
+    if (!course?.chapters) {
+      return null
+    }
+
+    const currentChapterIndex = course.chapters.findIndex((ch) => ch.id === chapterId)
+    if (currentChapterIndex === -1 || currentChapterIndex === course.chapters.length - 1) {
+      return null
+    }
+
+    return course.chapters[currentChapterIndex + 1].id
+  }, [course?.chapters, chapterId])
+
   return (
-    <div className="flex w-full flex-1">
+    <div className="flex w-full flex-1 flex-col">
       {isCompleted && <Banner variant="success" label="You already completed this chapter." />}
       {isLocked && <Banner variant="warning" label="You need to purchase this course to watch this chapter." />}
 
@@ -61,7 +75,11 @@ export default function ChapterIdPage() {
             <h2 className="mb-2 text-2xl font-semibold">{chapter?.title}</h2>
           </div>
 
-          {purchase ? <div>todo progress</div> : <CourseEnrollButton courseId={course?.id} price={course?.price} />}
+          {purchase ? (
+            <CourseProgressButton chapterId={chapterId} isCompleted={isCompleted} />
+          ) : (
+            <CourseEnrollButton courseId={course?.id} price={course?.price} />
+          )}
         </div>
 
         <div className="p-4">
