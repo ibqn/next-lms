@@ -10,7 +10,9 @@ import { notFound, redirect } from "next/navigation"
 import { Suspense, type PropsWithChildren } from "react"
 
 type CourseIdLayoutProps = PropsWithChildren<{
-  params: Promise<{ courseId: string }>
+  params: Promise<{
+    courseId: string
+  }>
 }>
 
 export default async function CourseIdLayout({ children, params }: CourseIdLayoutProps) {
@@ -33,7 +35,7 @@ export default async function CourseIdLayout({ children, params }: CourseIdLayou
   await queryClient.prefetchQuery(progressQueryOptions({ id: courseIdParseResult.data.id }))
 
   return (
-    <Suspense fallback="Loading...">
+    <Suspense>
       <div className="flex h-full flex-1">
         <div className="fixed inset-y-0 z-50 h-20 w-full lg:pl-80">
           <CourseNavbar />

@@ -8,12 +8,19 @@ import { CourseSidebarChapter } from "@/components/course/course-sidebar-chapter
 import { Heading } from "@/components/heading"
 import { purchaseQueryOptions } from "@/api/purchase"
 import { CourseProgress } from "@/components/course/course-progress"
+import { progressQueryOptions } from "@/api/progress"
+import { useMemo } from "react"
 
 export const CourseSidebar = () => {
   const { courseId } = useParams<{ courseId: Course["id"] }>()
 
   const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
   const { data: purchase } = useSuspenseQuery(purchaseQueryOptions({ id: courseId }))
+  const { data: progress } = useSuspenseQuery(progressQueryOptions({ id: courseId }))
+
+  const completedChapterIds = useMemo(() => {
+    return new Set(progress?.completedChapters.map(({ id }) => id) ?? [])
+  }, [progress])
 
   return (
     <div className="flex h-full flex-col gap-y-8 overflow-y-auto border-r shadow-sm">
@@ -22,7 +29,7 @@ export const CourseSidebar = () => {
         <h1 className="font-semibold">{course?.title}</h1>
         {purchase && (
           <div className="mt-10">
-            <CourseProgress variant="success" value={0} />
+            <CourseProgress variant="success" value={progress?.progressPercentage ?? 0} />
           </div>
         )}
       </div>
@@ -30,7 +37,12 @@ export const CourseSidebar = () => {
       <div className="flex w-full flex-col">
         <Heading className="px-6">course chapters</Heading>
         {course?.chapters?.map((chapter) => (
-          <CourseSidebarChapter key={chapter.id} chapter={chapter} />
+          <CourseSidebarChapter
+            isCompleted={completedChapterIds.has(chapter.id)}
+            key={chapter.id}
+            chapter={chapter}
+            isLocked={!chapter.isFree && !purchase}
+          />
         ))}
       </div>
     </div>

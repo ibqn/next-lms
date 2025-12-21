@@ -8,13 +8,12 @@ import { usePathname, useRouter } from "next/navigation"
 type CourseSidebarChapterProps = {
   chapter: Chapter
   isCompleted: boolean
+  isLocked: boolean
 }
 
-export const CourseSidebarChapter = ({ chapter, isCompleted }: CourseSidebarChapterProps) => {
+export const CourseSidebarChapter = ({ chapter, isCompleted, isLocked }: CourseSidebarChapterProps) => {
   const pathname = usePathname()
   const router = useRouter()
-
-  const isLocked = !chapter.isFree
 
   const Icon = isLocked ? LockIcon : isCompleted ? CheckCircleIcon : PlayCircleIcon
 

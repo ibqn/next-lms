@@ -2,18 +2,20 @@
 
 import { chapterQueryOptions } from "@/api/chapter"
 import { courseQueryOptions } from "@/api/course"
+import { progressQueryOptions } from "@/api/progress"
 import { purchaseQueryOptions } from "@/api/purchase"
 import { Banner } from "@/components/banner"
 import { CourseEnrollButton } from "@/components/course/course-enroll-button"
 import { CourseVideoPlayer } from "@/components/course/course-video-player"
 import { Heading } from "@/components/heading"
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
 import type { Course } from "database/src/drizzle/schema/course"
 import { FileIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { useMemo } from "react"
 
 type ChapterParams = {
   chapterId: Chapter["id"]
@@ -31,12 +33,17 @@ export default function ChapterIdPage() {
     { ssr: false }
   )
 
-  const { data: chapter } = useQuery(chapterQueryOptions({ id: chapterId }))
+  const { data: chapter } = useSuspenseQuery(chapterQueryOptions({ id: chapterId }))
   const { data: course } = useSuspenseQuery(courseQueryOptions({ id: courseId }))
   const { data: purchase } = useSuspenseQuery(purchaseQueryOptions({ id: courseId }))
+  const { data: progress } = useSuspenseQuery(progressQueryOptions({ id: courseId }))
 
-  const isLocked = false
-  const isCompleted = false
+  const isLocked = useMemo(() => !chapter?.isFree && !purchase, [chapter, purchase])
+
+  const isCompleted = useMemo(
+    () => progress?.completedChapters.some(({ id }) => id === chapterId),
+    [progress, chapterId]
+  )
 
   return (
     <div className="flex w-full flex-1">
