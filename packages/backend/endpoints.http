@@ -1,0 +1,314 @@
+# Backend API Test Endpoints
+
+@baseUrl = http://localhost:3333
+@sessionCookie = {{signin.response.headers.Set-Cookie}}
+
+### Health Check
+GET {{baseUrl}}/
+
+###
+
+# =============================================================================
+# AUTH ROUTES (/api/auth)
+# =============================================================================
+
+### Sign Up
+# @name signup
+POST {{baseUrl}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+###
+
+### Sign In
+# @name signin
+POST {{baseUrl}}/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "lev@gmail.com",
+  "password": "rootme99"
+}
+
+###
+
+### Sign Out (requires authentication)
+GET {{baseUrl}}/api/auth/signout
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# COURSE ROUTES (/api/courses)
+# =============================================================================
+
+### Create Course (requires authentication)
+POST {{baseUrl}}/api/courses
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "title": "Introduction to React",
+  "description": "Learn React fundamentals",
+  "imageUrl": "https://example.com/image.jpg",
+  "price": 49.99,
+  "categoryId": "1",
+  "isPublished": false
+}
+
+###
+
+### Get User Courses with Pagination (requires authentication)
+GET {{baseUrl}}/api/courses?page=1&limit=10
+Cookie: {{sessionCookie}}
+
+###
+
+### Explore Courses with Search and Filter (requires authentication)
+GET {{baseUrl}}/api/courses/explore?page=1&limit=10&category=programming&searchTitle=react
+Cookie: {{sessionCookie}}
+
+###
+
+### Get Course by ID (requires authentication)
+GET {{baseUrl}}/api/courses/course-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+### Update Course (requires authentication)
+PATCH {{baseUrl}}/api/courses/course-id-here
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "title": "Advanced React Concepts",
+  "description": "Deep dive into React",
+  "price": 79.99,
+  "isPublished": true
+}
+
+###
+
+### Delete Course (requires authentication)
+DELETE {{baseUrl}}/api/courses/course-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+### Get Course Progress (requires authentication)
+GET {{baseUrl}}/api/courses/course-id-here/progress
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# CHAPTER ROUTES (/api/chapters)
+# =============================================================================
+
+### Create Chapter (requires authentication)
+POST {{baseUrl}}/api/chapters
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "title": "Getting Started",
+  "description": "Introduction chapter",
+  "videoUrl": "https://example.com/video.mp4",
+  "courseId": "course-id-here",
+  "isPublished": false,
+  "isFree": true
+}
+
+###
+
+### Reorder Chapters (requires authentication)
+POST {{baseUrl}}/api/chapters/reorder
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "list": [
+    {"id": "chapter-1-id", "position": 0},
+    {"id": "chapter-2-id", "position": 1}
+  ]
+}
+
+###
+
+### Get Chapter by ID (requires authentication)
+GET {{baseUrl}}/api/chapters/chapter-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+### Update Chapter (requires authentication)
+PATCH {{baseUrl}}/api/chapters/chapter-id-here
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "title": "Updated Chapter Title",
+  "description": "Updated description",
+  "videoUrl": "https://example.com/updated-video.mp4",
+  "isPublished": true,
+  "isFree": false
+}
+
+###
+
+### Delete Chapter (requires authentication)
+DELETE {{baseUrl}}/api/chapters/chapter-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# CATEGORY ROUTES (/api/categories)
+# =============================================================================
+
+### Get All Categories (requires authentication)
+GET {{baseUrl}}/api/categories
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# UPLOAD ROUTES (/api/uploads)
+# =============================================================================
+
+### Upload File (requires authentication)
+POST {{baseUrl}}/api/uploads
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Cookie: {{sessionCookie}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Test Image Upload
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="alt"
+
+Test image description
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Get Upload by ID (requires authentication)
+GET {{baseUrl}}/api/uploads/upload-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+### Get Upload Image with Query Params (requires authentication)
+GET {{baseUrl}}/api/uploads/upload-id-here/image?width=300&height=200&format=webp&quality=80
+Cookie: {{sessionCookie}}
+
+###
+
+### Delete Upload (requires authentication)
+DELETE {{baseUrl}}/api/uploads/upload-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+### Serve File (no authentication required)
+GET {{baseUrl}}/uploads/filename.jpg
+
+###
+
+# =============================================================================
+# ATTACHMENT ROUTES (/api/attachments)
+# =============================================================================
+
+### Create Attachment (requires authentication)
+POST {{baseUrl}}/api/attachments
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{
+  "attachments": [
+    {
+      "name": "Course Material",
+      "url": "/uploads/material.pdf",
+      "courseId": "course-id-here"
+    }
+  ]
+}
+
+###
+
+### Delete Attachment (requires authentication)
+DELETE {{baseUrl}}/api/attachments/attachment-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# PURCHASE ROUTES (/api/purchases)
+# =============================================================================
+
+### Get Purchase by Course ID (requires authentication)
+GET {{baseUrl}}/api/purchases/course-id-here
+Cookie: {{sessionCookie}}
+
+###
+
+# =============================================================================
+# STRIPE ROUTES (/api/stripe)
+# =============================================================================
+
+### Create Stripe Checkout Session (requires authentication)
+POST {{baseUrl}}/api/stripe/checkout/course-id-here
+Content-Type: application/json
+Cookie: {{sessionCookie}}
+
+{}
+
+###
+
+### Stripe Webhook (for Stripe to call)
+POST {{baseUrl}}/api/stripe/webhook
+Content-Type: application/json
+Stripe-Signature: whsec_test_signature
+
+{
+  "type": "checkout.session.completed",
+  "data": {
+    "object": {
+      "id": "cs_test_123",
+      "metadata": {
+        "userId": "user-id",
+        "courseId": "course-id"
+      }
+    }
+  }
+}
+
+###
+
+# =============================================================================
+# COMMON VARIABLES TO UPDATE
+# =============================================================================
+
+# Replace these with actual IDs after creating resources:
+# - course-id-here
+# - chapter-id-here
+# - upload-id-here
+# - attachment-id-here
+# - user-id
+# - filename.jpg
+
+# Note: Most endpoints require authentication via session cookie.
+# Make sure to sign in first and use the session token in subsequent requests.
