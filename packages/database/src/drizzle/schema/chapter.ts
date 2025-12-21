@@ -2,7 +2,7 @@ import { boolean, index, integer, text, uuid } from "drizzle-orm/pg-core"
 import { schema } from "./schema"
 import { lifecycleDates } from "./utils"
 import { relations, type InferSelectModel } from "drizzle-orm"
-import { courseTable } from "./course"
+import { courseTable, type Course } from "./course"
 
 export const chapterTable = schema.table(
   "chapter",
@@ -24,11 +24,10 @@ export const chapterTable = schema.table(
   (table) => [index().on(table.courseId)]
 )
 
-export const chapterRelations = relations(chapterTable, ({ one, many }) => ({
-  course: one(courseTable, {
-    fields: [chapterTable.courseId],
-    references: [courseTable.id],
-  }),
+export const chapterRelations = relations(chapterTable, ({ one }) => ({
+  course: one(courseTable, { fields: [chapterTable.courseId], references: [courseTable.id] }),
 }))
 
-export type Chapter = InferSelectModel<typeof chapterTable>
+export type Chapter = InferSelectModel<typeof chapterTable> & {
+  course?: Course | null
+}
