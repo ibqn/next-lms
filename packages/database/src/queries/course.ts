@@ -18,6 +18,35 @@ export const createCourse = async ({ title, user }: CreateCourseOptions): Promis
   return { ...course, user } satisfies Course
 }
 
+type GetDashboardCourseOptions = {
+  courseId: Course["id"]
+  userId: User["id"]
+}
+
+export const getDashboardCourseItem = async ({
+  courseId,
+  userId,
+}: GetDashboardCourseOptions): Promise<Course | null> => {
+  const course = await db.query.course.findFirst({
+    where: ({ id, userId: courseUserId }, { eq, and }) => and(eq(id, courseId), eq(courseUserId, userId)),
+    with: {
+      user: { columns: { passwordHash: false } },
+      chapters: {
+        orderBy: (chapters, { asc }) => [asc(chapters.position)],
+      },
+      attachments: true,
+    },
+  })
+
+  if (!course) {
+    return null
+  }
+
+  unset(course, "user.passwordHash")
+
+  return course satisfies Course
+}
+
 type GetCourseOptions = {
   courseId: Course["id"]
   userId: User["id"]
@@ -30,6 +59,7 @@ export const getCourseItem = async ({ courseId, userId }: GetCourseOptions): Pro
       user: { columns: { passwordHash: false } },
       chapters: {
         orderBy: (chapters, { asc }) => [asc(chapters.position)],
+        where: eq(chapterTable.isPublished, true),
       },
       attachments: true,
     },
@@ -67,7 +97,7 @@ export const updateCourse = async ({ id, user: { id: userId }, ...data }: Update
   return { ...course, user } satisfies Course
 }
 
-export const getCourseItemsCount = async () => {
+export const getDashboardCourseItemsCount = async () => {
   const [{ count }] = await db.select({ count: countDistinct(courseTable.id) }).from(courseTable)
 
   return count
@@ -84,7 +114,7 @@ const getSortedByColumn = (sortedBy: SortedBySchema) => {
   }
 }
 
-export const getCourseItems = async (queryParams?: PaginationSchema): Promise<Course[]> => {
+export const getDashboardCourseItems = async (queryParams?: PaginationSchema): Promise<Course[]> => {
   const params = paginationSchema.parse(queryParams ?? {})
 
   const { limit, page, sortedBy, order } = params
@@ -125,7 +155,7 @@ export const deleteCourse = async ({ id: courseId, user }: DeleteCourseOptions):
   return { id: course.id }
 }
 
-export const getExploreCourseItemsCount = async (searchQuery?: CourseQuerySchema) => {
+export const getCourseItemsCount = async (searchQuery?: CourseQuerySchema) => {
   const params = courseQuerySchema.parse(searchQuery ?? {})
 
   const conditions = [eq(courseTable.isPublished, true)]
@@ -146,7 +176,7 @@ export const getExploreCourseItemsCount = async (searchQuery?: CourseQuerySchema
   return count
 }
 
-export const getExploreCourseItems = async (queryParams?: CourseQuerySchema & PaginationSchema): Promise<Course[]> => {
+export const getCourseItems = async (queryParams?: CourseQuerySchema & PaginationSchema): Promise<Course[]> => {
   const params = paginationSchema.and(courseQuerySchema).parse(queryParams ?? {})
 
   const { limit, page, sortedBy, order, category, searchTitle } = params

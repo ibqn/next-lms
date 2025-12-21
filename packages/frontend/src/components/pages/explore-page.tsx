@@ -2,7 +2,7 @@
 
 import { categoryQueryOptions } from "@/api/category"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { Categories } from "../categories"
+import { Categories } from "@/components/categories"
 import { SearchInput } from "@/components/search-input"
 import { ExploreCourseList } from "@/components/explore-course-list"
 

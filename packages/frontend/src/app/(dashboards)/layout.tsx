@@ -1,8 +1,9 @@
 import { Navbar } from "@/components/navbar"
 import { Sidebar } from "@/components/sidebar"
+import type { ReactNode } from "react"
 
 type Props = Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>
 
 export default async function DashboardLayout({ children }: Props) {

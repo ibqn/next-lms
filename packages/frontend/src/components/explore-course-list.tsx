@@ -1,6 +1,6 @@
 "use client"
 
-import { exploreCourseListQueryOptions } from "@/api/course"
+import { courseListQueryOptions } from "@/api/course"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import { CourseCard } from "./course/course-card"
@@ -11,7 +11,7 @@ export const ExploreCourseList = () => {
   const category = searchParams.get("category") ?? undefined
   const searchTitle = searchParams.get("title") ?? undefined
 
-  const { data, isLoading } = useQuery(exploreCourseListQueryOptions({ category, searchTitle }))
+  const { data, isLoading } = useQuery(courseListQueryOptions({ category, searchTitle }))
 
   const { courseItems: courses = [] } = data ?? {}
 

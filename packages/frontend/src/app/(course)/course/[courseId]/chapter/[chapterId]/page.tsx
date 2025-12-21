@@ -72,7 +72,7 @@ export default function ChapterIdPage() {
       }),
     onSuccess: (data) => {
       console.log("Toggled chapter progress:", data)
-      toast.success(`Chapter marked as "completed"}`)
+      toast.success(`Chapter marked as completed`)
 
       if (nextChapterId) {
         router.push(`${nextChapterId}`)

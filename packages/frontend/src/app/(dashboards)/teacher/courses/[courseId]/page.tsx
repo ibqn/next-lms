@@ -1,6 +1,6 @@
 import { categoryQueryOptions } from "@/api/category"
 import { getQueryClient } from "@/lib/query-client"
-import { courseQueryOptions } from "@/api/course"
+import { dashboardCourseQueryOptions } from "@/api/course"
 import { Suspense } from "react"
 import { CoursePage } from "@/components/pages/course-page"
 
@@ -14,13 +14,8 @@ export default async function SingleCoursePage({ params }: Props) {
   const { courseId } = await params
 
   const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(courseQueryOptions({ id: courseId }))
+  await queryClient.prefetchQuery(dashboardCourseQueryOptions({ id: courseId }))
 
-  // const course = queryClient.getQueryData(["course", courseId])
-
-  // if (!course) {
-  //   return notFound()
-  // }
   console.log("courseId:", courseId)
 
   await queryClient.prefetchQuery(categoryQueryOptions())

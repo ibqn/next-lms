@@ -6,7 +6,7 @@ import { queryOptions } from "@tanstack/react-query"
 import type { ParamIdSchema } from "database/src/validators/param"
 
 export const postChapter = async (chapterData: CreateChapterSchema) => {
-  const { data: response } = await axios.post<ApiResponse<Chapter>>("/chapters", chapterData)
+  const { data: response } = await axios.post<ApiResponse<Chapter>>("/chapters/dashboard", chapterData)
 
   if (!response.success) {
     return null
@@ -17,7 +17,7 @@ export const postChapter = async (chapterData: CreateChapterSchema) => {
 }
 
 export const deleteChapter = async (chapterId: string) => {
-  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/chapters/${chapterId}`)
+  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/chapters/dashboard/${chapterId}`)
 
   if (!response.success) {
     return null
@@ -28,7 +28,7 @@ export const deleteChapter = async (chapterId: string) => {
 }
 
 export const postReorderChapters = async (reorderList: ReorderChapterSchema) => {
-  const { data: response } = await axios.post<ApiResponse<{ id: string }[]>>("/chapters/reorder", reorderList)
+  const { data: response } = await axios.post<ApiResponse<{ id: string }[]>>("/chapters/dashboard/reorder", reorderList)
 
   if (!response.success) {
     return null
@@ -37,6 +37,29 @@ export const postReorderChapters = async (reorderList: ReorderChapterSchema) => 
 
   return chapterIds
 }
+
+export const getDashboardChapterItem = async ({ id: chapterId }: ParamIdSchema) => {
+  try {
+    const { data: response } = await axios.get<ApiResponse<Chapter>>(`/chapters/dashboard/${chapterId}`)
+
+    if (!response.success) {
+      return null
+    }
+    const { data: chapter } = response
+
+    return chapter
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const dashboardChapterQueryOptions = (paramId?: ParamIdSchema) =>
+  queryOptions({
+    queryKey: ["dashboard-chapters", paramId?.id ?? null] as const,
+    queryFn: () => (paramId ? getDashboardChapterItem(paramId) : null),
+    enabled: !!paramId?.id,
+  })
 
 export const getChapterItem = async ({ id: chapterId }: ParamIdSchema) => {
   try {
@@ -61,7 +84,7 @@ export const chapterQueryOptions = (paramId?: ParamIdSchema) =>
   })
 
 export const patchChapter = async (chapterId: string, chapterData: UpdateChapterSchema) => {
-  const { data: response } = await axios.patch<ApiResponse<Chapter>>(`/chapters/${chapterId}`, chapterData)
+  const { data: response } = await axios.patch<ApiResponse<Chapter>>(`/chapters/dashboard/${chapterId}`, chapterData)
 
   if (!response.success) {
     return null

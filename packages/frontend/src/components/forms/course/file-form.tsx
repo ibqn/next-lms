@@ -16,7 +16,7 @@ import { attachmentSchema, AttachmentSchema } from "@/lib/validators/course"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import Link from "next/link"
 import { deleteAttachment, postAttachment } from "@/api/attachment"
-import { courseQueryOptions } from "@/api/course"
+import { dashboardCourseQueryOptions } from "@/api/course"
 import { ConfirmModal } from "@/components/modals/confirm-modal"
 
 type Props = {
@@ -52,7 +52,7 @@ export const FileForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },
@@ -94,7 +94,7 @@ export const FileForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },

@@ -11,7 +11,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } 
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { courseQueryOptions, patchCourse } from "@/api/course"
+import { dashboardCourseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 
 type Props = {
@@ -56,7 +56,7 @@ export const TitleForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },

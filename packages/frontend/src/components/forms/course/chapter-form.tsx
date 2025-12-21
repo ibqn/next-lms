@@ -16,7 +16,7 @@ import type { TitleSchema } from "@/lib/validators/course"
 import { Input } from "@/components/ui/input"
 import { postChapter, postReorderChapters } from "@/api/chapter"
 import { ChapterList } from "@/components/chapter-list"
-import { courseQueryOptions } from "@/api/course"
+import { dashboardCourseQueryOptions } from "@/api/course"
 
 type Props = {
   initialData: Course
@@ -56,7 +56,7 @@ export const ChapterForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },
@@ -77,7 +77,7 @@ export const ChapterForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },

@@ -10,8 +10,9 @@ import {
   getCourseItem,
   getCourseItems,
   getCourseItemsCount,
-  getExploreCourseItems,
-  getExploreCourseItemsCount,
+  getDashboardCourseItem,
+  getDashboardCourseItems,
+  getDashboardCourseItemsCount,
   updateCourse,
 } from "database/src/queries/course"
 import { createCourseSchema, updateCourseSchema } from "database/src/validators/course"
@@ -23,7 +24,7 @@ import { courseQuerySchema } from "database/src/validators/course-query"
 import { getCategoryId } from "database/src/queries/category"
 import { getCourseProgress, type CourseProgress } from "database/src/queries/user-progress"
 
-export const courseRoute = new Hono<ExtEnv>()
+const courseDashboardRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User
@@ -49,8 +50,8 @@ export const courseRoute = new Hono<ExtEnv>()
     const query = c.req.valid("query")
     const { page, limit } = query
 
-    const courseCount = await getCourseItemsCount()
-    const courseItems = await getCourseItems(query)
+    const courseCount = await getDashboardCourseItemsCount()
+    const courseItems = await getDashboardCourseItems(query)
 
     return c.json<PaginatedSuccessResponse<Course[]>>({
       success: true,
@@ -63,7 +64,37 @@ export const courseRoute = new Hono<ExtEnv>()
       },
     })
   })
-  .get("/explore", signedIn, zValidator("query", paginationSchema.and(courseQuerySchema)), async (c) => {
+  .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const { id: courseId } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const courseItem = await getDashboardCourseItem({ courseId, userId: user.id })
+
+    if (!courseItem) {
+      return c.json<ErrorResponse>({ success: false, error: "Course not found" }, 404)
+    }
+
+    return c.json<SuccessResponse<Course>>({
+      success: true,
+      data: courseItem,
+      message: "Course retrieved",
+    })
+  })
+  .delete("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
+    const user = c.get("user") as User
+    const { id } = c.req.valid("param")
+
+    const response = await deleteCourse({ id, user })
+
+    if (!response?.id) {
+      throw new HTTPException(404, { message: "Could not delete course" })
+    }
+
+    return c.json<SuccessResponse<{ id: string }>>({ success: true, message: "Course deleted", data: response }, 200)
+  })
+
+const courseExploreRoute = new Hono<ExtEnv>()
+  .get("/", signedIn, zValidator("query", paginationSchema.and(courseQuerySchema)), async (c) => {
     const query = c.req.valid("query")
     const { page, limit, category, searchTitle } = query
 
@@ -72,8 +103,8 @@ export const courseRoute = new Hono<ExtEnv>()
       categoryId = await getCategoryId(category)
     }
 
-    const courseCount = await getExploreCourseItemsCount({ category: categoryId, searchTitle })
-    const courseItems = await getExploreCourseItems({ ...query, category: categoryId })
+    const courseCount = await getCourseItemsCount({ category: categoryId, searchTitle })
+    const courseItems = await getCourseItems({ ...query, category: categoryId })
 
     return c.json<PaginatedSuccessResponse<Course[]>>({
       success: true,
@@ -110,15 +141,5 @@ export const courseRoute = new Hono<ExtEnv>()
 
     return c.json<SuccessResponse<CourseProgress>>(response("Course progress retrieved", userProgress))
   })
-  .delete("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
-    const user = c.get("user") as User
-    const { id } = c.req.valid("param")
 
-    const response = await deleteCourse({ id, user })
-
-    if (!response?.id) {
-      throw new HTTPException(404, { message: "Could not delete course" })
-    }
-
-    return c.json<SuccessResponse<{ id: string }>>({ success: true, message: "Course deleted", data: response }, 200)
-  })
+export const courseRoute = new Hono<ExtEnv>().route("/dashboard", courseDashboardRoute).route("/", courseExploreRoute)

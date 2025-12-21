@@ -18,7 +18,7 @@ import { paramIdSchema } from "database/src/validators/param"
 import { toggleChapterProgress } from "database/src/queries/user-progress"
 import type { UserProgress } from "database/src/drizzle/schema/user-progress"
 
-export const chapterRoute = new Hono<ExtEnv>()
+const chapterDashboardRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createChapterSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User
@@ -47,26 +47,6 @@ export const chapterRoute = new Hono<ExtEnv>()
       data: reorderedChapters,
     })
   })
-  .patch(
-    "/:id/progress",
-    signedIn,
-    zValidator("param", paramIdSchema),
-    zValidator("json", progressChapterSchema),
-    async (c) => {
-      const { id: chapterId } = c.req.valid("param")
-      const user = c.get("user") as User
-
-      const inputData = c.req.valid("json")
-
-      const toggleUserProgress = await toggleChapterProgress({ chapterId, userId: user.id, ...inputData })
-
-      if (!toggleUserProgress) {
-        throw new HTTPException(404, { message: "Could not toggle chapter progress" })
-      }
-
-      return c.json<SuccessResponse<UserProgress>>(response("Chapter progress toggled", toggleUserProgress), 200)
-    }
-  )
   .get("/:id", zValidator("param", paramIdSchema), signedIn, async (c) => {
     const { id } = c.req.valid("param")
     const user = c.get("user") as User
@@ -108,3 +88,45 @@ export const chapterRoute = new Hono<ExtEnv>()
 
     return c.json<SuccessResponse<{ id: string }>>({ success: true, message: "Chapter deleted", data: response }, 200)
   })
+
+const chapterExploreRoute = new Hono<ExtEnv>()
+  .patch(
+    "/:id/progress",
+    signedIn,
+    zValidator("param", paramIdSchema),
+    zValidator("json", progressChapterSchema),
+    async (c) => {
+      const { id: chapterId } = c.req.valid("param")
+      const user = c.get("user") as User
+
+      const inputData = c.req.valid("json")
+
+      const toggleUserProgress = await toggleChapterProgress({ chapterId, userId: user.id, ...inputData })
+
+      if (!toggleUserProgress) {
+        throw new HTTPException(404, { message: "Could not toggle chapter progress" })
+      }
+
+      return c.json<SuccessResponse<UserProgress>>(response("Chapter progress toggled", toggleUserProgress), 200)
+    }
+  )
+  .get("/:id", zValidator("param", paramIdSchema), signedIn, async (c) => {
+    const { id } = c.req.valid("param")
+    const user = c.get("user") as User
+
+    const chapter = await getChapter({ id, user })
+
+    if (!chapter) {
+      throw new HTTPException(404, { message: "Chapter not found" })
+    }
+
+    return c.json<SuccessResponse<Chapter>>({
+      success: true,
+      message: "Chapter found",
+      data: chapter,
+    })
+  })
+
+export const chapterRoute = new Hono<ExtEnv>()
+  .route("/dashboard", chapterDashboardRoute)
+  .route("/", chapterExploreRoute)

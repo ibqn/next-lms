@@ -9,12 +9,12 @@ import { accessSchema, AccessSchema } from "@/lib/validators/chapter"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { chapterQueryOptions, patchChapter } from "@/api/chapter"
+import { dashboardChapterQueryOptions, patchChapter } from "@/api/chapter"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
-import { courseQueryOptions } from "@/api/course"
+import { dashboardCourseQueryOptions } from "@/api/course"
 
 type Props = {
   initialData: Chapter
@@ -58,10 +58,10 @@ export const AccessForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: chapterQueryOptions({ id: chapterId }).queryKey,
+        queryKey: dashboardChapterQueryOptions({ id: chapterId }).queryKey,
       })
       queryClient.invalidateQueries({
-        queryKey: courseQueryOptions({ id: courseId }).queryKey,
+        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
       })
     },
   })
