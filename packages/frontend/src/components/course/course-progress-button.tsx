@@ -4,17 +4,21 @@ import { patchUserChapterProgress } from "@/api/progress"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CheckCircleIcon, XCircleIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 type CourseProgressButtonProps = {
   isCompleted: boolean
+  nextChapterId: string | null
   chapterId: string
 }
 
-export const CourseProgressButton = ({ isCompleted, chapterId }: CourseProgressButtonProps) => {
+export const CourseProgressButton = ({ isCompleted, chapterId, nextChapterId }: CourseProgressButtonProps) => {
   const Icon = isCompleted ? XCircleIcon : CheckCircleIcon
 
   const queryClient = useQueryClient()
+
+  const router = useRouter()
 
   const { mutate: toggleChapterProgress, isPending } = useMutation({
     mutationFn: async (isCompleted: boolean) =>
@@ -25,6 +29,10 @@ export const CourseProgressButton = ({ isCompleted, chapterId }: CourseProgressB
     onSuccess: (data) => {
       console.log("Toggled chapter progress:", data)
       toast.success(`Chapter marked as ${isCompleted ? "not completed" : "completed"}`)
+
+      if (!isCompleted && nextChapterId) {
+        router.push(`${nextChapterId}`)
+      }
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["progress"] })

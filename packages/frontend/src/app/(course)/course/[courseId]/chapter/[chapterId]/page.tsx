@@ -76,7 +76,7 @@ export default function ChapterIdPage() {
           </div>
 
           {purchase ? (
-            <CourseProgressButton chapterId={chapterId} isCompleted={isCompleted} />
+            <CourseProgressButton chapterId={chapterId} nextChapterId={nextChapterId} isCompleted={isCompleted} />
           ) : (
             <CourseEnrollButton courseId={course?.id} price={course?.price} />
           )}
