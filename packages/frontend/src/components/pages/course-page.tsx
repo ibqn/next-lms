@@ -1,6 +1,6 @@
 "use client"
 
-import { dashboardCourseQueryOptions } from "@/api/course"
+import { editorCourseQueryOptions } from "@/api/course"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { notFound } from "next/navigation"
 import { IconBadge } from "@/components/icon-badge"
@@ -20,7 +20,7 @@ type Props = {
 }
 
 export const CoursePage = ({ courseId }: Props) => {
-  const { data: course } = useSuspenseQuery(dashboardCourseQueryOptions({ id: courseId }))
+  const { data: course } = useSuspenseQuery(editorCourseQueryOptions({ id: courseId }))
 
   if (!course) {
     notFound()

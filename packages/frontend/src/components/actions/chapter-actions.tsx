@@ -7,9 +7,9 @@ import { ConfirmModal } from "@/components/modals/confirm-modal"
 import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ParamIdSchema } from "database/src/validators/param"
-import { dashboardChapterQueryOptions, deleteChapter, patchChapter } from "@/api/chapter"
+import { editorChapterQueryOptions, deleteChapter, patchChapter } from "@/api/chapter"
 import { toast } from "sonner"
-import { dashboardCourseQueryOptions } from "@/api/course"
+import { editorCourseQueryOptions } from "@/api/course"
 import type { PublishSchema } from "@/lib/validators/chapter"
 
 type ChapterActionsProps = {
@@ -42,7 +42,7 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: dashboardCourseQueryOptions({ id: chapter.courseId }).queryKey,
+        queryKey: editorCourseQueryOptions({ id: chapter.courseId }).queryKey,
       })
     },
   })
@@ -64,10 +64,10 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: dashboardChapterQueryOptions({ id: chapter.id }).queryKey,
+        queryKey: editorChapterQueryOptions({ id: chapter.id }).queryKey,
       })
       queryClient.invalidateQueries({
-        queryKey: dashboardCourseQueryOptions({ id: chapter.courseId }).queryKey,
+        queryKey: editorCourseQueryOptions({ id: chapter.courseId }).queryKey,
       })
       router.refresh()
     },

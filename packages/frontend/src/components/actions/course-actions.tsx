@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ParamIdSchema } from "database/src/validators/param"
 import { toast } from "sonner"
-import { dashboardCourseListQueryOptions, courseQueryOptions, deleteCourse, patchCourse } from "@/api/course"
+import { editorCourseListQueryOptions, courseQueryOptions, deleteCourse, patchCourse } from "@/api/course"
 import type { PublishSchema } from "@/lib/validators/chapter"
 import type { Course } from "database/src/drizzle/schema/course"
 
@@ -41,7 +41,7 @@ export const CourseActions = ({ course, disabled }: CourseActionsProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: dashboardCourseListQueryOptions().queryKey,
+        queryKey: editorCourseListQueryOptions().queryKey,
       })
     },
   })
@@ -66,7 +66,7 @@ export const CourseActions = ({ course, disabled }: CourseActionsProps) => {
         queryKey: courseQueryOptions({ id: course.id }).queryKey,
       })
       queryClient.invalidateQueries({
-        queryKey: dashboardCourseListQueryOptions().queryKey,
+        queryKey: editorCourseListQueryOptions().queryKey,
       })
       router.refresh()
     },

@@ -18,15 +18,12 @@ export const createCourse = async ({ title, user }: CreateCourseOptions): Promis
   return { ...course, user } satisfies Course
 }
 
-type GetDashboardCourseOptions = {
+type GetEditorCourseOptions = {
   courseId: Course["id"]
   userId: User["id"]
 }
 
-export const getDashboardCourseItem = async ({
-  courseId,
-  userId,
-}: GetDashboardCourseOptions): Promise<Course | null> => {
+export const getEditorCourseItem = async ({ courseId, userId }: GetEditorCourseOptions): Promise<Course | null> => {
   const course = await db.query.course.findFirst({
     where: ({ id, userId: courseUserId }, { eq, and }) => and(eq(id, courseId), eq(courseUserId, userId)),
     with: {
@@ -97,7 +94,7 @@ export const updateCourse = async ({ id, user: { id: userId }, ...data }: Update
   return { ...course, user } satisfies Course
 }
 
-export const getDashboardCourseItemsCount = async () => {
+export const getEditorCourseItemsCount = async () => {
   const [{ count }] = await db.select({ count: countDistinct(courseTable.id) }).from(courseTable)
 
   return count
@@ -114,7 +111,7 @@ const getSortedByColumn = (sortedBy: SortedBySchema) => {
   }
 }
 
-export const getDashboardCourseItems = async (queryParams?: PaginationSchema): Promise<Course[]> => {
+export const getEditorCourseItems = async (queryParams?: PaginationSchema): Promise<Course[]> => {
   const params = paginationSchema.parse(queryParams ?? {})
 
   const { limit, page, sortedBy, order } = params

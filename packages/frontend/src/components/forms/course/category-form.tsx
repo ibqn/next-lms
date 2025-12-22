@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
-import { dashboardCourseQueryOptions, patchCourse } from "@/api/course"
+import { editorCourseQueryOptions, patchCourse } from "@/api/course"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Combobox } from "@/components/combobox"
@@ -65,7 +65,7 @@ export const CategoryForm = ({ initialData }: Props) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: dashboardCourseQueryOptions({ id: courseId }).queryKey,
+        queryKey: editorCourseQueryOptions({ id: courseId }).queryKey,
       })
       router.refresh()
     },

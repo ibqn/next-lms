@@ -12,7 +12,7 @@ import { toast } from "sonner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import type { Chapter } from "database/src/drizzle/schema/chapter"
-import { dashboardChapterQueryOptions, patchChapter } from "@/api/chapter"
+import { editorChapterQueryOptions, patchChapter } from "@/api/chapter"
 import { isAxiosError } from "axios"
 import { ErrorResponse } from "database/src/types"
 
@@ -44,7 +44,7 @@ export const TitleForm = ({ initialData }: Props) => {
     mutationFn: (payload: TitleSchema) => patchChapter(chapterId, payload),
     onSettled: async () => {
       await queryClient.invalidateQueries({
-        queryKey: dashboardChapterQueryOptions({ id: chapterId }).queryKey,
+        queryKey: editorChapterQueryOptions({ id: chapterId }).queryKey,
       })
       router.refresh()
     },

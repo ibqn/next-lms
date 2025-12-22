@@ -95,14 +95,11 @@ export const reorderChapters = async ({ reorderList, user }: ReorderChapterOptio
   return trxResult
 }
 
-export type GetDashboardChapterOptions = ParamIdSchema & {
+export type GetEditorChapterOptions = ParamIdSchema & {
   userId: User["id"]
 }
 
-export const getDashboardChapter = async ({
-  id: chapterId,
-  userId,
-}: GetDashboardChapterOptions): Promise<Chapter | null> => {
+export const getEditorChapter = async ({ id: chapterId, userId }: GetEditorChapterOptions): Promise<Chapter | null> => {
   const [chapter] = await db.select().from(chapterTable).where(eq(chapterTable.id, chapterId))
 
   if (!chapter) {

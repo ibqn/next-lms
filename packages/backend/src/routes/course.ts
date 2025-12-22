@@ -10,9 +10,9 @@ import {
   getCourseItem,
   getCourseItems,
   getCourseItemsCount,
-  getDashboardCourseItem,
-  getDashboardCourseItems,
-  getDashboardCourseItemsCount,
+  getEditorCourseItem,
+  getEditorCourseItems,
+  getEditorCourseItemsCount,
   updateCourse,
 } from "database/src/queries/course"
 import { createCourseSchema, updateCourseSchema } from "database/src/validators/course"
@@ -23,8 +23,9 @@ import { paginationSchema } from "database/src/validators/pagination"
 import { courseQuerySchema } from "database/src/validators/course-query"
 import { getCategoryId } from "database/src/queries/category"
 import { getCourseProgress, type CourseProgress } from "database/src/queries/user-progress"
+import { getDashboardCourses, type DashboardCourses } from "database/src/queries/dashboard"
 
-const courseDashboardRoute = new Hono<ExtEnv>()
+const courseEditorRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User
@@ -50,8 +51,8 @@ const courseDashboardRoute = new Hono<ExtEnv>()
     const query = c.req.valid("query")
     const { page, limit } = query
 
-    const courseCount = await getDashboardCourseItemsCount()
-    const courseItems = await getDashboardCourseItems(query)
+    const courseCount = await getEditorCourseItemsCount()
+    const courseItems = await getEditorCourseItems(query)
 
     return c.json<PaginatedSuccessResponse<Course[]>>({
       success: true,
@@ -68,7 +69,7 @@ const courseDashboardRoute = new Hono<ExtEnv>()
     const { id: courseId } = c.req.valid("param")
     const user = c.get("user") as User
 
-    const courseItem = await getDashboardCourseItem({ courseId, userId: user.id })
+    const courseItem = await getEditorCourseItem({ courseId, userId: user.id })
 
     if (!courseItem) {
       return c.json<ErrorResponse>({ success: false, error: "Course not found" }, 404)
@@ -141,5 +142,12 @@ const courseExploreRoute = new Hono<ExtEnv>()
 
     return c.json<SuccessResponse<CourseProgress>>(response("Course progress retrieved", userProgress))
   })
+  .get("/dashboard", signedIn, async (c) => {
+    const user = c.get("user") as User
 
-export const courseRoute = new Hono<ExtEnv>().route("/dashboard", courseDashboardRoute).route("/", courseExploreRoute)
+    const dashboardCourses = await getDashboardCourses({ userId: user.id })
+
+    return c.json<SuccessResponse<DashboardCourses>>(response("Dashboard courses retrieved", dashboardCourses))
+  })
+
+export const courseRoute = new Hono<ExtEnv>().route("/editor", courseEditorRoute).route("/", courseExploreRoute)

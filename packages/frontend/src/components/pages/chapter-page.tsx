@@ -1,6 +1,6 @@
 "use client"
 
-import { dashboardChapterQueryOptions } from "@/api/chapter"
+import { editorChapterQueryOptions } from "@/api/chapter"
 import { AccessForm } from "@/components/forms/chapter/access-form"
 import { DescriptionForm } from "@/components/forms/chapter/description-form"
 import { TitleForm } from "@/components/forms/chapter/title-form"
@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const ChapterPage = ({ chapterId }: Props) => {
-  const { data: chapter } = useSuspenseQuery(dashboardChapterQueryOptions({ id: chapterId }))
+  const { data: chapter } = useSuspenseQuery(editorChapterQueryOptions({ id: chapterId }))
 
   if (chapter === null) {
     return notFound()

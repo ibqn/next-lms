@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 import { useDropzone } from "react-dropzone"
 import { getUrl, uploadFiles, UploadSuccess } from "@/lib/upload-files"
 import { deleteUpload } from "@/api/upload"
-import { dashboardChapterQueryOptions, patchChapter } from "@/api/chapter"
+import { editorChapterQueryOptions, patchChapter } from "@/api/chapter"
 import { VideoPlayer } from "@/components/video"
 
 type Props = {
@@ -60,7 +60,7 @@ export const VideoForm = ({ initialData }: Props) => {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({
-        queryKey: dashboardChapterQueryOptions({ id: chapterId }).queryKey,
+        queryKey: editorChapterQueryOptions({ id: chapterId }).queryKey,
       })
       router.refresh()
     },

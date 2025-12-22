@@ -8,7 +8,7 @@ import {
   reorderChapters,
   getChapter,
   deleteChapter,
-  getDashboardChapter,
+  getEditorChapter,
 } from "database/src/queries/chapter"
 import { updateChapter } from "database/src/queries/chapter"
 import {
@@ -24,7 +24,7 @@ import { paramIdSchema } from "database/src/validators/param"
 import { toggleChapterProgress } from "database/src/queries/user-progress"
 import type { UserProgress } from "database/src/drizzle/schema/user-progress"
 
-const chapterDashboardRoute = new Hono<ExtEnv>()
+const chapterEditorRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createChapterSchema), async (c) => {
     const inputData = c.req.valid("json")
     const user = c.get("user") as User
@@ -57,7 +57,7 @@ const chapterDashboardRoute = new Hono<ExtEnv>()
     const { id } = c.req.valid("param")
     const user = c.get("user") as User
 
-    const chapter = await getDashboardChapter({ id, userId: user.id })
+    const chapter = await getEditorChapter({ id, userId: user.id })
 
     if (!chapter) {
       throw new HTTPException(404, { message: "Chapter not found" })
@@ -133,6 +133,4 @@ const chapterExploreRoute = new Hono<ExtEnv>()
     })
   })
 
-export const chapterRoute = new Hono<ExtEnv>()
-  .route("/dashboard", chapterDashboardRoute)
-  .route("/", chapterExploreRoute)
+export const chapterRoute = new Hono<ExtEnv>().route("/editor", chapterEditorRoute).route("/", chapterExploreRoute)

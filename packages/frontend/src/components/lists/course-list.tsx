@@ -5,7 +5,7 @@ import { courseColumns } from "@/components/columns/course-columns"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { PaginationState } from "@tanstack/react-table"
 import { useState } from "react"
-import { dashboardCourseListQueryOptions } from "@/api/course"
+import { editorCourseListQueryOptions } from "@/api/course"
 
 export const CourseList = () => {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -14,7 +14,7 @@ export const CourseList = () => {
   })
 
   const { data } = useSuspenseQuery(
-    dashboardCourseListQueryOptions({ page: pagination.pageIndex + 1, limit: pagination.pageSize })
+    editorCourseListQueryOptions({ page: pagination.pageIndex + 1, limit: pagination.pageSize })
   )
   const { courseItems, pagination: paginationResult } = data
 

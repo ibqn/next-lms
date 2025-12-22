@@ -8,17 +8,17 @@ import type { ParamIdSchema } from "database/src/validators/param"
 import { courseQuerySchema, type CourseQuerySchema } from "database/src/validators/course-query"
 
 export const postCourse = async (courseData: CreateCourseSchema) => {
-  const response = await axios.post<SuccessResponse<Course>>("/courses/dashboard", courseData)
+  const response = await axios.post<SuccessResponse<Course>>("/courses/editor", courseData)
   return response.data
 }
 
 export const patchCourse = async (courseId: string, courseData: UpdateCourseSchema) => {
-  const response = await axios.patch<SuccessResponse<Course>>(`/courses/dashboard/${courseId}`, courseData)
+  const response = await axios.patch<SuccessResponse<Course>>(`/courses/editor/${courseId}`, courseData)
   return response.data
 }
 
 export const deleteCourse = async (courseId: string) => {
-  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/courses/dashboard/${courseId}`)
+  const { data: response } = await axios.delete<ApiResponse<{ id: string | null }>>(`/courses/editor/${courseId}`)
 
   if (!response.success) {
     return null
@@ -28,27 +28,27 @@ export const deleteCourse = async (courseId: string) => {
   return deletedChapter
 }
 
-export const getDashboardCourseItems = async (params?: PaginationSchema) => {
-  const { data: response } = await axios.get<PaginatedSuccessResponse<Course[]>>("/courses/dashboard", { params })
+export const getEditorCourseItems = async (params?: PaginationSchema) => {
+  const { data: response } = await axios.get<PaginatedSuccessResponse<Course[]>>("/courses/editor", { params })
   const { data: courseItems, pagination } = response
   return { courseItems, pagination }
 }
 
-export type GetDashboardCourseItems = Awaited<ReturnType<typeof getDashboardCourseItems>>
+export type GetEditorCourseItems = Awaited<ReturnType<typeof getEditorCourseItems>>
 
-export const dashboardCourseListQueryOptions = (paramsInput?: Partial<PaginationSchema>) => {
+export const editorCourseListQueryOptions = (paramsInput?: Partial<PaginationSchema>) => {
   const params = paginationSchema.parse(paramsInput ?? {})
 
   return queryOptions({
-    queryKey: ["dashboard-course-list", params] as const,
-    queryFn: () => getDashboardCourseItems(params),
+    queryKey: ["editor-course-list", params] as const,
+    queryFn: () => getEditorCourseItems(params),
     placeholderData: keepPreviousData,
   })
 }
 
-export const getDashboardCourseItem = async ({ id }: ParamIdSchema) => {
+export const getEditorCourseItem = async ({ id }: ParamIdSchema) => {
   try {
-    const { data: response } = await axios.get<ApiResponse<Course>>(`/courses/dashboard/${id}`)
+    const { data: response } = await axios.get<ApiResponse<Course>>(`/courses/editor/${id}`)
     if (!response.success) {
       return null
     }
@@ -59,10 +59,10 @@ export const getDashboardCourseItem = async ({ id }: ParamIdSchema) => {
   }
 }
 
-export const dashboardCourseQueryOptions = (paramId?: ParamIdSchema) => {
+export const editorCourseQueryOptions = (paramId?: ParamIdSchema) => {
   return queryOptions({
-    queryKey: ["dashboard-course", paramId?.id ?? null] as const,
-    queryFn: () => (paramId ? getDashboardCourseItem(paramId) : null),
+    queryKey: ["editor-course", paramId?.id ?? null] as const,
+    queryFn: () => (paramId ? getEditorCourseItem(paramId) : null),
     enabled: !!paramId?.id,
   })
 }
