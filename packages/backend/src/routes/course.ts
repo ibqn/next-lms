@@ -24,6 +24,7 @@ import { courseQuerySchema } from "database/src/validators/course-query"
 import { getCategoryId } from "database/src/queries/category"
 import { getCourseProgress, type CourseProgress } from "database/src/queries/user-progress"
 import { getDashboardCourses, type DashboardCourses } from "database/src/queries/dashboard"
+import { getAnalyticsData, type AnalyticsData } from "database/src/queries/analytics"
 
 const courseEditorRoute = new Hono<ExtEnv>()
   .post("/", signedIn, zValidator("json", createCourseSchema), async (c) => {
@@ -34,18 +35,12 @@ const courseEditorRoute = new Hono<ExtEnv>()
 
     return c.json<SuccessResponse<Course>>({ success: true, message: "Course created", data: course }, 201)
   })
-  .patch("/:id", signedIn, zValidator("param", paramIdSchema), zValidator("json", updateCourseSchema), async (c) => {
-    const { id } = c.req.valid("param")
-    const inputData = c.req.valid("json")
+  .get("/analytics", signedIn, async (c) => {
     const user = c.get("user") as User
 
-    const course = await updateCourse({ ...inputData, id, user })
+    const analyticData = await getAnalyticsData({ userId: user.id })
 
-    if (!course) {
-      throw new HTTPException(404, { message: "Course not found" })
-    }
-
-    return c.json<SuccessResponse<Course>>({ success: true, message: "Course updated", data: course }, 200)
+    return c.json<SuccessResponse<AnalyticsData>>(response("Analytics endpoint", analyticData), 200)
   })
   .get("/", signedIn, zValidator("query", paginationSchema), async (c) => {
     const query = c.req.valid("query")
@@ -64,6 +59,19 @@ const courseEditorRoute = new Hono<ExtEnv>()
         totalItems: courseCount,
       },
     })
+  })
+  .patch("/:id", signedIn, zValidator("param", paramIdSchema), zValidator("json", updateCourseSchema), async (c) => {
+    const { id } = c.req.valid("param")
+    const inputData = c.req.valid("json")
+    const user = c.get("user") as User
+
+    const course = await updateCourse({ ...inputData, id, user })
+
+    if (!course) {
+      throw new HTTPException(404, { message: "Course not found" })
+    }
+
+    return c.json<SuccessResponse<Course>>({ success: true, message: "Course updated", data: course }, 200)
   })
   .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const { id: courseId } = c.req.valid("param")
