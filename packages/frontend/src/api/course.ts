@@ -7,6 +7,7 @@ import { keepPreviousData, queryOptions } from "@tanstack/react-query"
 import type { ParamIdSchema } from "database/src/validators/param"
 import { courseQuerySchema, type CourseQuerySchema } from "database/src/validators/course-query"
 import type { DashboardCourses } from "database/src/queries/dashboard"
+import type { AnalyticsData } from "database/src/queries/analytics"
 
 export const postCourse = async (courseData: CreateCourseSchema) => {
   const response = await axios.post<SuccessResponse<Course>>("/courses/editor", courseData)
@@ -123,5 +124,23 @@ export const dashboardCourseListQueryOptions = () => {
   return queryOptions({
     queryKey: ["dashboard-course-list"] as const,
     queryFn: getDashboardCourses,
+  })
+}
+
+export const getEditorAnalytics = async () => {
+  const { data: response } = await axios.get<SuccessResponse<AnalyticsData>>("/courses/editor/analytics")
+
+  if (!response.success) {
+    return null
+  }
+  const { data: analytics } = response
+
+  return analytics
+}
+
+export const editorAnalyticsQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["editor-analytics"] as const,
+    queryFn: getEditorAnalytics,
   })
 }
