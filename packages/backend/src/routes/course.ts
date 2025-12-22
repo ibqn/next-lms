@@ -118,6 +118,17 @@ const courseExploreRoute = new Hono<ExtEnv>()
       },
     })
   })
+  .get("/dashboard", signedIn, async (c) => {
+    const user = c.get("user") as User
+
+    console.log("Fetching dashboard courses for user:", user.id)
+
+    const dashboardCourses = await getDashboardCourses({ userId: user.id })
+
+    console.log("Dashboard courses:", dashboardCourses)
+
+    return c.json<SuccessResponse<DashboardCourses>>(response("Dashboard courses retrieved", dashboardCourses))
+  })
   .get("/:id", signedIn, zValidator("param", paramIdSchema), async (c) => {
     const { id: courseId } = c.req.valid("param")
     const user = c.get("user") as User
@@ -141,13 +152,6 @@ const courseExploreRoute = new Hono<ExtEnv>()
     const userProgress = await getCourseProgress({ courseId, userId: user.id })
 
     return c.json<SuccessResponse<CourseProgress>>(response("Course progress retrieved", userProgress))
-  })
-  .get("/dashboard", signedIn, async (c) => {
-    const user = c.get("user") as User
-
-    const dashboardCourses = await getDashboardCourses({ userId: user.id })
-
-    return c.json<SuccessResponse<DashboardCourses>>(response("Dashboard courses retrieved", dashboardCourses))
   })
 
 export const courseRoute = new Hono<ExtEnv>().route("/editor", courseEditorRoute).route("/", courseExploreRoute)

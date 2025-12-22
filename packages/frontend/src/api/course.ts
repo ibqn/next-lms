@@ -6,6 +6,7 @@ import { paginationSchema, type PaginationSchema } from "database/src/validators
 import { keepPreviousData, queryOptions } from "@tanstack/react-query"
 import type { ParamIdSchema } from "database/src/validators/param"
 import { courseQuerySchema, type CourseQuerySchema } from "database/src/validators/course-query"
+import type { DashboardCourses } from "database/src/queries/dashboard"
 
 export const postCourse = async (courseData: CreateCourseSchema) => {
   const response = await axios.post<SuccessResponse<Course>>("/courses/editor", courseData)
@@ -103,5 +104,24 @@ export const courseListQueryOptions = (paramsInput?: Partial<PaginationSchema & 
     queryKey: ["course-list", params] as const,
     queryFn: () => getCourseItems(params),
     placeholderData: keepPreviousData,
+  })
+}
+
+export const getDashboardCourses = async () => {
+  const { data: response } = await axios.get<SuccessResponse<DashboardCourses>>("/courses/dashboard")
+
+  if (!response.success) {
+    return null
+  }
+
+  const { data: dashboardCourses } = response
+
+  return dashboardCourses
+}
+
+export const dashboardCourseListQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["dashboard-course-list"] as const,
+    queryFn: getDashboardCourses,
   })
 }
