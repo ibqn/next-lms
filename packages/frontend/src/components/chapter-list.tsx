@@ -41,7 +41,7 @@ export const ChapterList = (props: Props) => {
 
   const router = useRouter()
   const onEdit = (chapterId: string) => {
-    router.push(`/teacher/courses/${chapters.at(0)?.courseId}/chapters/${chapterId}`)
+    router.push(`/editor/courses/${chapters.at(0)?.courseId}/chapters/${chapterId}`)
   }
 
   return (

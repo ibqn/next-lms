@@ -23,7 +23,7 @@ export const courseColumns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const course = row.original
       const title = (row.getValue("title") as string) ?? ""
-      return <Link href={`/teacher/courses/${course.id}`}>{title}</Link>
+      return <Link href={`/editor/courses/${course.id}`}>{title}</Link>
     },
   },
   {
@@ -77,7 +77,7 @@ export const courseColumns: ColumnDef<Course>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href={`/teacher/courses/${course.id}/`}>
+              <Link href={`/editor/courses/${course.id}/`}>
                 <PencilIcon className="mr-2 size-4" />
                 Edit
               </Link>

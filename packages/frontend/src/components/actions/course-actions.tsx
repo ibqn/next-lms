@@ -32,7 +32,7 @@ export const CourseActions = ({ course, disabled }: CourseActionsProps) => {
         description: `The course was deleted successfully`,
       })
 
-      router.push(`/teacher/courses`)
+      router.push(`/editor/courses`)
     },
     onError: () => {
       toast.error("Update course error", {

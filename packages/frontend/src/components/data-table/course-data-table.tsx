@@ -68,7 +68,7 @@ export function CourseDataTable<TData, TValue>({
           className="max-w-sm"
         />
 
-        <Button onClick={() => router.push(`/teacher/create`)}>
+        <Button onClick={() => router.push(`/editor/create`)}>
           <PlusCircleIcon className="size-4" />
           New Course
         </Button>

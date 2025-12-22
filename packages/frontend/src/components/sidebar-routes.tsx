@@ -30,12 +30,12 @@ const teacherRoutes: RouteItem[] = [
   {
     icon: <List />,
     label: "Courses",
-    href: "/teacher/courses",
+    href: "/editor/courses",
   },
   {
     icon: <BarChart />,
     label: "Analytics",
-    href: "/teacher/analytics",
+    href: "/editor/analytics",
   },
 ]
 
@@ -44,7 +44,7 @@ export const SidebarRoutes = () => {
 
   const pathname = usePathname()
 
-  if (pathname.startsWith("/teacher")) {
+  if (pathname.startsWith("/editor")) {
     routes = guestRoutes.concat(teacherRoutes)
   }
 

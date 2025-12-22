@@ -40,7 +40,7 @@ export const ChapterPage = ({ chapterId }: Props) => {
 
       <div className="flex grow flex-col p-6">
         <div className="mb-4 flex">
-          <Link href={`/teacher/courses/${chapter.courseId}`} className="flex items-center text-sm hover:opacity-75">
+          <Link href={`/editor/courses/${chapter.courseId}`} className="flex items-center text-sm hover:opacity-75">
             <ArrowLeftIcon className="mr-2 size-4" />
             Back to course setup
           </Link>

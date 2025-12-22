@@ -33,7 +33,7 @@ export const ChapterActions = ({ chapter, disabled }: ChapterActionsProps) => {
         description: `The chapter was deleted successfully`,
       })
 
-      router.push(`/teacher/courses/${chapter.courseId}`)
+      router.push(`/editor/courses/${chapter.courseId}`)
     },
     onError: () => {
       toast.error("Update chapter error", {

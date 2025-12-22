@@ -10,7 +10,7 @@ import Link from "next/link"
 export const NavbarRoutes = () => {
   const pathname = usePathname()
 
-  const isTeacherPage = pathname.startsWith("/teacher")
+  const isTeacherPage = pathname.startsWith("/editor")
   const isCoursePage = pathname.startsWith("/course")
   const isExplorePage = pathname.startsWith("/explore")
 
@@ -24,8 +24,8 @@ export const NavbarRoutes = () => {
             <LogOut className="mr-2 size-4" /> Exit
           </Link>
         ) : (
-          <Link href="/teacher/courses" className={buttonVariants({ variant: "ghost", size: "sm" })}>
-            Teacher mode
+          <Link href="/editor/courses" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+            Editor mode
           </Link>
         )}
         <UserButton />
