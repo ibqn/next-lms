@@ -22,7 +22,7 @@ importers:
         version: 0.45.1(postgres@3.4.8)
       drizzle-zod:
         specifier: ^0.8.3
-        version: 0.8.3(drizzle-orm@0.45.1(postgres@3.4.8))(zod@4.3.5)
+        version: 0.8.3(drizzle-orm@0.45.1(postgres@3.4.8))(zod@4.3.6)
       lodash.unset:
         specifier: ^4.5.2
         version: 4.5.2
@@ -30,15 +30,15 @@ importers:
         specifier: ^3.4.8
         version: 3.4.8
       zod:
-        specifier: ^4.3.5
-        version: 4.3.5
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@types/lodash.unset':
         specifier: ^4.5.9
         version: 4.5.9
       '@types/node':
-        specifier: ^25.0.3
-        version: 25.0.3
+        specifier: ^25.0.10
+        version: 25.0.10
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.8
@@ -531,8 +531,8 @@ packages:
   '@types/lodash@4.17.20':
     resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
 
-  '@types/node@25.0.3':
-    resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
+  '@types/node@25.0.10':
+    resolution: {integrity: sha512-zWW5KPngR/yvakJgGOmZ5vTBemDoSqF3AcV/LrO5u5wTWyEAVVh+IT39G4gtyAkh3CtTZs8aX/yRM82OfzHJRg==}
 
   argon2@0.44.0:
     resolution: {integrity: sha512-zHPGN3S55sihSQo0dBbK0A5qpi2R31z7HZDZnry3ifOyj8bZZnpZND2gpmhnRGO1V/d555RwBqIK5W4Mrmv3ig==}
@@ -750,8 +750,8 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  zod@4.3.5:
-    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
 snapshots:
 
@@ -1012,7 +1012,7 @@ snapshots:
 
   '@types/lodash@4.17.20': {}
 
-  '@types/node@25.0.3':
+  '@types/node@25.0.10':
     dependencies:
       undici-types: 7.16.0
 
@@ -1053,10 +1053,10 @@ snapshots:
     optionalDependencies:
       postgres: 3.4.8
 
-  drizzle-zod@0.8.3(drizzle-orm@0.45.1(postgres@3.4.8))(zod@4.3.5):
+  drizzle-zod@0.8.3(drizzle-orm@0.45.1(postgres@3.4.8))(zod@4.3.6):
     dependencies:
       drizzle-orm: 0.45.1(postgres@3.4.8)
-      zod: 4.3.5
+      zod: 4.3.6
 
   esbuild-register@3.6.0(esbuild@0.25.12):
     dependencies:
@@ -1199,4 +1199,4 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  zod@4.3.5: {}
+  zod@4.3.6: {}
