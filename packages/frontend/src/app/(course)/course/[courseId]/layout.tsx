@@ -30,9 +30,11 @@ export default async function CourseIdLayout({ children, params }: CourseIdLayou
 
   const queryClient = getQueryClient()
 
-  await queryClient.prefetchQuery(courseQueryOptions({ id: courseIdParseResult.data.id }))
-  await queryClient.prefetchQuery(purchaseQueryOptions({ id: courseIdParseResult.data.id }))
-  await queryClient.prefetchQuery(progressQueryOptions({ id: courseIdParseResult.data.id }))
+  await Promise.all([
+    queryClient.prefetchQuery(courseQueryOptions({ id: courseIdParseResult.data.id })),
+    queryClient.prefetchQuery(purchaseQueryOptions({ id: courseIdParseResult.data.id })),
+    queryClient.prefetchQuery(progressQueryOptions({ id: courseIdParseResult.data.id })),
+  ])
 
   return (
     <Suspense>
