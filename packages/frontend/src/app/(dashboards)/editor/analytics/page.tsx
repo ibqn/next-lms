@@ -7,6 +7,7 @@ export default async function AnalyticsServerPage() {
   const queryClient = getQueryClient()
 
   await queryClient.prefetchQuery(editorAnalyticsQueryOptions())
+
   return (
     <Suspense>
       <AnalyticsPage />
