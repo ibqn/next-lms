@@ -205,7 +205,7 @@ export const FileForm = ({ initialData }: Props) => {
                         <FormItem>
                           <FormControl>
                             <Link className="line-clamp-1 text-xs" target="_blank" href={field.value.url}>
-                              {field.value.name}{" "}
+                              {field.value.name}
                             </Link>
                           </FormControl>
                         </FormItem>
